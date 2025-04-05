@@ -2,11 +2,11 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   ChartColumnIncreasing,
   Folder,
-  Image,
+  Image as ImageIcon,
   MoreHorizontal,
   Search,
   Sparkles,
@@ -18,16 +18,10 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-
 import { useRef, useState } from "react";
-
 import { Input } from "@/components/ui/input";
-import SortButton from "@/components/sort-button";
-import CourseDashboard from "@/components/course-dashboard";
-import CourseLessons from "@/components/course-lessons";
-import CourseDocument from "@/components/course-document";
-import CourseTestsProjects from "@/components/course-tests-projects";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, useRouter, usePathname } from "next/navigation";
+import Image from "next/image";
 
 const badges = [
   { title: "Math" },
@@ -42,7 +36,19 @@ function Course({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const { courseId } = useParams();
   const tabTop = useRef<HTMLDivElement | null>(null);
-  const [tab, setTab] = useState("dashboard");
+
+  const pathname = usePathname();
+  const currentTab = pathname.includes("/lessons")
+    ? "lessons"
+    : pathname.includes("/documents")
+    ? "documents"
+    : pathname.includes("/tests")
+    ? "tests"
+    : pathname.includes("/ask-ai")
+    ? "ask"
+    : "dashboard";
+
+  const [tab, setTab] = useState(currentTab);
 
   const scrollToTabTop = () => {
     const navbarHeight = 56;
@@ -52,7 +58,10 @@ function Course({ children }: { children: React.ReactNode }) {
         window.scrollY -
         navbarHeight;
 
-      window.scrollTo({ top: topOffset, behavior: "smooth" });
+      //delay
+      setTimeout(() => {
+        window.scrollTo({ top: topOffset, behavior: "smooth" });
+      }, 1000);
     }
   };
 
@@ -66,7 +75,9 @@ function Course({ children }: { children: React.ReactNode }) {
             }
           >
             <div className="flex mb-4">
-              <img
+              <Image
+                width={1000}
+                height={1000}
                 src="/placeholder.svg"
                 alt="Image"
                 className="inset-0 h-[30vh] w-full object-cover dark:brightness-[0.2] dark:grayscale"
@@ -81,7 +92,7 @@ function Course({ children }: { children: React.ReactNode }) {
             <div className="flex flex-col sm:flex-row gap-2 items-center">
               <CollapsibleTrigger asChild>
                 <Button size={"icon"} variant={"ghost"}>
-                  <Image />
+                  <ImageIcon />
                 </Button>
               </CollapsibleTrigger>
               <Button size={"icon"} variant={"ghost"}>

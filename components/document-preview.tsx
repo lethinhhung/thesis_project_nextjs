@@ -21,6 +21,7 @@ import {
 import { DeleteButton } from "@/components/delete-button";
 import { DownloadButton } from "@/components/download-button";
 import { Document } from "@/interfaces/document";
+import Image from "next/image";
 
 function DocumentPreview({
   document,
@@ -104,7 +105,9 @@ function DocumentPreview({
             </Card>
             <Card className="w-full h-150 bg-background rounded-xl border border-dashed shadow-none">
               <CardContent className="h-full">
-                <img
+                <Image
+                  width={1000}
+                  height={1000}
                   alt="Document preview"
                   src="/placeholder.svg"
                   className="inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"

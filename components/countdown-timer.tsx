@@ -93,7 +93,7 @@ export function CountdownTimer() {
             variant="ghost"
             size={"sm"}
           >
-            5"
+            5&quot;
           </Button>
           <Button
             onClick={() => {
@@ -105,7 +105,7 @@ export function CountdownTimer() {
             variant="ghost"
             size={"sm"}
           >
-            25"
+            25&quot;
           </Button>
           <Button
             onClick={() => {
@@ -117,7 +117,7 @@ export function CountdownTimer() {
             variant="ghost"
             size={"sm"}
           >
-            60"
+            60&quot;
           </Button>
         </div>
 
@@ -153,7 +153,7 @@ export function CountdownTimer() {
               <ChevronDown />
             </Button>
           </div>
-          <span className="text-xl font-semibold">"</span>
+          <span className="text-xl font-semibold">&quot;</span>
           <div className="flex flex-col items-center">
             <Button
               variant="ghost"
@@ -184,7 +184,7 @@ export function CountdownTimer() {
               <ChevronDown />
             </Button>
           </div>
-          <span className="text-xl font-semibold">'</span>
+          <span className="text-xl font-semibold">&apos;</span>
         </div>
       </CollapsibleContent>
     </Collapsible>

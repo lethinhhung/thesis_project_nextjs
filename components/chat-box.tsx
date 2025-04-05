@@ -51,7 +51,8 @@ function ChatBox({
     }
   };
 
-  const getChatCompletions = async (updatedMessages: Message[]) => {
+  // const getChatCompletions = async (updatedMessages: Message[]) => {
+  const getChatCompletions = async () => {
     setLoading(true);
     try {
       // const res = await chatCompletions(updatedMessages);
@@ -89,7 +90,8 @@ function ChatBox({
     setInput("");
 
     // Gọi API sau khi `messages` cập nhật
-    getChatCompletions(updatedMessages);
+    // getChatCompletions(updatedMessages);
+    getChatCompletions();
   };
 
   useEffect(() => {

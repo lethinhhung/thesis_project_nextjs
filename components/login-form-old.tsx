@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
 import { MouseEvent as ReactMouseEvent } from "react";
+import Image from "next/image";
 
 export function LoginFormOld({
   className,
@@ -104,7 +105,9 @@ export function LoginFormOld({
             </div>
           </form>
           <div className="bg-muted relative hidden md:block">
-            <img
+            <Image
+              width={1000}
+              height={1000}
               src="/placeholder.svg"
               alt="Image"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"

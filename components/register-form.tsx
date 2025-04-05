@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
 import { MouseEvent as ReactMouseEvent } from "react";
+import Image from "next/image";
 
 export default function RegisterForm({
   className,
@@ -93,7 +94,9 @@ export default function RegisterForm({
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
           <div className="bg-muted relative hidden md:block">
-            <img
+            <Image
+              width={1000}
+              height={1000}
               src="/placeholder.svg"
               alt="Image"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"

@@ -10,7 +10,9 @@ export default function CustomEmojiPicker(
     <div
       className="bg-background p-2 shadow-sm grid flex-col gap-1 h-fit-content max-h-inherit overflow-y-auto"
       style={
-        { gridTemplateColumns: `repeat(${props.columns || 1}, 1fr)` } as any
+        {
+          gridTemplateColumns: `repeat(${props.columns || 1}, 1fr)`,
+        } as React.CSSProperties
       }
     >
       {props.items.map((item, index) => (

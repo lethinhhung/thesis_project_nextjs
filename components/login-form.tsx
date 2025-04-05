@@ -18,6 +18,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import Image from "next/image";
 
 export function LoginForm({
   className,
@@ -167,7 +168,9 @@ export function LoginForm({
           </Form>
 
           <div className="bg-muted relative hidden md:block">
-            <img
+            <Image
+              width={1000}
+              height={1000}
               src="/placeholder.svg"
               alt="Image"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"

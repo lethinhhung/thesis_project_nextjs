@@ -40,6 +40,8 @@ const breadcrumbMap: Record<string, string> = {
   folders: "Folders",
   tests: "Tests",
   projects: "Projects",
+  documents: "Documents",
+  "ask-ai": "Ask AI",
 };
 
 export default function Breadcrumbs() {

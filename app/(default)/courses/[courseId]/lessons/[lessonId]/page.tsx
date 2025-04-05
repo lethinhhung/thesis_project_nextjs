@@ -50,7 +50,7 @@ function Lesson() {
               <CardHeader className="flex-1">
                 <CardTitle>Lesson 1 📄</CardTitle>
                 <CardDescription>22/12/2013</CardDescription>
-                <CardDescription>User's lesson note</CardDescription>
+                <CardDescription>User&apos;s lesson note</CardDescription>
               </CardHeader>
               <div className="px-4">
                 <Button size={"sm"} variant={"ghost"}>

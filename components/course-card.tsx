@@ -13,6 +13,7 @@ import { CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Progress } from "./ui/progress";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 interface Course {
   id: string;
@@ -42,8 +43,11 @@ export function CourseCard({
         className
       )}
     >
-      <img
+      <Image
+        width={1000}
+        height={1000}
         src="/placeholder.svg"
+        alt="Course Image"
         className="object-cover h-50 w-full rounded-xl rounded-b-none dark:brightness-[0.2] dark:grayscale"
       />
       <CardHeader>
