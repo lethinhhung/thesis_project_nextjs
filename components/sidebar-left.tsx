@@ -23,6 +23,7 @@ import { NavUser } from "./nav-user";
 import { NavControls } from "./nav-controls";
 import { NavCourses } from "./nav-courses";
 import { NavPinned } from "./nav-pinned";
+import { usePathname } from "next/navigation";
 
 // This is sample data.
 const data = {
@@ -251,13 +252,12 @@ export function SidebarLeft({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const { isMobile, open } = useSidebar();
-  const location =
-    typeof window !== "undefined" ? window.location : { pathname: "" };
-  const isChatPage = location.pathname.startsWith("/chat");
+  const pathname = usePathname();
+  const isChatPage = pathname.startsWith("/chat");
   return (
     <Sidebar collapsible="icon" className="border-r-0 z-40" {...props}>
       <SidebarHeader className="md:gap-0">
-        <NavUser user={data.user} />
+        <NavUser />
         {!isMobile && <NavControls isSidebarOpen={open} />}
         <NavMain items={data.navMain} />
       </SidebarHeader>

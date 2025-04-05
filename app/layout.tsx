@@ -137,7 +137,7 @@ export default function RootLayout({
                 {children}
               </div>
             </SidebarInset>
-            {/* <SidebarRight hidden={!isOpen} className="hidden 2xl:flex" /> */}
+            <SidebarRight hidden={!isOpen} className="hidden 2xl:flex" />
           </SidebarProvider>
           <Toaster theme={theme} />
         </ThemeProvider>

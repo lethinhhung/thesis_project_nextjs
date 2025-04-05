@@ -1,3 +1,5 @@
+"use client";
+
 import {
   ChevronRight,
   Cloud,
@@ -25,7 +27,7 @@ import {
 } from "./ui/collapsible";
 import ChatSmall from "./chat-small";
 import ButtonWithBadge from "./button-with-badge";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import { Textarea } from "./ui/textarea";
 import TodoList from "./todo-list";
 import SlideInFromRight from "./slide-in-from-right";
@@ -34,7 +36,7 @@ export function SidebarRight({
   hidden,
   ...props
 }: React.ComponentProps<typeof Sidebar> & { hidden: boolean }) {
-  const navigate = useNavigate();
+  const router = useRouter();
 
   return (
     <SlideInFromRight
@@ -45,7 +47,7 @@ export function SidebarRight({
         <SidebarHeader className="border-sidebar-border">
           <div className="flex items-center justify-between gap-2 w-full h-full">
             <ButtonWithBadge
-              onClick={() => navigate("/inbox")}
+              onClick={() => router.push("/inbox")}
               isBadgeVisible={true}
               badgeColor="bg-sky-500"
               variant={"ghost"}

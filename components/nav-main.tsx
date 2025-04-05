@@ -6,7 +6,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { LucideIcon, Search } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 
 import { lazy, Suspense, useState } from "react";
 
@@ -22,7 +22,7 @@ export function NavMain({
   }[];
 }) {
   const router = useRouter();
-  const location = window.location.pathname;
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
   const handleClick = (e: React.MouseEvent, url: string) => {
@@ -57,7 +57,7 @@ export function NavMain({
         </SidebarMenuItem>
         {items.map((item) => (
           <SidebarMenuItem key={item.title}>
-            <SidebarMenuButton asChild isActive={location === item.url}>
+            <SidebarMenuButton asChild isActive={pathname === item.url}>
               <a href={item.url} onClick={(e) => handleClick(e, item.url)}>
                 <item.icon />
                 <span>{item.title}</span>
