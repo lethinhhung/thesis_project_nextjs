@@ -1,4 +1,3 @@
-import { DarkModeSwitcher } from "@/components/dark-mode-switcher";
 import Image from "next/image";
 
 export default function Home() {

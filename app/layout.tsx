@@ -66,7 +66,7 @@ export default function RootLayout({
   const [isOpen, setIsOpen] = useState(false);
   const { theme } = useTheme();
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className="scrollbar">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
@@ -139,7 +139,13 @@ export default function RootLayout({
             </SidebarInset>
             <SidebarRight hidden={!isOpen} className="hidden 2xl:flex" />
           </SidebarProvider>
-          <Toaster theme={theme} />
+          <Toaster
+            theme={
+              theme === "light" || theme === "dark" || theme === "system"
+                ? theme
+                : undefined
+            }
+          />
         </ThemeProvider>
       </body>
     </html>
