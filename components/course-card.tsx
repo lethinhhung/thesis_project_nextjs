@@ -36,7 +36,7 @@ export function CourseCard({
   const router = useRouter();
   return (
     <Card
-      onClick={() => router.push(`/${course.id}`)}
+      onClick={() => router.push(`/courses/course1`)}
       className={cn(
         "pt-0 duration-200 dark:border-dashed hover:shadow-lg dark:hover:border-solid cursor-pointer ",
         className

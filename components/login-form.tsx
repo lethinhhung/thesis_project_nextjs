@@ -4,7 +4,6 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
 import { MouseEvent as ReactMouseEvent, useEffect, useState } from "react";
 
@@ -24,7 +23,6 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
-  const { t } = useTranslation();
   const router = useRouter();
   const [svgFill, setSvgFill] = useState("white");
 
@@ -38,10 +36,10 @@ export function LoginForm({
 
   const formSchema = z.object({
     email: z.string().email({
-      message: t("email_required"),
+      message: "email_required",
     }),
     password: z.string().min(8, {
-      message: t("password_required"),
+      message: "password_required",
     }),
   });
 
@@ -76,9 +74,9 @@ export function LoginForm({
             <form className="p-6 md:p-8" onSubmit={form.handleSubmit(onSubmit)}>
               <div className="flex flex-col gap-6">
                 <div className="flex flex-col items-center text-center">
-                  <h1 className="text-2xl font-bold">{t("welcome")}</h1>
+                  <h1 className="text-2xl font-bold">{"welcome"}</h1>
                   <p className="text-muted-foreground text-balance">
-                    {t("login_to")}
+                    {"login_to"}
                   </p>
                 </div>
                 <FormField
@@ -100,12 +98,12 @@ export function LoginForm({
                   render={({ field }) => (
                     <FormItem className="grid gap-3">
                       <div className="flex items-center">
-                        <FormLabel>{t("password")}</FormLabel>
+                        <FormLabel>{"password"}</FormLabel>
                         <a
                           href="#"
                           className="ml-auto text-sm underline-offset-2 hover:underline"
                         >
-                          {t("forgot_password")}
+                          {"forgot_password"}
                         </a>
                       </div>
 
@@ -118,11 +116,11 @@ export function LoginForm({
                   )}
                 />
                 <Button type="submit" className="w-full">
-                  {t("login")}
+                  {"login"}
                 </Button>
                 <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
                   <span className="bg-background text-muted-foreground relative z-10 px-2">
-                    {t("or_continue_with")}
+                    {"or_continue_with"}
                   </span>
                 </div>
                 {/* <div className="grid grid-cols-3 gap-4">
@@ -155,13 +153,13 @@ export function LoginForm({
                   </Button>
                 </div> */}
                 <div className="text-center text-sm">
-                  {t("dont_have_account")}{" "}
+                  {"dont_have_account"}{" "}
                   <a
                     href="#"
                     className="underline underline-offset-4"
                     onClick={(e) => handleSignUp(e)}
                   >
-                    {t("sign_up")}
+                    {"sign_up"}
                   </a>
                 </div>
               </div>
