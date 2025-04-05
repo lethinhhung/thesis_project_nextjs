@@ -39,7 +39,8 @@ import {
 import { Toaster } from "@/components/ui/sonner";
 import { useTheme } from "next-themes";
 import Breadcrumbs from "@/components/breadcrumbs";
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import Loading from "./loading";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -76,76 +77,78 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <SidebarProvider>
-            <SidebarLeft />
-            <SidebarInset>
-              <header className="z-30 sticky top-0 flex h-14 shrink-0 items-center gap-2 border-b border-dashed bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-                <div className="flex flex-1 items-center gap-2 px-3">
-                  <SidebarTrigger />
-                  <Separator orientation="vertical" className="h-4" />
+          <Suspense fallback={<Loading />}>
+            <SidebarProvider>
+              <SidebarLeft />
+              <SidebarInset>
+                <header className="z-30 sticky top-0 flex h-14 shrink-0 items-center gap-2 border-b border-dashed bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+                  <div className="flex flex-1 items-center gap-2 px-3">
+                    <SidebarTrigger />
+                    <Separator orientation="vertical" className="h-4" />
 
-                  <Breadcrumbs />
-                  <Separator orientation="vertical" className="mr-2 h-4" />
-                </div>
+                    <Breadcrumbs />
+                    <Separator orientation="vertical" className="mr-2 h-4" />
+                  </div>
 
-                <div className="flex items-center gap-2 px-2">
-                  <TooltipProvider>
-                    <DropdownMenu modal={false}>
+                  <div className="flex items-center gap-2 px-2">
+                    <TooltipProvider>
+                      <DropdownMenu modal={false}>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <DropdownMenuTrigger asChild>
+                              <Button size={"icon"} variant={"ghost"}>
+                                <Plus />
+                              </Button>
+                            </DropdownMenuTrigger>
+                          </TooltipTrigger>
+                          <TooltipContent>Create</TooltipContent>
+                        </Tooltip>
+                        <DropdownMenuContent>
+                          <DropdownMenuLabel>Create new</DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          {createItems.map((item) => (
+                            <DropdownMenuItem key={item.url}>
+                              {item.icon}
+                              {item.title}
+                            </DropdownMenuItem>
+                          ))}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TooltipProvider>
+
+                    <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <DropdownMenuTrigger asChild>
-                            <Button size={"icon"} variant={"ghost"}>
-                              <Plus />
-                            </Button>
-                          </DropdownMenuTrigger>
+                          <Button
+                            size={"icon"}
+                            variant={"ghost"}
+                            onClick={() => setIsOpen(!isOpen)}
+                            className="hidden 2xl:flex"
+                          >
+                            {isOpen ? <ChevronRight /> : <ChevronLeft />}
+                          </Button>
                         </TooltipTrigger>
-                        <TooltipContent>Create</TooltipContent>
+                        <TooltipContent>
+                          {isOpen ? "Hide sidebar" : "Show sidebar"}
+                        </TooltipContent>
                       </Tooltip>
-                      <DropdownMenuContent>
-                        <DropdownMenuLabel>Create new</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        {createItems.map((item) => (
-                          <DropdownMenuItem key={item.url}>
-                            {item.icon}
-                            {item.title}
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TooltipProvider>
-
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          size={"icon"}
-                          variant={"ghost"}
-                          onClick={() => setIsOpen(!isOpen)}
-                          className="hidden 2xl:flex"
-                        >
-                          {isOpen ? <ChevronRight /> : <ChevronLeft />}
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        {isOpen ? "Hide sidebar" : "Show sidebar"}
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
+                    </TooltipProvider>
+                  </div>
+                </header>
+                <div className="flex flex-1 flex-col gap-4 p-4 max-w-full">
+                  {children}
                 </div>
-              </header>
-              <div className="flex flex-1 flex-col gap-4 p-4 max-w-full">
-                {children}
-              </div>
-            </SidebarInset>
-            <SidebarRight hidden={!isOpen} className="hidden 2xl:flex" />
-          </SidebarProvider>
-          <Toaster
-            theme={
-              theme === "light" || theme === "dark" || theme === "system"
-                ? theme
-                : undefined
-            }
-          />
+              </SidebarInset>
+              <SidebarRight hidden={!isOpen} className="hidden 2xl:flex" />
+            </SidebarProvider>
+            <Toaster
+              theme={
+                theme === "light" || theme === "dark" || theme === "system"
+                  ? theme
+                  : undefined
+              }
+            />
+          </Suspense>
         </ThemeProvider>
       </body>
     </html>
