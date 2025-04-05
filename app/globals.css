@@ -193,3 +193,106 @@
     margin: 0;
   }
 }
+
+@layer component {
+  .bn-editor h1,
+  h2,
+  h3,
+  h4 {
+    @apply text-primary;
+  }
+
+  html[lang="vi"] .bn-editor * {
+    @apply font-sans;
+  }
+  /* .bn-editor h1 .bn-inline-content {
+    @apply scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl;
+  }
+
+  .bn-editor h2 .bn-inline-content {
+    @apply scroll-m-20 pb-2 text-3xl font-semibold tracking-tight first:mt-0;
+  }
+
+  .bn-editor h3 .bn-inline-content {
+    @apply scroll-m-20 text-2xl font-semibold tracking-tight;
+  }
+
+  .bn-editor p .bn-inline-content {
+    @apply leading-7 [&:not(:first-child)]:mt-6;
+  } */
+
+  /* BlockNote editor */
+  @media (width < 48rem) {
+    .bn-editor {
+      padding: 1rem 2rem;
+    }
+  }
+
+  .bn-editor {
+    padding-top: 1rem;
+    padding-bottom: calc(100dvh - 150px);
+    max-width: 100% !important;
+    word-break: keep-all !important;
+  }
+
+  .bn-editor h1 {
+    font-size: 2.25rem; /* 4xl */
+    font-weight: 800; /* extrabold */
+    letter-spacing: -0.02em; /* tracking-tight */
+  }
+
+  @media (min-width: 1024px) {
+    /* lg */
+    .bn-editor h1 {
+      font-size: 3rem; /* 5xl */
+    }
+  }
+
+  .bn-editor h2 {
+    font-size: 1.875rem; /* 3xl */
+    font-weight: 600; /* semibold */
+    letter-spacing: -0.02em; /* tracking-tight */
+  }
+
+  .bn-editor h3 {
+    font-size: 1.5rem; /* 2xl */
+    font-weight: 600; /* semibold */
+    letter-spacing: -0.02em; /* tracking-tight */
+  }
+
+  .bn-editor p {
+    line-height: 1.75; /* leading-7 */
+  }
+
+  .bn-panel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 100dvw;
+    padding: 0 1rem;
+  }
+
+  .bn-toolbar {
+  }
+
+  @media (max-width: 1280px) {
+    [aria-label="Replace image"] {
+      display: none !important;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .bn-file-block-content-wrapper {
+      max-width: calc(100dvw - 255px - 152px);
+    }
+  }
+
+  .bn-editor .tableWrapper {
+    padding: 10px 0px !important;
+  }
+
+  div[tabindex="-1"][data-floating-ui-focusable] {
+    z-index: 10 !important;
+  }
+}
