@@ -98,7 +98,7 @@ function ChatBox({
     scrollToBottom();
   }, [messages]);
   return (
-    <div className="flex flex-col w-full h-full space-y-4 items-center">
+    <div className="flex flex-col w-full h-full space-y-4 items-center min-w-100">
       {title && (
         <CardHeader className="w-full">
           <CardTitle>Ask AI</CardTitle>

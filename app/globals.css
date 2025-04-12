@@ -81,7 +81,8 @@
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
+  /* --card: oklch(0.205 0 0); */
+  --card: oklch(0.145 0 0);
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
@@ -117,7 +118,7 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground overflow-x-hidden;
   }
   :root {
     --chart-1: 12 76% 61%;
@@ -202,9 +203,9 @@
     @apply text-primary;
   }
 
-  html[lang="vi"] .bn-editor * {
+  /* html[lang="vi"] .bn-editor * {
     @apply font-sans;
-  }
+  } */
   /* .bn-editor h1 .bn-inline-content {
     @apply scroll-m-20 text-4xl font-extrabold tracking-tight lg:text-5xl;
   }
@@ -293,6 +294,6 @@
   }
 
   div[tabindex="-1"][data-floating-ui-focusable] {
-    z-index: 10 !important;
+    z-index: 40 !important;
   }
 }

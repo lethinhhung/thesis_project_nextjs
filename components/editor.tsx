@@ -190,7 +190,7 @@ const Editor = ({
     loadInitialJSON();
 
     return () => mediaQuery.removeEventListener("change", handleChange);
-  }, [loadInitialJSON]);
+  }, []);
 
   // Xác định theme thực tế mà user đang dùng
   const isDarkTheme = theme === "dark" || (theme === "system" && isSystemDark);

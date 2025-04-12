@@ -40,6 +40,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { useTheme } from "next-themes";
 import Breadcrumbs from "@/components/breadcrumbs";
 import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -137,7 +138,19 @@ export default function RootLayout({
                 {children}
               </div>
             </SidebarInset>
-            <SidebarRight hidden={!isOpen} className="hidden 2xl:flex" />
+            <AnimatePresence>
+              {isOpen && (
+                <motion.div
+                  initial={{ width: 0, opacity: 1 }}
+                  animate={{ width: 256, opacity: 1 }}
+                  exit={{ width: 0, opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                  className="hidden sticky top-0 h-svh border-l 2xl:flex"
+                >
+                  <SidebarRight />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </SidebarProvider>
           <Toaster
             theme={

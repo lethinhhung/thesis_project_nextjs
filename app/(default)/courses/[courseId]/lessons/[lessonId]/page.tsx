@@ -21,8 +21,8 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import SlideInFromRight from "@/components/slide-in-from-right";
 import ChatBox from "@/components/chat-box";
+import { AnimatePresence, motion } from "framer-motion";
 
 function Lesson() {
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -139,12 +139,19 @@ function Lesson() {
         />
       </div>
 
-      <SlideInFromRight
-        hidden={!isChatOpen}
-        className="hidden 2xl:flex sticky border py-4 dark:border-dashed rounded-xl shadow-md h-[calc(100svh-92px)] w-full min-w-100 max-w-5xl flex-1 top-16"
-      >
-        <ChatBox attachContent={markDown} title="lesson" />
-      </SlideInFromRight>
+      <AnimatePresence initial={false}>
+        {isChatOpen && (
+          <motion.div
+            initial={{ width: 0, opacity: 0 }}
+            animate={{ width: 1024, opacity: 1 }}
+            exit={{ width: 0, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="hidden 2xl:flex sticky border py-4 dark:border-dashed rounded-xl shadow-md h-[calc(100svh-92px)] top-16"
+          >
+            <ChatBox attachContent={markDown} title="lesson" />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
