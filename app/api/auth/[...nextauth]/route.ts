@@ -18,7 +18,7 @@ export const authOptions: AuthOptions = {
         const { username, password } = credentials as Record<string, string>;
 
         // Ví dụ đơn giản (bạn có thể thay bằng gọi DB hoặc API backend)
-        if (username === "admin" && password === "123456") {
+        if (username === "admin" && password === "12345678") {
           return {
             id: "1",
             name: "Admin",
@@ -35,7 +35,8 @@ export const authOptions: AuthOptions = {
     strategy: "jwt",
   },
   pages: {
-    signIn: "/auth/signin",
+    signIn: "/signin",
+    newUser: "/register",
   },
   callbacks: {
     async jwt({ token, user }) {

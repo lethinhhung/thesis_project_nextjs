@@ -21,6 +21,8 @@ import { z } from "zod";
 import Image from "next/image";
 
 import { signIn, useSession } from "next-auth/react";
+import { toast } from "sonner";
+import { CircleAlert, Smile } from "lucide-react";
 
 export function LoginForm({
   className,
@@ -30,23 +32,12 @@ export function LoginForm({
   const [svgFill, setSvgFill] = useState("white");
   const { data: session } = useSession();
 
-  const handleSubmit = async () => {
-    const res = await signIn("credentials", {
-      username: "admin",
-      password: "123456",
-      redirect: false,
-      callbackUrl: "/home",
-    });
-    console.log(res);
-  };
-
   useEffect(() => {
     if (document.documentElement.classList.contains("dark")) {
       setSvgFill("white");
     } else {
       setSvgFill("black");
     }
-    handleSubmit();
   }, []);
 
   useEffect(() => {
@@ -56,8 +47,8 @@ export function LoginForm({
   }, [session]);
 
   const formSchema = z.object({
-    email: z.string().email({
-      message: "email_required",
+    username: z.string().min(1, {
+      message: "username_required",
     }),
     password: z.string().min(8, {
       message: "password_required",
@@ -68,19 +59,38 @@ export function LoginForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
+      username: "",
       password: "",
     },
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    localStorage.setItem(
-      "user",
-      JSON.stringify({ ...values, name: "Name", avatar: "/placeholder.svg" })
-    );
-    console.log(values);
-    router.push("/home");
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const { username, password } = values;
+    // localStorage.setItem(
+    //   "user",
+    //   JSON.stringify({ ...values, name: "Name", avatar: "/placeholder.svg" })
+    // );
+    // console.log(values);
+    // router.push("/home");
+    const res = await signIn("credentials", {
+      username: username,
+      password: password,
+      redirect: false,
+    });
+    if (!res?.error) {
+      toast.success("Login successfully", {
+        icon: <Smile size={15} />,
+        description: "Welcome back!",
+      });
+      router.push("/home");
+    } else {
+      toast.error("Login failed", {
+        icon: <CircleAlert size={15} />,
+        description: "Invalid username or password",
+      });
+    }
+    console.log(res);
   }
 
   const handleSignUp = (e: ReactMouseEvent<HTMLAnchorElement>) => {
@@ -102,10 +112,10 @@ export function LoginForm({
                 </div>
                 <FormField
                   control={form.control}
-                  name="email"
+                  name="username"
                   render={({ field }) => (
                     <FormItem className="grid gap-3">
-                      <FormLabel>Email</FormLabel>
+                      <FormLabel>username</FormLabel>
                       <FormControl>
                         <Input placeholder="example@example.com" {...field} />
                       </FormControl>
