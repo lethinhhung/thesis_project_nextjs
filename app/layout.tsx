@@ -1,10 +1,9 @@
-"use client";
-
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "@/components/ui/sonner";
-import { useTheme } from "next-themes";
+import ToasterClient from "@/components/toaster-client";
+import { getServerSession } from "next-auth";
+import CustomSessionProvider from "@/components/session-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,32 +15,28 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { theme } = useTheme();
+  const session = await getServerSession();
   return (
     <html lang="en" suppressHydrationWarning className="scrollbar">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased font-[Geist]`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-          <Toaster
-            theme={
-              theme === "light" || theme === "dark" || theme === "system"
-                ? theme
-                : undefined
-            }
-          />
-        </ThemeProvider>
+        <CustomSessionProvider session={session}>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+            <ToasterClient />
+          </ThemeProvider>
+        </CustomSessionProvider>
       </body>
     </html>
   );

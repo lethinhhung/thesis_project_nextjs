@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/sidebar";
 import { NavControls } from "./nav-controls";
 import { useRouter } from "next/navigation";
+import { signOut, useSession } from "next-auth/react";
 
 const userLocal = {
   name: "Khaled Taha",
@@ -37,6 +38,8 @@ const userLocal = {
 export function NavUser() {
   const { isMobile } = useSidebar();
   const router = useRouter();
+  const { data: sesson } = useSession();
+  console.log(sesson);
 
   return (
     <SidebarMenu>
@@ -105,7 +108,7 @@ export function NavUser() {
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => signOut()}>
               <LogOut />
               Log out
             </DropdownMenuItem>

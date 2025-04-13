@@ -20,12 +20,25 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Image from "next/image";
 
+import { signIn, useSession } from "next-auth/react";
+
 export function LoginForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   const router = useRouter();
   const [svgFill, setSvgFill] = useState("white");
+  const { data: session } = useSession();
+
+  const handleSubmit = async () => {
+    const res = await signIn("credentials", {
+      username: "admin",
+      password: "123456",
+      redirect: false,
+      callbackUrl: "/home",
+    });
+    console.log(res);
+  };
 
   useEffect(() => {
     if (document.documentElement.classList.contains("dark")) {
@@ -33,7 +46,14 @@ export function LoginForm({
     } else {
       setSvgFill("black");
     }
+    handleSubmit();
   }, []);
+
+  useEffect(() => {
+    if (session) {
+      console.log("session", session);
+    }
+  }, [session]);
 
   const formSchema = z.object({
     email: z.string().email({
