@@ -1,3 +1,5 @@
+import { loginAPI } from "@/lib/services/auth.service";
+import { access } from "fs";
 import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -16,15 +18,23 @@ export const authOptions: AuthOptions = {
       async authorize(credentials) {
         // Đây là nơi bạn xác thực thông tin đăng nhập
         const { username, password } = credentials as Record<string, string>;
-
-        // Ví dụ đơn giản (bạn có thể thay bằng gọi DB hoặc API backend)
-        if (username === "admin" && password === "12345678") {
-          return {
-            id: "1",
-            name: "Admin",
-            email: "admin@example.com",
-          };
+        try {
+          // Gọi API để xác thực thông tin đăng nhập
+          const response = await loginAPI(username, password);
+          if (response) {
+            if (response.status == 200) {
+              return {
+                id: response.data.data.id,
+                name: response.data.data.username,
+                email: response.data.data.email,
+                accessToken: response.data.data.accessToken,
+              };
+            }
+          }
+        } catch (error) {
+          console.log("error", error);
         }
+        // Ví dụ đơn giản (bạn có thể thay bằng gọi DB hoặc API backend)
 
         // Nếu thông tin sai, trả về null
         return null;
@@ -42,15 +52,13 @@ export const authOptions: AuthOptions = {
     async jwt({ token, user }) {
       // Gắn user info vào token nếu cần
       if (user) {
-        token.id = user.id;
+        token.accessToken = user.accessToken;
       }
       return token;
     },
     async session({ session, token }) {
       // Truyền token vào session để frontend dùng
-      if (token) {
-        console.log(token);
-      }
+      session.accessToken = token.accessToken;
       return session;
     },
   },

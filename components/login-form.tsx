@@ -77,13 +77,13 @@ export function LoginForm({
       username: username,
       password: password,
       redirect: false,
+      callbackUrl: "/home",
     });
     if (!res?.error) {
       toast.success("Login successfully", {
         icon: <Smile size={15} />,
         description: "Welcome back!",
       });
-      router.push("/home");
     } else {
       toast.error("Login failed", {
         icon: <CircleAlert size={15} />,
