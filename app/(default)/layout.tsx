@@ -1,7 +1,5 @@
 "use client";
 
-import { ThemeProvider } from "@/components/theme-provider";
-
 import { SidebarLeft } from "@/components/sidebar-left";
 import { SidebarRight } from "@/components/sidebar-right";
 import { Separator } from "@/components/ui/separator";

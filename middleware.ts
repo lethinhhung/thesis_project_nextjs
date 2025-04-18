@@ -30,5 +30,7 @@ export async function middleware(request: NextRequest) {
 
 // Chỉ định các path cần áp dụng middleware
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|images|.*\\.png$).*)"],
+  matcher: [
+    "/((?!_next/static|_next/image|public|placeholder.svg|favicon.ico|images|.*\\.png$).*)",
+  ],
 };

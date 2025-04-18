@@ -14,4 +14,9 @@ const logoutAPI = () => {
   const URL_API = "/api/auth/logout";
   return axios.post(URL_API, {}, { withCredentials: true });
 };
-export { registerAPI, loginAPI, logoutAPI };
+
+const refreshTokenAPI = async (token: string) => {
+  return axios.post("/auth/refresh-token", { token });
+};
+
+export { registerAPI, loginAPI, logoutAPI, refreshTokenAPI };

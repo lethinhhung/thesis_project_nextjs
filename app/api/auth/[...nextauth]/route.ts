@@ -1,5 +1,4 @@
 import { loginAPI } from "@/lib/services/auth.service";
-import { access } from "fs";
 import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -21,20 +20,18 @@ export const authOptions: AuthOptions = {
         try {
           // Gọi API để xác thực thông tin đăng nhập
           const response = await loginAPI(username, password);
-          if (response) {
-            if (response.status == 200) {
-              return {
-                id: response.data.data.id,
-                name: response.data.data.username,
-                email: response.data.data.email,
-                accessToken: response.data.data.accessToken,
-              };
-            }
+
+          if (response?.status == 200) {
+            return {
+              id: response.data.data.id,
+              name: response.data.data.username,
+              email: response.data.data.email,
+              accessToken: response.data.data.accessToken,
+            };
           }
         } catch (error) {
           console.log("error", error);
         }
-        // Ví dụ đơn giản (bạn có thể thay bằng gọi DB hoặc API backend)
 
         // Nếu thông tin sai, trả về null
         return null;

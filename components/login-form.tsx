@@ -20,9 +20,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import Image from "next/image";
 
-import { signIn, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { toast } from "sonner";
-import { CircleAlert, Smile } from "lucide-react";
+import { CircleAlert, Loader, Smile } from "lucide-react";
 
 export function LoginForm({
   className,
@@ -30,7 +30,7 @@ export function LoginForm({
 }: React.ComponentProps<"div">) {
   const router = useRouter();
   const [svgFill, setSvgFill] = useState("white");
-  const { data: session } = useSession();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (document.documentElement.classList.contains("dark")) {
@@ -39,12 +39,6 @@ export function LoginForm({
       setSvgFill("black");
     }
   }, []);
-
-  useEffect(() => {
-    if (session) {
-      console.log("session", session);
-    }
-  }, [session]);
 
   const formSchema = z.object({
     username: z.string().min(1, {
@@ -66,6 +60,7 @@ export function LoginForm({
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
     const { username, password } = values;
     // localStorage.setItem(
     //   "user",
@@ -84,12 +79,14 @@ export function LoginForm({
         icon: <Smile size={15} />,
         description: "Welcome back!",
       });
+      router.push("/home");
     } else {
       toast.error("Login failed", {
         icon: <CircleAlert size={15} />,
         description: "Invalid username or password",
       });
     }
+    setLoading(false);
     console.log(res);
   }
 
@@ -147,7 +144,7 @@ export function LoginForm({
                   )}
                 />
                 <Button type="submit" className="w-full">
-                  {"login"}
+                  {loading ? <Loader className="animate-spin" /> : "login"}
                 </Button>
                 <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
                   <span className="bg-background text-muted-foreground relative z-10 px-2">

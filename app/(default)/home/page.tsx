@@ -10,8 +10,18 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
+import { getProfileAPI } from "@/lib/services/user.service";
 
 function Home() {
+  const [test, setTest] = useState({});
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await getProfileAPI();
+      console.log("res", res);
+    };
+    fetchData();
+  }, []);
   return (
     <div className="flex flex-col gap-4 items-center mx-auto h-2000 w-full max-w-7xl rounded-xl">
       <div className="w-full flex">
