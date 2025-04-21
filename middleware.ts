@@ -26,7 +26,13 @@ const authMiddlewares = withAuth(
 
 const middlewares = async (req: NextRequest, event: NextFetchEvent) => {
   const { pathname } = req.nextUrl;
-  if (pathname == "/" || pathname == "/en" || pathname == "/vi") {
+  if (
+    pathname == "/" ||
+    pathname == "/en" ||
+    pathname == "/vi" ||
+    pathname == "/login" ||
+    pathname == "/register"
+  ) {
     return intlMiddleware(req);
   }
   return authMiddlewares(req as NextRequestWithAuth, event);
@@ -35,5 +41,5 @@ const middlewares = async (req: NextRequest, event: NextFetchEvent) => {
 export default middlewares;
 
 export const config = {
-  matcher: ["/((?!api|trpc|_next|_vercel|login|register|.*\\..*).*)"],
+  matcher: ["/((?!api|trpc|_next|_vercel|.*\\..*).*)"],
 };
