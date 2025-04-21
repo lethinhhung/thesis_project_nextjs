@@ -1,11 +1,39 @@
-import createMiddleware from "next-intl/middleware";
+import createIntlMiddleware from "next-intl/middleware";
+import { withAuth, NextRequestWithAuth } from "next-auth/middleware";
 import { routing } from "@/src/i18n/routing";
+import { NextFetchEvent, NextRequest } from "next/server";
 
-export default createMiddleware(routing);
+// Create intl middleware
+const intlMiddleware = createIntlMiddleware(routing);
+
+// Combine intl and auth middleware
+const authMiddlewares = withAuth(
+  // First execute intl middleware
+  async function middleware(req) {
+    const res = await intlMiddleware(req);
+    return res;
+  },
+  {
+    callbacks: {
+      // Return true if the token exists
+      authorized: ({ token }) => token != null,
+    },
+    pages: {
+      signIn: "/en/login",
+    },
+  }
+);
+
+const middlewares = async (req: NextRequest, event: NextFetchEvent) => {
+  const { pathname } = req.nextUrl;
+  if (pathname == "/" || pathname == "/en" || pathname == "/vi") {
+    return intlMiddleware(req);
+  }
+  return authMiddlewares(req as NextRequestWithAuth, event);
+};
+
+export default middlewares;
 
 export const config = {
-  // Match all pathnames except for
-  // - … if they start with `/api`, `/trpc`, `/_next` or `/_vercel`
-  // - … the ones containing a dot (e.g. `favicon.ico`)
-  matcher: "/((?!api|trpc|_next|_vercel|.*\\..*).*)",
+  matcher: ["/((?!api|trpc|_next|_vercel|login|register|.*\\..*).*)"],
 };
