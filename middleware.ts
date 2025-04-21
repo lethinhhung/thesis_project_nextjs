@@ -30,6 +30,10 @@ const middlewares = async (req: NextRequest, event: NextFetchEvent) => {
     pathname == "/" ||
     pathname == "/en" ||
     pathname == "/vi" ||
+    pathname == "/en/login" ||
+    pathname == "/vi/login" ||
+    pathname == "/vi/register" ||
+    pathname == "/en/register" ||
     pathname == "/login" ||
     pathname == "/register"
   ) {

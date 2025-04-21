@@ -19,43 +19,45 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useRouter } from "next/navigation";
 import { MouseEvent as ReactMouseEvent } from "react";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 export default function RegisterForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
   const router = useRouter();
+  const t = useTranslations("register");
 
   const formSchema = z
     .object({
       username: z
         .string()
         .min(2, {
-          message: "username_required",
+          message: t("username_required"),
         })
         .regex(/^[a-zA-Z0-9_]+$/, {
-          message: "username_contain",
+          message: t("username_contain"),
         }),
       email: z.string().email({
-        message: "email_required",
+        message: t("email_required"),
       }),
       password: z
         .string()
         .min(8, {
-          message: "password_required",
+          message: t("password_required"),
         })
         .regex(
           /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/,
           {
-            message: "password_contain",
+            message: t("password_contain"),
           }
         ),
       confirmPassword: z.string().min(8, {
-        message: "confirm_password_required",
+        message: t("confirm_password_required"),
       }),
     })
     .refine((data) => data.password === data.confirmPassword, {
-      message: "password_not_match",
+      message: t("password_not_match"),
       path: ["confirmPassword"],
     });
 
@@ -107,9 +109,9 @@ export default function RegisterForm({
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <div className="flex flex-col gap-6 p-6">
                 <div className="flex flex-col items-center text-center">
-                  <h1 className="text-2xl font-bold">{"create_account"}</h1>
+                  <h1 className="text-2xl font-bold">{t("create_account")}</h1>
                   <p className="text-muted-foreground text-balance">
-                    {"join_study"}
+                    {t("join_study")}
                   </p>
                 </div>
                 <FormField
@@ -117,12 +119,12 @@ export default function RegisterForm({
                   name="username"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{"username"}</FormLabel>
+                      <FormLabel>{t("username")}</FormLabel>
                       <FormControl>
                         <Input placeholder="user" {...field} />
                       </FormControl>
                       <FormDescription>
-                        {"your_unique_display_name"}
+                        {t("your_unique_display_name")}
                       </FormDescription>
                       <FormMessage />
                     </FormItem>
@@ -146,7 +148,7 @@ export default function RegisterForm({
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{"password"}</FormLabel>
+                      <FormLabel>{t("password")}</FormLabel>
                       <FormControl>
                         <Input
                           type="password"
@@ -154,7 +156,9 @@ export default function RegisterForm({
                           {...field}
                         />
                       </FormControl>
-                      <FormDescription>{"use_strong_password"}</FormDescription>
+                      <FormDescription>
+                        {t("use_strong_password")}
+                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -164,7 +168,7 @@ export default function RegisterForm({
                   name="confirmPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>{"confirm_password"}</FormLabel>
+                      <FormLabel>{t("confirm_password")}</FormLabel>
                       <FormControl>
                         <Input
                           type="password"
@@ -172,26 +176,28 @@ export default function RegisterForm({
                           {...field}
                         />
                       </FormControl>
-                      <FormDescription>{"re_enter_password"}</FormDescription>
+                      <FormDescription>
+                        {t("re_enter_password")}
+                      </FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
                 <div className="text-center text-sm">
-                  {"already_have_account"}{" "}
+                  {t("already_have_account")}{" "}
                   <a
                     href="#"
                     className="underline underline-offset-4"
                     onClick={(e) => handleBack(e, "/login")}
                   >
-                    {"sign_in"}
+                    {t("sign_in")}
                   </a>
                 </div>
                 <div className="flex flex-row justify-between">
                   <Button variant={"secondary"} onClick={(e) => handleBack(e)}>
-                    {"back"}
+                    {t("back")}
                   </Button>
-                  <Button type="submit">{"submit"}</Button>
+                  <Button type="submit">{t("submit")}</Button>
                 </div>
               </div>
             </form>

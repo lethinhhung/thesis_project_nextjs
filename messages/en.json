@@ -6,6 +6,7 @@
   },
   "login": {
     "welcome": "Welcome back",
+    "username": "Username",
     "darkMode": "Dark Mode",
     "lightMode": "Light Mode",
     "system": "System",
@@ -15,7 +16,9 @@
     "login": "Login",
     "or_continue_with": "Or continue with",
     "dont_have_account": "Don't have an account?",
-    "sign_up": "Sign up"
+    "sign_up": "Sign up",
+    "username_required": "Username must be at least 2 characters.",
+    "password_required": "Password must be at least 8 characters."
   },
   "register": {
     "create_account": "Create an account",
@@ -26,9 +29,7 @@
     "your_unique_display_name": "Your unique display name.",
     "re_enter_password": "Re-enter your password.",
     "back": "Back",
-    "submit": "Submit"
-  },
-  "register_form": {
+    "submit": "Submit",
     "username_required": "Username must be at least 2 characters.",
     "username_contain": "Username can only contain letters, numbers, and underscores.",
     "email_required": "Invalid email address.",
@@ -37,6 +38,7 @@
     "confirm_password_required": "Confirm Password must be the same as Password.",
     "password_not_match": "Passwords do not match.",
     "already_have_account": "Already have an account?",
-    "sign_in": "Sign in"
+    "sign_in": "Sign in",
+    "password": "Password"
   }
 }

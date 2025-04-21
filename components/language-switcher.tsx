@@ -17,7 +17,7 @@ const languages = [
   { code: "vi", name: "Tiếng Việt" },
 ];
 
-export default function LanguageSwitcher({
+export function LanguageSwitcher({
   isSidebarOpen = true,
   ...props
 }: React.ComponentProps<"button"> &

@@ -147,7 +147,7 @@ const Editor = ({
   });
   const isMobile = useIsMobile();
   const { theme } = useTheme();
-  const [isPlainBackground, setIsPlainBackground] = useState(false);
+  const [isPlainBackground, setIsPlainBackground] = useState(true);
   const [isSystemDark, setIsSystemDark] = useState(false);
 
   async function loadInitialJSON() {

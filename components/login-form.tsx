@@ -23,6 +23,7 @@ import Image from "next/image";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
 import { CircleAlert, Loader, Smile } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export function LoginForm({
   className,
@@ -31,6 +32,7 @@ export function LoginForm({
   const router = useRouter();
   const [svgFill, setSvgFill] = useState("white");
   const [loading, setLoading] = useState(false);
+  const t = useTranslations("login");
 
   useEffect(() => {
     if (document.documentElement.classList.contains("dark")) {
@@ -42,10 +44,10 @@ export function LoginForm({
 
   const formSchema = z.object({
     username: z.string().min(1, {
-      message: "username_required",
+      message: t("username_required"),
     }),
     password: z.string().min(8, {
-      message: "password_required",
+      message: t("password_required"),
     }),
   });
 
@@ -102,9 +104,9 @@ export function LoginForm({
             <form className="p-6 md:p-8" onSubmit={form.handleSubmit(onSubmit)}>
               <div className="flex flex-col gap-6">
                 <div className="flex flex-col items-center text-center">
-                  <h1 className="text-2xl font-bold">{"welcome"}</h1>
+                  <h1 className="text-2xl font-bold">{t("welcome")}</h1>
                   <p className="text-muted-foreground text-balance">
-                    {"login_to"}
+                    {t("login_to")}
                   </p>
                 </div>
                 <FormField
@@ -112,7 +114,7 @@ export function LoginForm({
                   name="username"
                   render={({ field }) => (
                     <FormItem className="grid gap-3">
-                      <FormLabel>username</FormLabel>
+                      <FormLabel>{t("username")}</FormLabel>
                       <FormControl>
                         <Input placeholder="example@example.com" {...field} />
                       </FormControl>
@@ -126,12 +128,12 @@ export function LoginForm({
                   render={({ field }) => (
                     <FormItem className="grid gap-3">
                       <div className="flex items-center">
-                        <FormLabel>{"password"}</FormLabel>
+                        <FormLabel>{t("password")}</FormLabel>
                         <a
                           href="#"
                           className="ml-auto text-sm underline-offset-2 hover:underline"
                         >
-                          {"forgot_password"}
+                          {t("forgot_password")}
                         </a>
                       </div>
 
@@ -144,11 +146,11 @@ export function LoginForm({
                   )}
                 />
                 <Button type="submit" className="w-full">
-                  {loading ? <Loader className="animate-spin" /> : "login"}
+                  {loading ? <Loader className="animate-spin" /> : t("login")}
                 </Button>
                 <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
                   <span className="bg-background text-muted-foreground relative z-10 px-2">
-                    {"or_continue_with"}
+                    {t("or_continue_with")}
                   </span>
                 </div>
                 {/* <div className="grid grid-cols-3 gap-4">
@@ -181,13 +183,13 @@ export function LoginForm({
                   </Button>
                 </div> */}
                 <div className="text-center text-sm">
-                  {"dont_have_account"}{" "}
+                  {t("dont_have_account")}{" "}
                   <a
                     href="#"
                     className="underline underline-offset-4"
                     onClick={(e) => handleSignUp(e)}
                   >
-                    {"sign_up"}
+                    {t("sign_up")}
                   </a>
                 </div>
               </div>

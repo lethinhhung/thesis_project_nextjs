@@ -6,6 +6,7 @@
   },
   "login": {
     "welcome": "Chào mừng trở lại",
+    "username": "Tên người dùng",
     "darkMode": "Chế độ tối",
     "lightMode": "Chế độ sáng",
     "system": "Hệ thống",
@@ -15,7 +16,9 @@
     "login": "Đăng nhập",
     "or_continue_with": "Hoặc tiếp tục với",
     "dont_have_account": "Chưa có tài khoản?",
-    "sign_up": "Đăng ký"
+    "sign_up": "Đăng ký",
+    "username_required": "Tên người dùng phải có ít nhất 2 ký tự.",
+    "password_required": "Mật khẩu phải có ít nhất 8 ký tự."
   },
   "register": {
     "create_account": "Tạo tài khoản",
@@ -26,9 +29,7 @@
     "your_unique_display_name": "Tên hiển thị duy nhất của bạn.",
     "re_enter_password": "Nhập lại mật khẩu của bạn.",
     "back": "Quay lại",
-    "submit": "Gửi"
-  },
-  "register_form": {
+    "submit": "Gửi",
     "username_required": "Tên người dùng phải có ít nhất 2 ký tự.",
     "username_contain": "Tên người dùng chỉ có thể chứa các chữ cái, số và dấu gạch dưới",
     "email_required": "Địa chỉ email không hợp lệ.",
@@ -37,6 +38,7 @@
     "confirm_password_required": "Phải giống với Mật khẩu trước đó.",
     "password_not_match": "Mật khẩu không khớp.",
     "already_have_account": "Đã có tài khoản?",
-    "sign_in": "Đăng nhập"
+    "sign_in": "Đăng nhập",
+    "password": "Mật khẩu"
   }
 }

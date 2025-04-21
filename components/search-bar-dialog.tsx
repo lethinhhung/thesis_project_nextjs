@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/command";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-// import LanguageSwitcher from "./language-switcher";
+import { LanguageSwitcher } from "./language-switcher";
 import { DarkModeSwitcher } from "./dark-mode-switcher";
 
 const navigattionItems = [
@@ -173,7 +173,7 @@ export default function SearchBarDialog({
           <CommandItem value="languages english vietnamese">
             <span>Languagues</span>
             <CommandShortcut className="flex items-center">
-              {/* <LanguageSwitcher className="w-4 h-4" variant={"ghost"} /> */}
+              <LanguageSwitcher className="w-4 h-4" variant={"ghost"} />
             </CommandShortcut>
           </CommandItem>
         </CommandGroup>

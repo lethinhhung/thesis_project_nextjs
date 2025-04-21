@@ -146,7 +146,7 @@ function Lesson() {
             animate={{ width: 1024, opacity: 1 }}
             exit={{ width: 0, opacity: 0 }}
             transition={{ duration: 0.3 }}
-            className="hidden 2xl:flex sticky border py-4 dark:border-dashed rounded-xl shadow-md h-[calc(100svh-92px)] top-16"
+            className="hidden 2xl:flex sticky border py-4 dark:border-dashed rounded-xl shadow-md h-[calc(100svh-92px)] top-18"
           >
             <ChatBox attachContent={markDown} title="lesson" />
           </motion.div>

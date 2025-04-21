@@ -2,7 +2,7 @@
 
 // import LanguageSwitcher from "./language-switcher";
 import { DarkModeSwitcher } from "./dark-mode-switcher";
-import LanguageSwitcher from "./language-switcher";
+import { LanguageSwitcher } from "./language-switcher";
 
 export function NavControls({ isSidebarOpen }: { isSidebarOpen?: boolean }) {
   return (
