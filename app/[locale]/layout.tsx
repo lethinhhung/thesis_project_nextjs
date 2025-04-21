@@ -33,7 +33,9 @@ export default async function RootLayout({
   return (
     <html lang={locale} suppressHydrationWarning className="scrollbar">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased font-[Geist]`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased ${
+          locale == "en" && "font-[Geist]"
+        }`}
       >
         <CustomSessionProvider session={session}>
           <ThemeProvider

@@ -34,7 +34,6 @@ function MailPreviewMobile({
                 <div className="flex items-center gap-1">
                   {mail?.title} {mail?.status && <CheckCircle2 size={"1rem"} />}
                 </div>
-                <Button size={"sm"} variant={"ghost"}></Button>
               </div>
             </DrawerTitle>
             <DrawerDescription>{mail?.date}</DrawerDescription>

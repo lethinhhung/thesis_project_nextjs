@@ -29,17 +29,17 @@ import { NavControls } from "./nav-controls";
 import { useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 
-const userLocal = {
-  name: "Khaled Taha",
-  avatar: "/images/avatar.png",
-  email: "user@example.com",
-};
-
 export function NavUser() {
   const { isMobile } = useSidebar();
   const router = useRouter();
-  const { data: sesson } = useSession();
-  console.log(sesson);
+  const { data: session } = useSession();
+
+  const user = {
+    name: session?.user?.name || "Guest",
+    email: session?.user?.email || "",
+    // You can add a default avatar or handle null case
+    avatar: session?.user?.image || "/images/avatar.png",
+  };
 
   return (
     <SidebarMenu>
@@ -51,12 +51,14 @@ export function NavUser() {
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg">
-                <AvatarImage src={userLocal.avatar} alt={userLocal.name} />
-                <AvatarFallback className="rounded-lg">KT</AvatarFallback>
+                <AvatarImage src={user.avatar} alt={user.name} />
+                <AvatarFallback className="rounded-lg">
+                  {user.name.charAt(0).toUpperCase()}
+                </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">{userLocal.name}</span>
-                <span className="truncate text-xs">{userLocal.email}</span>
+                <span className="truncate font-semibold">{user.name}</span>
+                <span className="truncate text-xs">{user.email}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -70,14 +72,14 @@ export function NavUser() {
             <DropdownMenuLabel className="p-0 font-normal ">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={userLocal.avatar} alt={userLocal.name} />
-                  <AvatarFallback className="rounded-lg">KT</AvatarFallback>
+                  <AvatarImage src={user.avatar} alt={user.name} />
+                  <AvatarFallback className="rounded-lg">
+                    {user.name.charAt(0).toUpperCase()}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">
-                    {userLocal.name}
-                  </span>
-                  <span className="truncate text-xs">{userLocal.email}</span>
+                  <span className="truncate font-semibold">{user.name}</span>
+                  <span className="truncate text-xs">{user.email}</span>
                 </div>
               </div>
 
