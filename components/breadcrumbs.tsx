@@ -48,7 +48,7 @@ const breadcrumbMap: Record<string, string> = {
 
 export default function Breadcrumbs() {
   const pathname = usePathname();
-  const pathSegments = pathname.split("/").filter(Boolean);
+  const pathSegments = pathname.split("/").filter(Boolean).slice(1);
   const isTablet = useIsTablet();
   const shouldShorten = isTablet
     ? pathSegments.length >= 3

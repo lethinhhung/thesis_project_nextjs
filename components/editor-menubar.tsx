@@ -38,7 +38,7 @@ function EditorMenubar({
   const [isCollapsed, setIsCollapsed] = useState(false);
   return (
     <AnimatePresence initial={false}>
-      <div className="w-full flex justify-end col-span-full sticky z-10 top-16 2xl:top-18">
+      <div className="w-full pb-4 pt-2 2xl:pt-4 flex justify-end col-span-full sticky z-10 top-14 2xl:top-14">
         <motion.div
           className=""
           initial={false}
@@ -50,7 +50,10 @@ function EditorMenubar({
             ease: "easeInOut",
           }}
         >
-          <Menubar className="justify-between dark:border-dashed bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+          <Menubar
+            autoFocus={false}
+            className="justify-between shadow-sm dark:border-dashed bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+          >
             {!isCollapsed && (
               <div className="flex gap-1">
                 <MenubarMenu>

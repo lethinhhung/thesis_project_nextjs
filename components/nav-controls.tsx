@@ -18,6 +18,7 @@ export function NavControls({ isSidebarOpen }: { isSidebarOpen?: boolean }) {
         className="p-2 h-8 w-8"
         variant={"ghost"}
         size={"icon"}
+        isSidebarOpen={isSidebarOpen}
       />
 
       {/* <LanguageSwitcher
