@@ -27,6 +27,8 @@ import { useEffect, useState } from "react";
 import { CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { motion } from "framer-motion";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { chatCompletions } from "@/lib/services/ai.service";
+import ThinkingText from "./thinking-text";
 
 function ChatBox({
   attachContent,
@@ -51,19 +53,27 @@ function ChatBox({
     }
   };
 
-  // const getChatCompletions = async (updatedMessages: Message[]) => {
-  const getChatCompletions = async () => {
+  const getChatCompletions = async (updatedMessages: Message[]) => {
     setLoading(true);
     try {
-      // const res = await chatCompletions(updatedMessages);
-      // console.log(res);
-      // setMessages((prevMessages) => [
-      //   ...prevMessages,
-      //   {
-      //     role: "assistant",
-      //     content: res?.data.choices[0]?.message?.content,
-      //   },
-      // ]);
+      const res = await chatCompletions(updatedMessages);
+      if (res?.status == 200) {
+        setMessages((prevMessages) => [
+          ...prevMessages,
+          {
+            role: "assistant",
+            content: res?.data.choices[0]?.message?.content,
+          },
+        ]);
+      } else {
+        setMessages([
+          {
+            role: "assistant",
+            content:
+              "Đã có lỗi xảy ra. Vui lòng tạo cuộc trò chuyện mới và thử lại sau.",
+          },
+        ]);
+      }
     } catch (error) {
       console.error("Error fetching chat completions:", error);
     } finally {
@@ -90,8 +100,8 @@ function ChatBox({
     setInput("");
 
     // Gọi API sau khi `messages` cập nhật
-    // getChatCompletions(updatedMessages);
-    getChatCompletions();
+    getChatCompletions(updatedMessages);
+    // getChatCompletions();
   };
 
   useEffect(() => {
@@ -147,7 +157,7 @@ function ChatBox({
             >
               <div className="flex flex-col gap-2">
                 <small className="text-sm font-medium leading-none">
-                  Thinking...
+                  <ThinkingText />
                 </small>
                 <Skeleton className="w-100 p-4 mb-5 bg-secondary rounded-md h-15" />
               </div>
