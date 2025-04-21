@@ -10,11 +10,12 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { getProfileAPI } from "@/lib/services/user.service";
+import { useTranslations } from "next-intl";
 
 function Home() {
-  const [test, setTest] = useState({});
+  const t = useTranslations("common");
   useEffect(() => {
     const fetchData = async () => {
       const res = await getProfileAPI();
@@ -28,7 +29,7 @@ function Home() {
         <Card className="w-full dark:border-dashed">
           <CardContent>
             <h2 className="text-3xl font-extrabold tracking-tight">
-              Welcome back to Notebok.
+              {t("languages")}
             </h2>
           </CardContent>
           <CardFooter>

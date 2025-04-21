@@ -4,6 +4,9 @@ import { ThemeProvider } from "@/components/theme-provider";
 import ToasterClient from "@/components/toaster-client";
 import { getServerSession } from "next-auth";
 import CustomSessionProvider from "@/components/session-provider";
+import { NextIntlClientProvider, hasLocale } from "next-intl";
+import { notFound } from "next/navigation";
+import { routing } from "@/src/i18n/routing";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,12 +20,18 @@ const geistMono = Geist_Mono({
 
 export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: Promise<{ locale: string }>;
 }>) {
+  const { locale } = await params;
+  if (!hasLocale(routing.locales, locale)) {
+    notFound();
+  }
   const session = await getServerSession();
   return (
-    <html lang="en" suppressHydrationWarning className="scrollbar">
+    <html lang={locale} suppressHydrationWarning className="scrollbar">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased font-[Geist]`}
       >
@@ -33,7 +42,7 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {children}
+            <NextIntlClientProvider>{children}</NextIntlClientProvider>
             <ToasterClient />
           </ThemeProvider>
         </CustomSessionProvider>

@@ -42,6 +42,8 @@ const breadcrumbMap: Record<string, string> = {
   projects: "Projects",
   documents: "Documents",
   "ask-ai": "Ask AI",
+  en: "English",
+  vi: "Tiếng Việt",
 };
 
 export default function Breadcrumbs() {

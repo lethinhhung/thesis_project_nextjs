@@ -1,0 +1,37 @@
+{
+  "english": "Tiếng Anh",
+  "vietnamese": "Tiếng Việt",
+  "languages": "Ngôn ngữ",
+
+  "welcome": "Chào mừng trở lại",
+  "darkMode": "Chế độ tối",
+  "lightMode": "Chế độ sáng",
+  "system": "Hệ thống",
+  "login_to": "Đăng nhập vào tài khoản Notebok của bạn",
+  "password": "Mật khẩu",
+  "forgot_password": "Quên mật khẩu?",
+  "login": "Đăng nhập",
+  "or_continue_with": "Hoặc tiếp tục với",
+  "dont_have_account": "Chưa có tài khoản?",
+  "sign_up": "Đăng ký",
+
+  "create_account": "Tạo tài khoản",
+  "join_study": "Tham gia Notebok ngay hôm nay",
+  "username": "Tên người dùng",
+  "confirm_password": "Xác nhận mật khẩu",
+  "use_strong_password": "Sử dụng mật khẩu mạnh.",
+  "your_unique_display_name": "Tên hiển thị duy nhất của bạn.",
+  "re_enter_password": "Nhập lại mật khẩu của bạn.",
+  "back": "Quay lại",
+  "submit": "Gửi",
+
+  "username_required": "Tên người dùng phải có ít nhất 2 ký tự.",
+  "username_contain": "Tên người dùng chỉ có thể chứa các chữ cái, số và dấu gạch dưới",
+  "email_required": "Địa chỉ email không hợp lệ.",
+  "password_required": "Mật khẩu phải có ít nhất 8 ký tự.",
+  "password_contain": "Mật khẩu phải chứa ít nhất một chữ cái viết thường, một chữ cái viết hoa, một số và một ký tự đặc biệt.",
+  "confirm_password_required": "Phải giống với Mật khẩu trước đó.",
+  "password_not_match": "Mật khẩu không khớp.",
+  "already_have_account": "Đã có tài khoản?",
+  "sign_in": "Đăng nhập"
+}
