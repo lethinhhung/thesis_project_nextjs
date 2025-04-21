@@ -17,7 +17,7 @@ import {
   MenubarSubTrigger,
   MenubarTrigger,
 } from "@/components/ui/menubar";
-import { ArrowUpRight, ChevronLeft, Square, SquareDashed } from "lucide-react";
+import { ArrowUpRight, ChevronRight, Square, SquareDashed } from "lucide-react";
 import { Button } from "./ui/button";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
@@ -154,7 +154,7 @@ function EditorMenubar({
                         animate={{ rotate: isCollapsed ? 180 : 0 }}
                         transition={{ duration: 0.3 }}
                       >
-                        <ChevronLeft />
+                        <ChevronRight />
                       </motion.div>
                     </Button>
                   </TooltipTrigger>
