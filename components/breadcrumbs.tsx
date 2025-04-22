@@ -30,7 +30,6 @@ const breadcrumbMap: Record<string, string> = {
   pages: "Pages",
   chat: "Chat",
   library: "Library",
-  account: "Account",
   settings: "Settings",
   inbox: "Inbox",
   calendar: "Calendar",

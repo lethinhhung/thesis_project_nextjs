@@ -90,10 +90,6 @@ export function NavUser() {
 
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem onClick={() => router.push("/account")}>
-                <User />
-                Account
-              </DropdownMenuItem>
               <DropdownMenuItem onClick={() => router.push("/settings")}>
                 <Settings />
                 Settings
