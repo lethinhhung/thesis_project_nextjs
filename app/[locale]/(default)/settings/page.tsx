@@ -35,7 +35,7 @@ interface UpdateData {
 }
 
 function Settings() {
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
   const [userData, setUserData] = useState<User>();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -78,10 +78,13 @@ function Settings() {
         toast.error("Error fetching user data");
         fetchUserData();
       } else {
+        await update();
         setIsDialogOpen(false);
         toast.success("Profile updated successfully");
         fetchUserData();
       }
+
+      console.log(res.data.profile.avatar);
 
       setIsDialogLoading(false);
       // TODO: Add your API call here
@@ -137,7 +140,7 @@ function Settings() {
               <Avatar className="w-12 h-12 md:w-18 md:h-18 rounded-full">
                 <AvatarImage
                   src={userData?.profile?.avatar || user.avatar}
-                  className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+                  className="h-full w-full object-cover"
                 />
                 <AvatarFallback className="rounded-full">
                   {userData?.profile?.name.charAt(0).toUpperCase() || "U"}
@@ -175,6 +178,7 @@ function Settings() {
                         Name
                       </Label>
                       <Input
+                        spellCheck={false}
                         value={updateData?.name}
                         id="name"
                         className="col-span-3"

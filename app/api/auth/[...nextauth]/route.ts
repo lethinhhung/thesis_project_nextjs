@@ -1,4 +1,5 @@
 import { loginAPI } from "@/lib/services/auth.service";
+import { getProfileAPI } from "@/lib/services/user.service";
 import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
@@ -56,7 +57,15 @@ export const authOptions: AuthOptions = {
     },
     async session({ session, token }) {
       // Truyền token vào session để frontend dùng
+      const updatedUser = await getProfileAPI(token.accessToken as string); // Giả sử accessToken có sẵn trong token
+      if (updatedUser?.status === 200 && updatedUser.data) {
+        session.user = {
+          ...session.user,
+          image: updatedUser.data.data.profile.avatar,
+        }; // Cập nhật thông tin user trong session
+      }
       session.accessToken = token.accessToken;
+
       return session;
     },
   },
