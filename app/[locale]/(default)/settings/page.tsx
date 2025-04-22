@@ -32,6 +32,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 interface UpdateData {
   name?: string;
   bio?: string;
+  avatar?: File | null;
 }
 
 function Settings() {
@@ -47,22 +48,60 @@ function Settings() {
     // You can add a default avatar or handle null case
     avatar: session?.user?.image || "/images/avatar.png",
   };
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setUpdateData((prev) => ({
+        ...prev,
+        avatar: e.target.files![0],
+      }));
+    }
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const form = new FormData();
+      form.append("name", updateData?.name || "");
+      form.append("bio", updateData?.bio || "");
+      if (updateData?.avatar) {
+        form.append("avatar", updateData?.avatar);
+      }
+
+      // TODO: Add your API call here
+      // const response = await updateProfileAPI(form);
+
+      setIsDialogOpen(false);
+      toast.success("Profile updated successfully");
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      toast.error("Failed to update profile");
+    }
+  };
 
   const fetchUserData = async () => {
     setIsLoading(true);
-    const res = await getProfileAPI();
-    if (res.status === 200) {
-      setUserData(res.data.data);
+    const response = await fetch("/api/user/profile");
+    const res = await response.json();
+    if (!res.success) {
+      toast.error("Error fetching user data");
+      setIsLoading(false);
+    } else {
+      setUserData(res.data);
       setUpdateData({
-        name: res.data.data.profile.name,
-        bio: res.data.data.profile.bio,
+        name: res.data.profile.name,
+        bio: res.data.profile.bio,
       });
       setIsLoading(false);
-      return;
     }
 
-    toast.error("Error fetching user data");
-    setIsLoading(false);
+    // if (res.status === 200) {
+    //   setUserData(res.data.data);
+    //   setUpdateData({
+    //     name: res.data.data.profile.name,
+    //     bio: res.data.data.profile.bio,
+    //   });
+    //   setIsLoading(false);
+    //   return;
+    // }
   };
 
   useEffect(() => {
@@ -82,17 +121,20 @@ function Settings() {
             <div className="flex w-full items-center p-2 md:p-4 gap-4">
               <Avatar className="w-12 h-12 md:w-18 md:h-18 rounded-full">
                 <AvatarImage
-                  src={user.avatar}
+                  src={userData?.profile?.avatar || user.avatar}
                   className="h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
                 />
                 <AvatarFallback className="rounded-full">
-                  {user.name.charAt(0).toUpperCase()}
+                  {userData?.profile?.name.charAt(0).toUpperCase() || "U"}
                 </AvatarFallback>
               </Avatar>
 
               <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-                {user.name}
-                <p className="text-sm text-muted-foreground">{user.email}</p>
+                {userData?.username || user.name} |{" "}
+                {userData?.profile?.name || user.name}
+                <p className="text-sm text-muted-foreground">
+                  {userData?.email || user.email}
+                </p>
               </h3>
             </div>
             <div className="flex items-center gap-2 p-2 md:p-4">
@@ -122,7 +164,10 @@ function Settings() {
                         id="name"
                         className="col-span-3"
                         onChange={(e) =>
-                          setUpdateData({ ...updateData, name: e.target.value })
+                          setUpdateData((prev) => ({
+                            ...prev,
+                            name: e.target.value,
+                          }))
                         }
                       />
                     </div>
@@ -131,7 +176,13 @@ function Settings() {
                       <Label htmlFor="username" className="justify-self-end">
                         Avatar
                       </Label>
-                      <Input id="picture" type="file" className="col-span-3" />
+                      <Input
+                        id="picture"
+                        type="file"
+                        className="col-span-3"
+                        accept="image/png, image/jpeg, image/jpg"
+                        onChange={handleFileChange}
+                      />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
                       <Label htmlFor="username" className="justify-self-end">
@@ -143,7 +194,10 @@ function Settings() {
                         placeholder="Tell us about yourself..."
                         className="col-span-3 resize-none h-40 scrollbar"
                         onChange={(e) =>
-                          setUpdateData({ ...updateData, bio: e.target.value })
+                          setUpdateData((prev) => ({
+                            ...prev,
+                            bio: e.target.value,
+                          }))
                         }
                       />
                     </div>
@@ -169,12 +223,9 @@ function Settings() {
         </div>
       ) : (
         <>
-          <div className="flex p-4 flex-col border border-dashed rounded-xl">
+          <div className="flex p-4 w-full flex-col border border-dashed rounded-xl">
             <p className="text-sm text-muted-foreground">About</p>
-            <p className="p-2">
-              The king, seeing how much happier his subjects were, realized the
-              error of his ways and repealed the joke tax.
-            </p>
+            <p className="p-2 w-full">{userData?.profile?.bio || ""}</p>
           </div>
           <Card className="w-full shadow-none border border-dashed">
             <CardHeader>

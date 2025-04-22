@@ -1,8 +1,8 @@
-import axios from "../axios.customize";
+import { createAxiosInstance } from "../axios.customize-server";
 
-const getProfileAPI = () => {
+const getProfileAPI = (token: string) => {
   const URL_API = "/api/user/profile";
-  return axios.get(URL_API);
+  return createAxiosInstance(token).get(URL_API);
 };
 
 export { getProfileAPI };
