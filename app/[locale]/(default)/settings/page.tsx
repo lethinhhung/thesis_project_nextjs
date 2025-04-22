@@ -84,11 +84,7 @@ function Settings() {
         fetchUserData();
       }
 
-      console.log(res.data.profile.avatar);
-
       setIsDialogLoading(false);
-      // TODO: Add your API call here
-      // const response = await updateProfileAPI(form);
     } catch (error) {
       console.error("Error updating profile:", error);
       toast.error("Failed to update profile");
@@ -110,21 +106,12 @@ function Settings() {
       });
       setIsLoading(false);
     }
-
-    // if (res.status === 200) {
-    //   setUserData(res.data.data);
-    //   setUpdateData({
-    //     name: res.data.data.profile.name,
-    //     bio: res.data.data.profile.bio,
-    //   });
-    //   setIsLoading(false);
-    //   return;
-    // }
   };
 
   useEffect(() => {
     fetchUserData();
   }, []);
+
   return (
     <div className="flex flex-col gap-4 items-center mx-auto h-full w-full max-w-3xl rounded-xl">
       <div className="flex w-full items-center justify-between">
@@ -224,7 +211,7 @@ function Settings() {
 
                   <DialogFooter>
                     <Button
-                      className="w-32"
+                      className="w-full sm:w-32"
                       onClick={handleSubmit}
                       type="submit"
                     >

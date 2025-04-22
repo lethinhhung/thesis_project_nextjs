@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const createAxiosInstance = (token: string) => {
+export const createAxiosInstance = (token?: string) => {
   const instance = axios.create({
     baseURL: process.env.BACKEND_URL || "http://localhost:8080",
     withCredentials: true,
@@ -9,6 +9,9 @@ export const createAxiosInstance = (token: string) => {
   instance.interceptors.request.use(
     async function (config) {
       // Do something before request is sent
+      if (!token) {
+        return config;
+      }
 
       config.headers.Authorization = `Bearer ${token}`;
 
