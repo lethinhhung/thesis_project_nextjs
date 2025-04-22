@@ -5,4 +5,9 @@ const getProfileAPI = (token: string) => {
   return createAxiosInstance(token).get(URL_API);
 };
 
-export { getProfileAPI };
+const updateProfileAPI = (token: string, form: FormData) => {
+  const URL_API = "/api/user/update-profile";
+  return createAxiosInstance(token).put(URL_API, form);
+};
+
+export { getProfileAPI, updateProfileAPI };

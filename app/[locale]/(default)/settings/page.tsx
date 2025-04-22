@@ -9,7 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Edit } from "lucide-react";
+import { Edit, Loader } from "lucide-react";
 import { useSession } from "next-auth/react";
 import {
   Dialog,
@@ -24,7 +24,6 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useEffect, useState } from "react";
-import { getProfileAPI } from "@/lib/services/user.service";
 import { User } from "@/interfaces/user";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -41,6 +40,7 @@ function Settings() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [updateData, setUpdateData] = useState<UpdateData>();
+  const [isDialogLoading, setIsDialogLoading] = useState(false);
 
   const user = {
     name: session?.user?.name || "Guest",
@@ -58,19 +58,34 @@ function Settings() {
   };
 
   const handleSubmit = async () => {
+    setIsDialogLoading(true);
     try {
       const form = new FormData();
-      form.append("name", updateData?.name || "");
-      form.append("bio", updateData?.bio || "");
       if (updateData?.avatar) {
         form.append("avatar", updateData?.avatar);
       }
+      form.append("name", updateData?.name || "");
+      form.append("bio", updateData?.bio || "");
 
+      const response = await fetch(`/api/user/update-profile`, {
+        method: "PUT",
+        body: form,
+      });
+
+      const res = await response.json();
+      if (!res.success) {
+        setIsDialogOpen(false);
+        toast.error("Error fetching user data");
+        fetchUserData();
+      } else {
+        setIsDialogOpen(false);
+        toast.success("Profile updated successfully");
+        fetchUserData();
+      }
+
+      setIsDialogLoading(false);
       // TODO: Add your API call here
       // const response = await updateProfileAPI(form);
-
-      setIsDialogOpen(false);
-      toast.success("Profile updated successfully");
     } catch (error) {
       console.error("Error updating profile:", error);
       toast.error("Failed to update profile");
@@ -205,10 +220,15 @@ function Settings() {
 
                   <DialogFooter>
                     <Button
-                      onClick={() => console.log(updateData)}
+                      className="w-32"
+                      onClick={handleSubmit}
                       type="submit"
                     >
-                      Save changes
+                      {isDialogLoading ? (
+                        <Loader className="animate-spin" />
+                      ) : (
+                        "Save changes"
+                      )}
                     </Button>
                   </DialogFooter>
                 </DialogContent>

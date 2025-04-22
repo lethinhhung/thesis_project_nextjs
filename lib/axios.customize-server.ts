@@ -3,9 +3,6 @@ import axios from "axios";
 export const createAxiosInstance = (token: string) => {
   const instance = axios.create({
     baseURL: process.env.BACKEND_URL || "http://localhost:8080",
-    headers: {
-      "Content-Type": "application/json",
-    },
     withCredentials: true,
   });
 
