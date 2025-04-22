@@ -26,6 +26,7 @@ export const authOptions: AuthOptions = {
               id: response.data.data.id,
               name: response.data.data.username,
               email: response.data.data.email,
+              image: response.data.data.avatar,
               accessToken: response.data.data.accessToken,
             };
           }

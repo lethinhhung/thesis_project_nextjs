@@ -11,6 +11,18 @@ import {
 } from "@/components/ui/card";
 import { Edit } from "lucide-react";
 import { useSession } from "next-auth/react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 function Settings() {
   const { data: session } = useSession();
@@ -37,9 +49,52 @@ function Settings() {
           </h3>
         </div>
         <div className="flex items-center gap-2 p-2 md:p-4">
-          <Button size={"icon"} variant={"ghost"}>
-            <Edit />
-          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button size={"icon"} variant={"ghost"}>
+                <Edit />
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Edit your profile</DialogTitle>
+                <DialogDescription>
+                  {
+                    "Make changes to your profile here. Click save when you're done."
+                  }
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="name" className="justify-self-end">
+                    Name
+                  </Label>
+                  <Input id="name" className="col-span-3" />
+                </div>
+
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="username" className="justify-self-end">
+                    Avatar
+                  </Label>
+                  <Input id="picture" type="file" className="col-span-3" />
+                </div>
+                <div className="grid grid-cols-4 items-center gap-4">
+                  <Label htmlFor="username" className="justify-self-end">
+                    About
+                  </Label>
+                  <Textarea
+                    spellCheck={false}
+                    placeholder="Tell us about yourself..."
+                    className="col-span-3 resize-none h-40 scrollbar"
+                  />
+                </div>
+              </div>
+
+              <DialogFooter>
+                <Button type="submit">Save changes</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
       <div className="flex p-4 flex-col border border-dashed rounded-xl">
