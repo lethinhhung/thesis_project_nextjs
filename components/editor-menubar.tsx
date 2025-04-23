@@ -68,23 +68,31 @@ function EditorMenubar({
     a.download = filename;
     a.click();
     window.URL.revokeObjectURL(url);
+    toast.success("File downloaded successfully!");
   };
 
   const downloadMarkdown = async () => {
+    document.body.style.cursor = "wait";
     const markdown = await editor.blocksToMarkdownLossy(editor.document);
     const blob = new Blob([markdown], { type: "text/markdown" });
     downloadBlob(blob, "markdown.md");
+    document.body.style.cursor = "default";
   };
 
   const downloadHTML = async () => {
+    document.body.style.cursor = "wait";
     const html = await editor.blocksToFullHTML(editor.document);
     const blob = new Blob([html], { type: "text/html" });
     downloadBlob(blob, "html.html");
+    document.body.style.cursor = "default";
   };
 
   const downloadPDF = async () => {
+    document.body.style.cursor = "wait";
     if (!editorRef?.current) {
       console.log("null");
+
+      document.body.style.cursor = "default";
       return;
     }
 
@@ -98,6 +106,8 @@ function EditorMenubar({
 
     pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
     pdf.save("pdf.pdf");
+    document.body.style.cursor = "default";
+    toast.success("File downloaded successfully!");
   };
 
   return (
