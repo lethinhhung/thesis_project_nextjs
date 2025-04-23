@@ -21,21 +21,85 @@ import { ArrowUpRight, ChevronRight, Square, SquareDashed } from "lucide-react";
 import { Button } from "./ui/button";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
+import { BlockNoteSchema, defaultBlockSpecs } from "@blocknote/core";
+import { Divider } from "./blocks/divider";
+import { Quote } from "./blocks/quote";
+import { Heading4 } from "./blocks/heading4";
+import { InlineCode } from "./blocks/inline-code";
+import { Muted } from "./blocks/muted";
+import { toast } from "sonner";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas-pro";
+
+export const schema = BlockNoteSchema.create({
+  blockSpecs: {
+    ...defaultBlockSpecs,
+    divider: Divider,
+    quote: Quote,
+    heading4: Heading4,
+    inlinecode: InlineCode,
+    muted: Muted,
+  },
+});
 
 function EditorMenubar({
+  editor,
   isDarkTheme,
   isPlainBackground,
   setIsPlainBackground,
   isChatOpen,
   setIsChatOpen,
+  editorRef,
 }: {
+  editor: typeof schema.BlockNoteEditor;
   isDarkTheme: boolean;
   isPlainBackground: boolean;
   setIsPlainBackground: (value: boolean) => void;
   isChatOpen: boolean;
   setIsChatOpen: (value: boolean) => void;
+  editorRef: React.RefObject<HTMLDivElement> | null;
 }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const downloadBlob = (blob: Blob, filename: string) => {
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
+
+  const downloadMarkdown = async () => {
+    const markdown = await editor.blocksToMarkdownLossy(editor.document);
+    const blob = new Blob([markdown], { type: "text/markdown" });
+    downloadBlob(blob, "markdown.md");
+  };
+
+  const downloadHTML = async () => {
+    const html = await editor.blocksToFullHTML(editor.document);
+    const blob = new Blob([html], { type: "text/html" });
+    downloadBlob(blob, "html.html");
+  };
+
+  const downloadPDF = async () => {
+    if (!editorRef?.current) {
+      console.log("null");
+      return;
+    }
+
+    const canvas = await html2canvas(editorRef?.current);
+    const imgData = canvas.toDataURL("image/png");
+
+    const pdf = new jsPDF("p", "mm", "a4");
+    const imgProps = pdf.getImageProperties(imgData);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save("pdf.pdf");
+  };
+
   return (
     <AnimatePresence initial={false}>
       <div className="w-full pb-4 pt-2 2xl:pt-4 flex justify-end col-span-full sticky z-10 top-14 2xl:top-14">
@@ -62,9 +126,11 @@ function EditorMenubar({
                     <MenubarSub>
                       <MenubarSubTrigger>Export to</MenubarSubTrigger>
                       <MenubarSubContent>
-                        <MenubarItem>PDF</MenubarItem>
-                        <MenubarItem>HTML</MenubarItem>
-                        <MenubarItem>Markdown</MenubarItem>
+                        <MenubarItem onClick={downloadPDF}>PDF</MenubarItem>
+                        <MenubarItem onClick={downloadHTML}>HTML</MenubarItem>
+                        <MenubarItem onClick={downloadMarkdown}>
+                          Markdown
+                        </MenubarItem>
                       </MenubarSubContent>
                     </MenubarSub>
                     <MenubarItem>Save</MenubarItem>

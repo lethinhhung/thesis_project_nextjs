@@ -29,7 +29,7 @@ import {
   Type,
 } from "lucide-react";
 import CustomEmojiPicker from "./blocks/emoji";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Quote } from "./blocks/quote";
 import { Heading4 } from "./blocks/heading4";
 import { InlineCode } from "./blocks/inline-code";
@@ -202,51 +202,56 @@ const Editor = ({
       : isDarkTheme
       ? "dark"
       : "light";
+  const editorRef = useRef<HTMLDivElement>(null!);
 
   return (
     <div className="col-span-full space-y-4">
       <EditorMenubar
+        editor={editor}
         isDarkTheme={isDarkTheme}
         isPlainBackground={isPlainBackground}
         setIsPlainBackground={setIsPlainBackground}
         isChatOpen={isChatOpen}
         setIsChatOpen={setIsChatOpen}
+        editorRef={editorRef}
       />
 
-      <BlockNoteView
-        className="w-full"
-        onChange={saveContentAsJSON}
-        editor={editor}
-        theme={editorTheme}
-        slashMenu={false}
-        emojiPicker={false}
+      <div className="w-full" ref={editorRef}>
+        <BlockNoteView
+          className="w-full"
+          onChange={saveContentAsJSON}
+          editor={editor}
+          theme={editorTheme}
+          slashMenu={false}
+          emojiPicker={false}
 
-        // onClick={() => console.log(editor.getSelection()?.blocks)}
-      >
-        <SuggestionMenuController
-          triggerCharacter={"/"}
-          getItems={async (query) =>
-            // Gets all default slash menu items and `insertAlert` item.
-            filterSuggestionItems(
-              [
-                ...getDefaultReactSlashMenuItems(editor),
-                insertDivider(editor),
-                insertQuote(editor),
-                insertHeading4(editor),
-                insertInlineCode(editor),
-                insertMuted(editor),
-              ],
-              query
-            )
-          }
-        />
-        <GridSuggestionMenuController
-          triggerCharacter={":"}
-          gridSuggestionMenuComponent={CustomEmojiPicker}
-          columns={isMobile ? 6 : 10}
-          minQueryLength={2}
-        />
-      </BlockNoteView>
+          // onClick={() => console.log(editor.getSelection()?.blocks)}
+        >
+          <SuggestionMenuController
+            triggerCharacter={"/"}
+            getItems={async (query) =>
+              // Gets all default slash menu items and `insertAlert` item.
+              filterSuggestionItems(
+                [
+                  ...getDefaultReactSlashMenuItems(editor),
+                  insertDivider(editor),
+                  insertQuote(editor),
+                  insertHeading4(editor),
+                  insertInlineCode(editor),
+                  insertMuted(editor),
+                ],
+                query
+              )
+            }
+          />
+          <GridSuggestionMenuController
+            triggerCharacter={":"}
+            gridSuggestionMenuComponent={CustomEmojiPicker}
+            columns={isMobile ? 6 : 10}
+            minQueryLength={2}
+          />
+        </BlockNoteView>
+      </div>
     </div>
   );
 };
