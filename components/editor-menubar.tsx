@@ -21,26 +21,10 @@ import { ArrowUpRight, ChevronRight, Square, SquareDashed } from "lucide-react";
 import { Button } from "./ui/button";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
-import { BlockNoteSchema, defaultBlockSpecs } from "@blocknote/core";
-import { Divider } from "./blocks/divider";
-import { Quote } from "./blocks/quote";
-import { Heading4 } from "./blocks/heading4";
-import { InlineCode } from "./blocks/inline-code";
-import { Muted } from "./blocks/muted";
 import { toast } from "sonner";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas-pro";
-
-export const schema = BlockNoteSchema.create({
-  blockSpecs: {
-    ...defaultBlockSpecs,
-    divider: Divider,
-    quote: Quote,
-    heading4: Heading4,
-    inlinecode: InlineCode,
-    muted: Muted,
-  },
-});
+import { schema } from "./blocknote";
 
 function EditorMenubar({
   editor,
@@ -76,7 +60,7 @@ function EditorMenubar({
     const markdown = await editor.blocksToMarkdownLossy(editor.document);
     const blob = new Blob([markdown], { type: "text/markdown" });
     downloadBlob(blob, "markdown.md");
-    document.body.style.cursor = "default";
+    document.body.style.cursor = "auto";
   };
 
   const downloadHTML = async () => {
@@ -84,29 +68,80 @@ function EditorMenubar({
     const html = await editor.blocksToFullHTML(editor.document);
     const blob = new Blob([html], { type: "text/html" });
     downloadBlob(blob, "html.html");
-    document.body.style.cursor = "default";
+    document.body.style.cursor = "auto";
   };
+
+  // const downloadPDF = async () => {
+  //   document.body.style.cursor = "wait";
+  //   if (!editorRef?.current) {
+  //     console.log("null");
+
+  //     document.body.style.cursor = "auto";
+  //     return;
+  //   }
+
+  //   const canvas = await html2canvas(editorRef?.current);
+  //   const imgData = canvas.toDataURL("image/png");
+
+  //   const pdf = new jsPDF("p", "mm", "a4");
+  //   const imgProps = pdf.getImageProperties(imgData);
+  //   const pdfWidth = pdf.internal.pageSize.getWidth();
+  //   const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+  //   pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+  //   pdf.save("pdf.pdf");
+  //   document.body.style.cursor = "auto";
+  //   toast.success("File downloaded successfully!");
+  // };
 
   const downloadPDF = async () => {
     document.body.style.cursor = "wait";
-    if (!editorRef?.current) {
-      console.log("null");
 
-      document.body.style.cursor = "default";
+    if (!editorRef?.current) {
+      document.body.style.cursor = "auto";
+      toast.error("Editor not found.");
       return;
     }
 
-    const canvas = await html2canvas(editorRef?.current);
+    const clone = editorRef.current.cloneNode(true) as HTMLElement;
+    clone.style.width = "794px"; // A4 width in px (96 DPI)
+    clone.style.minHeight = "auto";
+    clone.style.position = "absolute";
+    clone.style.left = "-9999px";
+    clone.style.top = "0";
+    clone.style.background = "white";
+
+    document.body.appendChild(clone);
+
+    const canvas = await html2canvas(clone, {
+      scale: 2, // higher quality
+      useCORS: true,
+    });
+
     const imgData = canvas.toDataURL("image/png");
-
     const pdf = new jsPDF("p", "mm", "a4");
-    const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
-    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save("pdf.pdf");
-    document.body.style.cursor = "default";
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+
+    const imgWidth = canvas.width;
+    const imgHeight = canvas.height;
+
+    const ratio = (pdfWidth * 4) / imgWidth; // scale image to match PDF width (4 is approx for 2x scale and 96 DPI)
+    const scaledHeight = (imgHeight * ratio) / 4;
+
+    let position = 0;
+
+    while (position < scaledHeight) {
+      pdf.addImage(imgData, "PNG", 0, 0 - position, pdfWidth, scaledHeight);
+
+      position += pdfHeight;
+      if (position < scaledHeight) pdf.addPage();
+    }
+
+    document.body.removeChild(clone);
+    pdf.save("document.pdf");
+    document.body.style.cursor = "auto";
     toast.success("File downloaded successfully!");
   };
 
