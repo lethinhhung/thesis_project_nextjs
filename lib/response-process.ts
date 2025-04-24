@@ -2,13 +2,22 @@
 
 import { toast } from "sonner";
 
-export async function processResponse(response: Response) {
+export async function processResponse(
+  response: Response,
+  toastify = { success: true, error: true }
+) {
   const data = await response.json();
 
   if (response.ok) {
+    if (!toastify.success) {
+      return data;
+    }
     const successMessage = data.message || "Thành công";
-
     toast.success(successMessage);
+    return data;
+  }
+
+  if (!toastify.error) {
     return data;
   }
 

@@ -10,7 +10,6 @@ export function useAutoSignOut() {
     if (!session) return;
 
     const expiresAt = new Date(session.expires).getTime(); // thời gian hết hạn
-    console.log(expiresAt);
     const now = Date.now();
     const timeout = expiresAt - now;
 

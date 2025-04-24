@@ -273,7 +273,7 @@ function EditorMenubar({
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent side="top">
-                    <p>Collapse</p>
+                    <p>{isCollapsed ? "Menu" : "Collapse"}</p>
                   </TooltipContent>
                 </Tooltip>
               </MenubarTrigger>

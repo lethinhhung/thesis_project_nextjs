@@ -100,7 +100,10 @@ function Settings() {
   const fetchUserData = async () => {
     setIsLoading(true);
     const res = await fetch("/api/user/profile");
-    const response = await processResponse(res);
+    const response = await processResponse(res, {
+      success: false,
+      error: true,
+    });
 
     if (response.success) {
       setUserData(response.data);
