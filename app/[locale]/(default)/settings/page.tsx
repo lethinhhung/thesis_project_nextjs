@@ -86,9 +86,9 @@ function Settings() {
       // }
 
       await processResponse(res);
-      await update();
       setIsDialogOpen(false);
       fetchUserData();
+      await update();
 
       setIsDialogLoading(false);
     } catch (error) {
