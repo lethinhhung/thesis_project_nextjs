@@ -44,9 +44,9 @@ function Settings() {
 
   const user = {
     name: session?.user?.name || "Guest",
-    email: session?.user?.email || "",
+    email: session?.user?.email || "guest@email.com",
     // You can add a default avatar or handle null case
-    avatar: session?.user?.image || "/images/avatar.png",
+    avatar: session?.user?.image || "/placeholder.svg",
   };
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {

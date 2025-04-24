@@ -29,6 +29,7 @@ import { motion } from "framer-motion";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { chatCompletions } from "@/lib/services/ai.service";
 import ThinkingText from "./thinking-text";
+import { toast } from "sonner";
 
 function ChatBox({
   attachContent,
@@ -66,13 +67,10 @@ function ChatBox({
           },
         ]);
       } else {
-        setMessages([
-          {
-            role: "assistant",
-            content:
-              "Đã có lỗi xảy ra. Vui lòng tạo cuộc trò chuyện mới và thử lại sau.",
-          },
-        ]);
+        setMessages([]);
+        toast.error("Something went wrong. Please try again later.", {
+          className: "!bg-destructive !text-white dark:!bg-red-900",
+        });
       }
     } catch (error) {
       console.error("Error fetching chat completions:", error);

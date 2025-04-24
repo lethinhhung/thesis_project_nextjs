@@ -31,7 +31,7 @@ export function NavUser() {
     name: session?.user?.name || "Guest",
     email: session?.user?.email || "",
     // You can add a default avatar or handle null case
-    avatar: session?.user?.image || "/images/avatar.png",
+    avatar: session?.user?.image || "/placeholder.svg",
   };
 
   return (

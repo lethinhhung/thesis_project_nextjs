@@ -36,6 +36,7 @@ import {
 import Breadcrumbs from "@/components/breadcrumbs";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useAutoSignOut } from "@/hooks/use-auto-signout";
 
 const createItems = [
   { title: "Course", url: "/course", icon: <Briefcase /> },
@@ -50,6 +51,7 @@ export default function DefaultLayout({
   children: React.ReactNode;
 }>) {
   const [isOpen, setIsOpen] = useState(false);
+  useAutoSignOut();
   return (
     <SidebarProvider className="">
       <SidebarLeft />
