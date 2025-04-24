@@ -1,8 +1,8 @@
 import { createAxiosInstance } from "../axios.customize-server";
 
-const registerAPI = (username: string, password: string, email: string) => {
+const registerAPI = (username: string, email: string, password: string) => {
   const URL_API = "/api/auth/register";
-  return createAxiosInstance().post(URL_API, { username, password, email });
+  return createAxiosInstance().post(URL_API, { username, email, password });
 };
 
 const loginAPI = (username: string, password: string) => {

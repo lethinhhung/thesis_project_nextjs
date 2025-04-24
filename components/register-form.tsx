@@ -20,6 +20,10 @@ import { useRouter } from "next/navigation";
 import { MouseEvent as ReactMouseEvent } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
+import { signIn } from "next-auth/react";
+import axios from "axios";
+import { processResponse } from "@/lib/response-process";
 
 export default function RegisterForm({
   className,
@@ -73,10 +77,35 @@ export default function RegisterForm({
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        body: JSON.stringify({
+          username: values.username,
+          email: values.email,
+          password: values.password,
+        }),
+      });
+      const data = await processResponse(res);
+
+      if (data.data) {
+        await signIn("credentials", {
+          username: data.data.username,
+          password: values.password,
+          redirect: false,
+          callbackUrl: "/home",
+        });
+        router.push("/home");
+      }
+
+      // nếu ok thì làm gì đó
+    } catch (error) {
+      console.error("Error", error);
+    }
   }
 
   const handleBack = (

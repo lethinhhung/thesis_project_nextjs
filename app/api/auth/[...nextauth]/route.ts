@@ -13,6 +13,11 @@ export const authOptions: AuthOptions = {
           type: "text",
           placeholder: "your username",
         },
+        email: {
+          label: "Email",
+          type: "email",
+          placeholder: "your email",
+        },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
