@@ -20,11 +20,9 @@ import { useRouter } from "next/navigation";
 import { MouseEvent as ReactMouseEvent } from "react";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
-import { toast } from "sonner";
-import { signIn } from "next-auth/react";
-import axios from "axios";
-import { processResponse } from "@/lib/response-process";
 
+import { signIn } from "next-auth/react";
+import { processResponse } from "@/lib/response-process";
 export default function RegisterForm({
   className,
   ...props

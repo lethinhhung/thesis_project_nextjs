@@ -100,6 +100,7 @@ const Editor = ({
     loadInitialJSON();
 
     return () => mediaQuery.removeEventListener("change", handleChange);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Xác định theme thực tế mà user đang dùng
