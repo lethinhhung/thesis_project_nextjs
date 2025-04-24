@@ -28,7 +28,43 @@ export async function PUT(req: NextRequest) {
 
     // Call backend API to get profile
     const response = await updateProfileAPI(token?.accessToken || "", form);
-    return NextResponse.json(response?.data);
+
+    if (response.status === 201 || response.status === 200) {
+      if (response.data.success) {
+        return NextResponse.json(
+          {
+            success: true,
+            message: response.data.message,
+            data: response.data.data,
+          },
+          { status: 201 }
+        );
+      } else {
+        return NextResponse.json(
+          {
+            success: false,
+            message: response.data.message,
+            error: {
+              code: response.data.error.code,
+              details: response.data.error.details,
+            },
+          },
+          { status: 400 }
+        );
+      }
+    }
+
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Unexpected response from profile API",
+        error: {
+          code: "UNEXPECTED_RESPONSE",
+          details: `Status code: ${response.status}`,
+        },
+      },
+      { status: 500 }
+    );
   } catch (error) {
     console.error("Error fetching profile:", error);
     return NextResponse.json(

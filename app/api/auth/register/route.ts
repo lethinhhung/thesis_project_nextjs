@@ -31,6 +31,17 @@ export async function POST(req: NextRequest) {
         );
       }
     }
+    return NextResponse.json(
+      {
+        success: false,
+        message: "Unexpected response from profile API",
+        error: {
+          code: "UNEXPECTED_RESPONSE",
+          details: `Status code: ${response.status}`,
+        },
+      },
+      { status: 500 }
+    );
   } catch (error) {
     console.error("Unexpected register error", error);
     return NextResponse.json(

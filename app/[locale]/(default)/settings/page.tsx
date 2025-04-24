@@ -27,6 +27,7 @@ import { useEffect, useState } from "react";
 import { User } from "@/interfaces/user";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
+import { processResponse } from "@/lib/response-process";
 
 interface UpdateData {
   name?: string;
@@ -67,22 +68,27 @@ function Settings() {
       form.append("name", updateData?.name || "");
       form.append("bio", updateData?.bio || "");
 
-      const response = await fetch(`/api/user/update-profile`, {
+      const res = await fetch(`/api/user/update-profile`, {
         method: "PUT",
         body: form,
       });
 
-      const res = await response.json();
-      if (!res.success) {
-        setIsDialogOpen(false);
-        toast.error("Error fetching user data");
-        fetchUserData();
-      } else {
-        await update();
-        setIsDialogOpen(false);
-        toast.success("Profile updated successfully");
-        fetchUserData();
-      }
+      // const res = await response.json();
+      // if (!res.success) {
+      //   setIsDialogOpen(false);
+      //   toast.error("Error fetching user data");
+      //   fetchUserData();
+      // } else {
+      //   await update();
+      //   setIsDialogOpen(false);
+      //   toast.success("Profile updated successfully");
+      //   fetchUserData();
+      // }
+
+      await processResponse(res);
+      await update();
+      setIsDialogOpen(false);
+      fetchUserData();
 
       setIsDialogLoading(false);
     } catch (error) {
@@ -93,19 +99,22 @@ function Settings() {
 
   const fetchUserData = async () => {
     setIsLoading(true);
-    const response = await fetch("/api/user/profile");
-    const res = await response.json();
-    if (!res.success) {
+    const res = await fetch("/api/user/profile");
+    const response = await processResponse(res);
+
+    if (!response.success) {
       toast.error("Error fetching user data");
       setIsLoading(false);
     } else {
-      setUserData(res.data);
+      setUserData(response.data);
       setUpdateData({
-        name: res.data.profile.name,
-        bio: res.data.profile.bio,
+        name: response.data.profile.name,
+        bio: response.data.profile.bio,
       });
       setIsLoading(false);
     }
+
+    setIsLoading(false);
   };
 
   useEffect(() => {
