@@ -102,16 +102,12 @@ function Settings() {
     const res = await fetch("/api/user/profile");
     const response = await processResponse(res);
 
-    if (!response.success) {
-      toast.error("Error fetching user data");
-      setIsLoading(false);
-    } else {
+    if (response.success) {
       setUserData(response.data);
       setUpdateData({
         name: response.data.profile.name,
         bio: response.data.profile.bio,
       });
-      setIsLoading(false);
     }
 
     setIsLoading(false);

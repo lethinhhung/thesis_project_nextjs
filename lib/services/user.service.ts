@@ -2,7 +2,7 @@ import { createAxiosInstance } from "../axios.customize-server";
 
 const getProfileAPI = (token: string) => {
   const URL_API = "/api/user/profile";
-  return createAxiosInstance(`${token}`).get(URL_API);
+  return createAxiosInstance(token).get(URL_API);
 };
 
 const updateProfileAPI = (token: string, form: FormData) => {
