@@ -55,8 +55,13 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.accessToken = user.accessToken;
+        token = {
+          ...token,
+          accessToken: user.accessToken,
+          image: user.image,
+        };
       }
+
       return token;
     },
     async session({ session, token }) {
@@ -67,7 +72,6 @@ export const authOptions: AuthOptions = {
           image: updatedUser.data.data.profile.avatar,
         }; // Cập nhật thông tin user trong session
       }
-      session.accessToken = token.accessToken;
 
       return session;
     },
