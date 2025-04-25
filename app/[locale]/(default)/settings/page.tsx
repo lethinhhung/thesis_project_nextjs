@@ -86,14 +86,15 @@ function Settings() {
       // }
 
       await processResponse(res);
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      toast.error("Failed to update profile");
+    } finally {
       setIsDialogOpen(false);
       fetchUserData();
       await update();
 
       setIsDialogLoading(false);
-    } catch (error) {
-      console.error("Error updating profile:", error);
-      toast.error("Failed to update profile");
     }
   };
 
@@ -173,6 +174,7 @@ function Settings() {
                         Name
                       </Label>
                       <Input
+                        placeholder="handsome"
                         spellCheck={false}
                         value={updateData?.name}
                         id="name"
@@ -187,11 +189,11 @@ function Settings() {
                     </div>
 
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="username" className="justify-self-end">
+                      <Label htmlFor="avatar" className="justify-self-end">
                         Avatar
                       </Label>
                       <Input
-                        id="picture"
+                        id="avatar"
                         type="file"
                         className="col-span-3"
                         accept="image/png, image/jpeg, image/jpg"
@@ -199,10 +201,11 @@ function Settings() {
                       />
                     </div>
                     <div className="grid grid-cols-4 items-center gap-4">
-                      <Label htmlFor="username" className="justify-self-end">
+                      <Label htmlFor="description" className="justify-self-end">
                         About
                       </Label>
                       <Textarea
+                        id="description"
                         value={updateData?.bio}
                         spellCheck={false}
                         placeholder="Tell us about yourself..."

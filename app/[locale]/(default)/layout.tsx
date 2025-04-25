@@ -8,24 +8,8 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import {
-  Book,
-  Briefcase,
-  ChevronLeft,
-  ChevronRight,
-  LibraryBig,
-  Plus,
-  Sparkles,
-} from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -37,13 +21,7 @@ import Breadcrumbs from "@/components/breadcrumbs";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAutoSignOut } from "@/hooks/use-auto-signout";
-
-const createItems = [
-  { title: "Course", url: "/course", icon: <Briefcase /> },
-  { title: "Page", url: "/page", icon: <Book /> },
-  { title: "Document", url: "/document", icon: <LibraryBig /> },
-  { title: "Chat", url: "/chat", icon: <Sparkles /> },
-];
+import { CreateNew } from "@/components/create-new";
 
 export default function DefaultLayout({
   children,
@@ -66,30 +44,7 @@ export default function DefaultLayout({
           </div>
 
           <div className="flex items-center gap-2 px-2">
-            <TooltipProvider>
-              <DropdownMenu modal={false}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <DropdownMenuTrigger asChild>
-                      <Button size={"icon"} variant={"ghost"}>
-                        <Plus />
-                      </Button>
-                    </DropdownMenuTrigger>
-                  </TooltipTrigger>
-                  <TooltipContent>Create</TooltipContent>
-                </Tooltip>
-                <DropdownMenuContent>
-                  <DropdownMenuLabel>Create new</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  {createItems.map((item) => (
-                    <DropdownMenuItem key={item.url}>
-                      {item.icon}
-                      {item.title}
-                    </DropdownMenuItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </TooltipProvider>
+            <CreateNew />
 
             <TooltipProvider>
               <Tooltip>

@@ -18,10 +18,13 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
-import { useParams, useRouter, usePathname } from "next/navigation";
+import { useRouter, usePathname, useParams } from "next/navigation";
 import Image from "next/image";
+import { processResponse } from "@/lib/response-process";
+import { Course as CourseInterface } from "@/interfaces/course";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const badges = [
   { title: "Math" },
@@ -32,9 +35,11 @@ const badges = [
 ];
 
 function Course({ children }: { children: React.ReactNode }) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const router = useRouter();
   const { courseId } = useParams();
+  const [isLoading, setIsLoading] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [course, setCourse] = useState<CourseInterface>();
+  const router = useRouter();
   const tabTop = useRef<HTMLDivElement | null>(null);
 
   const pathname = usePathname();
@@ -65,6 +70,28 @@ function Course({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const fetchCourse = async () => {
+    const res = await fetch(`/api/course/${courseId}`, {
+      method: "GET",
+    });
+    const response = await processResponse(res, {
+      success: false,
+      error: true,
+    });
+    console.log("Course data:", response);
+
+    if (response.success) {
+      setCourse(response.data);
+    }
+  };
+
+  useEffect(() => {
+    fetchCourse().then(() => setIsLoading(false));
+  }, []);
+
+  if (isLoading)
+    return <Skeleton className="w-full h-full max-w-7xl mx-auto" />;
+
   return (
     <div className="flex flex-col items-center mx-auto h-full w-full max-w-7xl rounded-xl">
       <div className="w-full flex p-2 md:p-4 flex-col gap-4 border-b border-dashed">
@@ -86,8 +113,10 @@ function Course({ children }: { children: React.ReactNode }) {
           </CollapsibleContent>
           <div className="flex justify-between items-center">
             <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-              {"Javascript in web development" + (isExpanded ? " 💻" : "")}
-              <p className="text-sm text-muted-foreground">12/10/2021</p>
+              {course?.title + (isExpanded ? " 💻" : "")}
+              <p className="text-sm text-muted-foreground">
+                {course?.createdAt?.toString()}
+              </p>
             </h3>
             <div className="flex flex-col sm:flex-row gap-2 items-center">
               <CollapsibleTrigger asChild>
@@ -113,8 +142,7 @@ function Course({ children }: { children: React.ReactNode }) {
             </Badge>
           ))}
         </div>
-        The king, seeing how much happier his subjects were, realized the error
-        of his ways and repealed the joke tax.
+        {course?.description}
       </div>
 
       <Tabs
