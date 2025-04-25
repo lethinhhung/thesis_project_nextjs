@@ -14,30 +14,19 @@ import { cn } from "@/lib/utils";
 import { Progress } from "./ui/progress";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-
-interface Course {
-  id: string;
-  emoji: string;
-  title: string;
-  summary: string;
-  description: string;
-  tags: string[];
-  type: string;
-  status: boolean;
-  date: string;
-}
+import { Course as CourseInterface } from "@/interfaces/course";
 
 export function CourseCard({
   course,
   className,
 }: {
-  course: Course;
+  course: CourseInterface;
   className?: string;
 }) {
   const router = useRouter();
   return (
     <Card
-      onClick={() => router.push(`/courses/course1`)}
+      onClick={() => router.push(`/courses/${course._id}`)}
       className={cn(
         "pt-0 duration-200 dark:border-dashed hover:shadow-lg dark:hover:border-solid cursor-pointer ",
         className
@@ -52,12 +41,13 @@ export function CourseCard({
       />
       <CardHeader>
         <CardTitle className="line-clamp-1 flex items-center gap-2">
-          {course.emoji} {course.title}
+          {/* {course.emoji}  */}
+          {course.title}
           {course.status && <CheckCircle2 size={18} />}
         </CardTitle>
-        <CardDescription>{course.date}</CardDescription>
+        <CardDescription>{course.createdAt.toString()}</CardDescription>
         <CardDescription className="line-clamp-3 min-h-[4rem]">
-          {course.summary}
+          {course.description}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">

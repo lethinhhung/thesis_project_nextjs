@@ -15,4 +15,5 @@ export interface Course {
   refDocuments: string[];
   createdAt: Date;
   updatedAt: Date;
+  status: boolean;
 }
