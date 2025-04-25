@@ -49,6 +49,18 @@ export async function GET(req: NextRequest) {
           { status: 400 }
         );
       }
+    } else if (response.status === 401) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "Unauthorized",
+          error: {
+            code: "UNAUTHORIZED",
+            details: "User not authenticated",
+          },
+        },
+        { status: 401 }
+      );
     }
 
     return NextResponse.json(

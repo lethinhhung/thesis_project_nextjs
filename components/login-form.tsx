@@ -4,8 +4,13 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/navigation";
-import { MouseEvent as ReactMouseEvent, useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import {
+  MouseEvent as ReactMouseEvent,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import {
   Form,
@@ -33,6 +38,22 @@ export function LoginForm({
   const [svgFill, setSvgFill] = useState("white");
   const [loading, setLoading] = useState(false);
   const t = useTranslations("login");
+  const searchParams = useSearchParams();
+  const error = searchParams.get("error");
+  const hasShownErrorRef = useRef(false);
+
+  useEffect(() => {
+    if (error === "unauthorized" && !hasShownErrorRef.current) {
+      const timeout = setTimeout(() => {
+        toast.error("Unauthorized", {
+          description: "Please login again",
+        });
+        hasShownErrorRef.current = true;
+      }, 1000);
+
+      return () => clearTimeout(timeout);
+    }
+  }, [error]);
 
   useEffect(() => {
     if (document.documentElement.classList.contains("dark")) {
@@ -96,6 +117,7 @@ export function LoginForm({
     e.preventDefault();
     router.push("/register");
   };
+
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden p-0">

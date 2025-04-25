@@ -1,5 +1,6 @@
 "use client";
 
+import { signOut } from "next-auth/react";
 import { toast } from "sonner";
 
 export async function processResponse(
@@ -26,6 +27,10 @@ export async function processResponse(
 
   switch (response.status) {
     case 401:
+      signOut({
+        redirect: true,
+        callbackUrl: "/login?error=unauthorized",
+      });
       toast.error(message || "Chưa xác thực", {
         description: details,
       });
