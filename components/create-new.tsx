@@ -30,12 +30,11 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "./ui/dialog";
 import { useState } from "react";
-import { Label } from "./ui/label";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
-import { CreateCourse } from "@/interfaces/course";
 import { processResponse } from "@/lib/response-process";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -49,6 +48,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import Picker from "@emoji-mart/react";
+import data from "@emoji-mart/data";
+
+import { useTheme } from "next-themes";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { SheetDescription } from "./ui/sheet";
 
 const createItems = [
   { title: "Course", type: "course", icon: <Briefcase /> },
@@ -61,7 +66,11 @@ export function CreateNew() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [currentType, setCurrentType] = useState<string | null>(null);
+  const [emoji, setEmoji] = useState<string | null>("📖");
   const [isLoading, setIsLoading] = useState(false);
+  const [isOpenEmoji, setIsOpenEmoji] = useState(false);
+  const isMobile = useIsMobile();
+  const theme = useTheme();
 
   const formSchema = z.object({
     title: z.string().min(1, {
@@ -141,15 +150,16 @@ export function CreateNew() {
         </DropdownMenuContent>
       </DropdownMenu>
       <Dialog open={open} onOpenChange={setOpen}>
-        <Form {...form}>
-          <DialogContent>
+        <DialogContent aria-describedby="create-dialog-description">
+          <DialogHeader>
+            <DialogTitle>{`Create new ${currentType}`}</DialogTitle>
+
+            <SheetDescription className="sr-only">
+              {`Create a new ${currentType} and start building your content!`}
+            </SheetDescription>
+          </DialogHeader>
+          <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)}>
-              <DialogHeader>
-                <DialogTitle>{`Create new ${currentType}`}</DialogTitle>
-                <DialogDescription>
-                  {`Create a new ${currentType} and start building your content!`}
-                </DialogDescription>
-              </DialogHeader>
               <div className="flex flex-col gap-8 py-4">
                 <FormField
                   control={form.control}
@@ -157,9 +167,50 @@ export function CreateNew() {
                   render={({ field }) => (
                     <FormItem className="grid gap-3">
                       <FormLabel>Title</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Discrete Math" {...field} />
-                      </FormControl>
+                      <div className="flex items-center gap-2">
+                        <Dialog
+                          open={isOpenEmoji}
+                          onOpenChange={setIsOpenEmoji}
+                        >
+                          <DialogTrigger asChild>
+                            <Button
+                              size={"icon"}
+                              className="text-xl"
+                              variant={"outline"}
+                            >
+                              {emoji}
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent
+                            aria-describedby="emoji-picker-description"
+                            className="!max-w-90 w-auto sm:!max-w-200"
+                          >
+                            <DialogHeader>
+                              <DialogTitle>Pick an emoji</DialogTitle>
+
+                              <SheetDescription className="sr-only">
+                                Select an emoji to represent your content
+                              </SheetDescription>
+                            </DialogHeader>
+                            <div className="mx-auto scroll">
+                              <Picker
+                                data={data}
+                                onEmojiSelect={(e: { native: string }) => {
+                                  setEmoji(e.native);
+                                  setIsOpenEmoji(!isOpenEmoji);
+                                }}
+                                theme={theme.theme}
+                                perLine={isMobile ? 7 : 10}
+                                previewPosition="none"
+                              />
+                            </div>
+                          </DialogContent>
+                        </Dialog>
+
+                        <FormControl>
+                          <Input placeholder="Discrete Math" {...field} />
+                        </FormControl>
+                      </div>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -198,8 +249,8 @@ export function CreateNew() {
                 </Button>
               </DialogFooter>
             </form>
-          </DialogContent>
-        </Form>
+          </Form>
+        </DialogContent>
       </Dialog>
     </TooltipProvider>
   );
