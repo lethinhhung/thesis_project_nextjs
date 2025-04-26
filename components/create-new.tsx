@@ -26,7 +26,6 @@ import {
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -111,8 +110,10 @@ export function CreateNew() {
 
       const course = await processResponse(res);
       if (course.success) {
+        form.reset();
         router.push(`/courses/${course.data._id}`);
       } else {
+        form.reset();
         console.error("Error creating course:", course.error.details);
       }
     } catch (error) {
