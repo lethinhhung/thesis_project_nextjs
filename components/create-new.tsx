@@ -38,6 +38,17 @@ import { Textarea } from "./ui/textarea";
 import { CreateCourse } from "@/interfaces/course";
 import { processResponse } from "@/lib/response-process";
 import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 
 const createItems = [
   { title: "Course", type: "course", icon: <Briefcase /> },
@@ -51,10 +62,23 @@ export function CreateNew() {
   const [open, setOpen] = useState(false);
   const [currentType, setCurrentType] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [submitting, setSubmitting] = useState<CreateCourse>({
-    title: "",
-    description: "",
-    aiGenerated: false,
+
+  const formSchema = z.object({
+    title: z.string().min(1, {
+      message: "Title required",
+    }),
+    description: z.string().min(1, {
+      message: "Description required",
+    }),
+  });
+
+  // 1. Define your form.
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+    },
   });
 
   const handleOpen = (type: string) => {
@@ -63,8 +87,13 @@ export function CreateNew() {
     setOpen(true);
   };
 
-  const handleSubmit = async () => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log("Submitting...", values);
     setIsLoading(true);
+    const submitting = {
+      ...values,
+      aiGenerated: false,
+    };
     try {
       const res = await fetch("/api/course/create", {
         method: "POST",
@@ -112,64 +141,65 @@ export function CreateNew() {
         </DropdownMenuContent>
       </DropdownMenu>
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{`Create new ${currentType}`}</DialogTitle>
-            <DialogDescription>
-              {`Create a new ${currentType} and start building your content!`}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="title" className="justify-self-end">
-                Title
-              </Label>
-              <Input
-                placeholder="Discrete Math"
-                spellCheck={false}
-                id="title"
-                className="col-span-3"
-                value={submitting?.title}
-                onChange={(e) => {
-                  setSubmitting({
-                    ...submitting,
-                    title: e.target.value,
-                  });
-                }}
-              />
-            </div>
+        <Form {...form}>
+          <DialogContent>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <DialogHeader>
+                <DialogTitle>{`Create new ${currentType}`}</DialogTitle>
+                <DialogDescription>
+                  {`Create a new ${currentType} and start building your content!`}
+                </DialogDescription>
+              </DialogHeader>
+              <div className="flex flex-col gap-8 py-4">
+                <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem className="grid gap-3">
+                      <FormLabel>Title</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Discrete Math" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="description"
+                  render={({ field }) => (
+                    <FormItem className="grid gap-3">
+                      <FormLabel>Description</FormLabel>
 
-            <div className="grid grid-cols-4 items-center gap-4">
-              <Label htmlFor="description" className="justify-self-end">
-                Description
-              </Label>
-              <Textarea
-                id="description"
-                spellCheck={false}
-                placeholder="Discrete mathematics is the study of mathematical structures that are countable or otherwise distinct and separable. Examples of structures that are discrete are combinations, graphs, and logical statements. Discrete structures can be finite or infinite."
-                className="col-span-3 resize-none h-40 scrollbar"
-                onChange={(e) => {
-                  setSubmitting({
-                    ...submitting,
-                    description: e.target.value,
-                  });
-                }}
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button
-              type="button"
-              variant={"outline"}
-              onClick={() => setOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button onClick={handleSubmit} type="submit">
-              {isLoading ? <Loader className="animate-spin" /> : "Create"}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
+                      <FormControl>
+                        <Textarea
+                          className="resize-none h-40 scrollbar"
+                          placeholder="Discrete mathematics is the study of mathematical structures that are countable or otherwise distinct and separable. Examples of structures that are discrete are combinations, graphs, and logical statements. Discrete structures can be finite or infinite."
+                          {...field}
+                        />
+                      </FormControl>
+
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <DialogFooter>
+                <Button
+                  type="button"
+                  variant={"outline"}
+                  onClick={() => setOpen(false)}
+                >
+                  Cancel
+                </Button>
+                <Button className="min-w-20" type="submit">
+                  {isLoading ? <Loader className="animate-spin" /> : "Create"}
+                </Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Form>
       </Dialog>
     </TooltipProvider>
   );
