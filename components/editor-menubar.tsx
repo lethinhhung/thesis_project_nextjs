@@ -161,7 +161,7 @@ function EditorMenubar({
           className=""
           initial={false}
           animate={{
-            width: isCollapsed ? "84px" : "100%",
+            width: isCollapsed ? "85px" : "100%",
           }}
           transition={{
             duration: 0,

@@ -8,6 +8,7 @@ import {
   lightDefaultTheme,
 } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
+import "@/app/[locale]/globals.css";
 import {
   getDefaultReactSlashMenuItems,
   GridSuggestionMenuController,
@@ -27,8 +28,7 @@ import {
   insertQuote,
   schema,
 } from "./blocknote";
-import { Skeleton } from "./ui/skeleton";
-import { Lesson, LessonContent } from "@/interfaces/lesson";
+import { LessonContent } from "@/interfaces/lesson";
 import { processResponse } from "@/lib/response-process";
 import { useDebounce } from "@/hooks/use-debounce";
 
