@@ -37,10 +37,12 @@ function CourseDashboard() {
 
   useEffect(() => {
     fetchCourse().then(() => setIsLoading(false));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (isLoading) {
-    return <Skeleton className="w-full h-full min-h-50" />;
+    return <Skeleton className="w-full h-full min-h-80" />;
   }
 
   return (

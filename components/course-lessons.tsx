@@ -3,7 +3,7 @@
 import { Lesson } from "@/interfaces/lesson";
 import { LessonCardLarge } from "./lesson-card-large";
 import SortButton from "./sort-button";
-import { Button } from "./ui/button";
+import { CreateNewSmall } from "./create-new-small";
 
 function CourseLessons({ lessons }: { lessons: Lesson[] }) {
   return (
@@ -15,13 +15,13 @@ function CourseLessons({ lessons }: { lessons: Lesson[] }) {
         <div className="flex gap-2 items-center">
           <SortButton variant={"secondary"} />
 
-          <Button>new</Button>
+          <CreateNewSmall type="lesson" />
         </div>
       </div>
       <div className="w-full flex grid grid-cols-1 sm:px-2 md:grid-cols-2 2xl:grid-cols-3 gap-4">
         {lessons.map((lesson) => (
           <LessonCardLarge
-            key={lesson.id}
+            key={lesson._id}
             lesson={lesson}
             className="col-span-1"
           />

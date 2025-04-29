@@ -25,15 +25,17 @@ export function LessonCardLarge({
         "duration-200 dark:border-dashed hover:shadow-lg dark:hover:border-solid cursor-pointer ",
         className
       )}
-      onClick={() => router.push(`/courses/course1/lessons/lesson1`)}
+      onClick={() =>
+        router.push(`/courses/${lesson.courseId}/lessons/${lesson._id}`)
+      }
     >
       <CardHeader>
         <CardTitle className="line-clamp-2">{lesson.title}</CardTitle>
         <CardDescription className="line-clamp-3 min-h-[4rem]">
-          {lesson.description}
+          {/* {lesson.description} */}
         </CardDescription>
         <CardDescription className="line-clamp-1">
-          {lesson.date}
+          {lesson.updatedAt.toString()}
         </CardDescription>
       </CardHeader>
     </Card>

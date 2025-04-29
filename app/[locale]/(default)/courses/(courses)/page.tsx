@@ -60,7 +60,7 @@ function CoursesAll() {
   }, []);
 
   if (isLoading) {
-    return <Skeleton className="w-full max-w-7xl h-full min-h-50" />;
+    return <Skeleton className="w-full max-w-7xl h-full min-h-80" />;
   }
   return (
     <div className="grid grid-cols-12 space-y-8 w-full h-full max-w-6xl p-2">

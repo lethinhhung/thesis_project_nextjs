@@ -87,6 +87,8 @@ function Course({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     fetchCourse().then(() => setIsLoading(false));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (isLoading)

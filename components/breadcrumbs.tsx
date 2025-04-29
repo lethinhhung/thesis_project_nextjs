@@ -22,6 +22,7 @@ import { useEffect, useState } from "react";
 import { Course as CourseInterface } from "@/interfaces/course";
 import { processResponse } from "@/lib/response-process";
 import { Skeleton } from "./ui/skeleton";
+import { LessonName } from "@/interfaces/lesson";
 
 const breadcrumbMap: Record<string, string> = {
   dashboard: "Dashboard",
@@ -59,29 +60,64 @@ export default function Breadcrumbs() {
     ? pathSegments.length >= 3
     : pathSegments.length >= 5;
   const courseId = params.courseId as string;
+  const lessonId = params.lessonId as string;
 
   const [course, setCourse] = useState<CourseInterface>();
+  const [lesson, setLesson] = useState<LessonName>();
 
-  const fetchCourse = async () => {
-    if (!courseId) return;
-    const res = await fetch(`/api/course/${courseId}`, {
-      method: "GET",
-    });
-    const response = await processResponse(res, {
-      success: false,
-      error: true,
-    });
-    console.log("Course data:", response);
+  const fetchData = async () => {
+    if (courseId) {
+      const res = await fetch(`/api/course/${courseId}`, {
+        method: "GET",
+      });
+      const response = await processResponse(res, {
+        success: false,
+        error: true,
+      });
+      console.log("Course data:", response);
 
-    if (response.success) {
-      setCourse(response.data);
+      if (response.success) {
+        setCourse(response.data);
+      }
+    }
+
+    if (lessonId) {
+      const res = await fetch(`/api/lesson/${lessonId}`, {
+        method: "GET",
+      });
+      const response = await processResponse(res, {
+        success: false,
+        error: true,
+      });
+      console.log("Lesson data:", response);
+
+      if (response.success) {
+        setLesson(response.data);
+      }
     }
   };
 
   useEffect(() => {
     setIsLoading(true);
-    fetchCourse().then(() => setIsLoading(false));
-  }, [params.courseId]);
+    fetchData().then(() => setIsLoading(false));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [params.courseId, params.lessonId]);
+
+  function resolveBreadcrumbLabel(segment: string): string {
+    if (segment === course?._id) return course?.title;
+    if (segment === lesson?._id) return lesson?.title;
+    return breadcrumbMap[segment] || segment;
+  }
+
+  const breadcrumbItems = pathSegments.slice(0, -1).map((segment, index) => {
+    const path = `/${pathSegments.slice(0, index + 1).join("/")}`;
+    return { label: resolveBreadcrumbLabel(segment), path };
+  });
+
+  const lastLabel = resolveBreadcrumbLabel(
+    pathSegments[pathSegments.length - 1]
+  );
 
   return (
     <Breadcrumb>
@@ -89,9 +125,8 @@ export default function Breadcrumbs() {
         <Skeleton className="h-5 w-60" />
       ) : (
         <BreadcrumbList>
-          {/* Mục đầu tiên */}
           <BreadcrumbItem>
-            <Link className="text-primary" href="/home">
+            <Link href="/home" className="text-primary">
               <Home size={18} className="sm:hidden" />
               <div className="hidden sm:flex">Notebook</div>
             </Link>
@@ -104,61 +139,36 @@ export default function Breadcrumbs() {
                 <DropdownMenu>
                   <DropdownMenuTrigger className="flex items-center gap-1">
                     <BreadcrumbEllipsis className="h-4 w-4" />
-                    <span className="sr-only">Toggle menu</span>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="start">
-                    {pathSegments.slice(0, -1).map((segment, index) => {
-                      const path = `/${pathSegments
-                        .slice(0, index + 1)
-                        .join("/")}`;
-                      return (
-                        <DropdownMenuItem key={path}>
-                          <Link href={path}>
-                            {segment == course?._id
-                              ? course?.title
-                              : breadcrumbMap[segment] || segment}
-                          </Link>
-                        </DropdownMenuItem>
-                      );
-                    })}
+                    {breadcrumbItems.map(({ label, path }) => (
+                      <DropdownMenuItem key={path}>
+                        <Link href={path}>{label}</Link>
+                      </DropdownMenuItem>
+                    ))}
                   </DropdownMenuContent>
                 </DropdownMenu>
               </BreadcrumbItem>
             </div>
           ) : (
-            pathSegments.slice(0, -1).map((segment, index) => {
-              const path = `/${pathSegments.slice(0, index + 1).join("/")}`;
-              return (
-                <div key={path} className="hidden sm:flex items-center gap-2">
-                  <BreadcrumbSeparator />
-                  <BreadcrumbItem>
-                    <Link className="text-primary" href={path}>
-                      {segment == course?._id
-                        ? course?.title
-                        : breadcrumbMap[segment] || segment}
-                    </Link>
-                  </BreadcrumbItem>
-                </div>
-              );
-            })
+            breadcrumbItems.map(({ label, path }) => (
+              <div key={path} className="hidden sm:flex items-center gap-2">
+                <BreadcrumbSeparator />
+                <BreadcrumbItem>
+                  <Link className="text-primary" href={path}>
+                    {label}
+                  </Link>
+                </BreadcrumbItem>
+              </div>
+            ))
           )}
 
-          {/* Mục cuối cùng */}
-          {pathSegments.length >= 1 && (
-            <>
-              <BreadcrumbSeparator />
-              <BreadcrumbItem>
-                <BreadcrumbPage className="truncate w-30">
-                  {breadcrumbMap[pathSegments[pathSegments.length - 1]] ==
-                    course?._id ||
-                  pathSegments[pathSegments.length - 1] == course?._id
-                    ? course?.title
-                    : breadcrumbMap[pathSegments[pathSegments.length - 1]] ||
-                      pathSegments[pathSegments.length - 1]}
-                </BreadcrumbPage>
-              </BreadcrumbItem>
-            </>
-          )}
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage className="truncate w-30">
+              {lastLabel}
+            </BreadcrumbPage>
+          </BreadcrumbItem>
         </BreadcrumbList>
       )}
     </Breadcrumb>
