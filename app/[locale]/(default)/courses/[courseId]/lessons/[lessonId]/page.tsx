@@ -19,14 +19,22 @@ import {
   MoreHorizontal,
   Sparkles,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import ChatBox from "@/components/chat-box";
 import { AnimatePresence, motion } from "framer-motion";
+import { LessonContent } from "@/interfaces/lesson";
+import { processResponse } from "@/lib/response-process";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useParams } from "next/navigation";
 
 function Lesson() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [markDown, setMarkDown] = useState<string>("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [lesson, setLesson] = useState<LessonContent>();
+  const params = useParams();
+  const lessonId = params.lessonId as string;
 
   const copyText = () => {
     const text = document?.getElementById("summary")?.innerText;
@@ -38,6 +46,29 @@ function Lesson() {
       });
   };
 
+  const fetchLessons = async () => {
+    const res = await fetch(`/api/lesson/${lessonId}`, {
+      method: "GET",
+    });
+    const response = await processResponse(res, {
+      success: false,
+      error: true,
+    });
+    console.log("Course data:", response);
+
+    if (response.success) {
+      setLesson(response.data);
+    }
+  };
+
+  useEffect(() => {
+    fetchLessons().then(() => setIsLoading(false));
+  }, []);
+
+  if (isLoading) {
+    return <Skeleton className="w-full max-w-7xl h-full min-h-80 mx-auto" />;
+  }
+
   return (
     <div className="flex justify-center h-full w-full gap-4">
       <div
@@ -48,8 +79,10 @@ function Lesson() {
           <Card className="dark:border-dashed break-inside-avoid-column">
             <div className="flex justify-between">
               <CardHeader className="flex-1">
-                <CardTitle>Lesson 1 📄</CardTitle>
-                <CardDescription>22/12/2013</CardDescription>
+                <CardTitle>{lesson?.title}</CardTitle>
+                <CardDescription>
+                  {lesson?.createdAt.toString()}
+                </CardDescription>
                 <CardDescription>User&apos;s lesson note</CardDescription>
               </CardHeader>
               <div className="px-4">
@@ -132,6 +165,7 @@ function Lesson() {
         /> */}
 
         <Editor
+          lesson={lesson}
           isChatOpen={isChatOpen}
           setIsChatOpen={setIsChatOpen}
           markDown={markDown}

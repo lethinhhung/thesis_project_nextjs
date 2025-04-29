@@ -27,6 +27,10 @@ import {
   insertQuote,
   schema,
 } from "./blocknote";
+import { Skeleton } from "./ui/skeleton";
+import { Lesson, LessonContent } from "@/interfaces/lesson";
+import { processResponse } from "@/lib/response-process";
+import { useDebounce } from "@/hooks/use-debounce";
 
 const plainTheme = {
   light: lightDefaultTheme,
@@ -42,11 +46,13 @@ const plainTheme = {
 };
 
 const Editor = ({
+  lesson,
   isChatOpen,
   setIsChatOpen,
   markDown,
   setMarkDown,
 }: {
+  lesson?: LessonContent;
   isChatOpen: boolean;
   setIsChatOpen: (value: boolean) => void;
   markDown: string;
@@ -59,13 +65,28 @@ const Editor = ({
   const { theme } = useTheme();
   const [isPlainBackground, setIsPlainBackground] = useState(true);
   const [isSystemDark, setIsSystemDark] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [content, setContent] = useState(lesson?.content);
+
+  const [pendingChange, setPendingChange] = useState(false);
+
+  useDebounce(
+    () => {
+      if (pendingChange) {
+        setIsLoading(true);
+        saveContentAsJSON();
+        setPendingChange(false);
+      }
+    },
+    3000,
+    [pendingChange]
+  );
 
   async function loadInitialJSON() {
-    const content = localStorage.getItem("blocks");
     if (!content) return;
 
     try {
-      const blocks = JSON.parse(content);
+      const blocks = JSON.parse(content || "");
       setTimeout(() => {
         editor.replaceBlocks(editor.document, blocks);
       }, 0);
@@ -75,14 +96,31 @@ const Editor = ({
   }
 
   async function saveContentAsJSON() {
+    setIsLoading(true);
     const blocks = editor.document;
     setMarkDown(await editor.blocksToMarkdownLossy());
     try {
       const blocksJSON = JSON.stringify(blocks);
-      localStorage.setItem("blocks", blocksJSON);
-      console.log(markDown);
+      const submitting = {
+        content: blocksJSON,
+      };
+
+      const res = await fetch(`/api/lesson/update-content/${lesson?._id}`, {
+        method: "PUT",
+        body: JSON.stringify(submitting),
+      });
+      const response = await processResponse(res, {
+        success: false,
+        error: true,
+      });
+
+      if (response.success) {
+        setContent(response.data.content);
+      }
     } catch (error) {
       console.error("Failed to save blocks as JSON:", error);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -125,12 +163,13 @@ const Editor = ({
         isChatOpen={isChatOpen}
         setIsChatOpen={setIsChatOpen}
         editorRef={editorRef}
+        isLoading={isLoading}
       />
 
       <div className="w-full" ref={editorRef}>
         <BlockNoteView
           className="w-full"
-          onChange={saveContentAsJSON}
+          onChange={() => setPendingChange(true)}
           editor={editor}
           theme={editorTheme}
           slashMenu={false}

@@ -20,4 +20,18 @@ const getAllLessonsAPI = (token: string, courseId: string) => {
   return createAxiosInstance(token).get(URL_API);
 };
 
-export { createLessonAPI, getLessonAPI, getAllLessonsAPI };
+const updateLessonContentAPI = (
+  token: string,
+  lessonId: string,
+  content: string
+) => {
+  const URL_API = `/api/lesson/update-lesson-content/${lessonId}`;
+  return createAxiosInstance(token).put(URL_API, { content });
+};
+
+export {
+  createLessonAPI,
+  getLessonAPI,
+  getAllLessonsAPI,
+  updateLessonContentAPI,
+};

@@ -35,7 +35,7 @@ export function LessonCardLarge({
           {/* {lesson.description} */}
         </CardDescription>
         <CardDescription className="line-clamp-1">
-          {lesson.updatedAt.toString()}
+          {lesson?.updatedAt?.toString()}
         </CardDescription>
       </CardHeader>
     </Card>

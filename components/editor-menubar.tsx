@@ -17,7 +17,14 @@ import {
   MenubarSubTrigger,
   MenubarTrigger,
 } from "@/components/ui/menubar";
-import { ArrowUpRight, ChevronRight, Square, SquareDashed } from "lucide-react";
+import {
+  ArrowUpRight,
+  CheckCircle2,
+  ChevronRight,
+  Loader,
+  Square,
+  SquareDashed,
+} from "lucide-react";
 import { Button } from "./ui/button";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
@@ -34,6 +41,7 @@ function EditorMenubar({
   isChatOpen,
   setIsChatOpen,
   editorRef,
+  isLoading,
 }: {
   editor: typeof schema.BlockNoteEditor;
   isDarkTheme: boolean;
@@ -42,6 +50,7 @@ function EditorMenubar({
   isChatOpen: boolean;
   setIsChatOpen: (value: boolean) => void;
   editorRef: React.RefObject<HTMLDivElement> | null;
+  isLoading: boolean;
 }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -152,7 +161,7 @@ function EditorMenubar({
           className=""
           initial={false}
           animate={{
-            width: isCollapsed ? "42px" : "100%",
+            width: isCollapsed ? "84px" : "100%",
           }}
           transition={{
             duration: 0,
@@ -254,30 +263,40 @@ function EditorMenubar({
               </div>
             )}
 
-            <MenubarMenu>
-              <MenubarTrigger asChild>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      className="px-2 py-1 h-7 rounded-sm text-sm font-medium"
-                      size="sm"
-                      variant={"ghost"}
-                      onClick={() => setIsCollapsed(!isCollapsed)}
-                    >
-                      <motion.div
-                        animate={{ rotate: isCollapsed ? 180 : 0 }}
-                        transition={{ duration: 0.3 }}
+            <div className="flex justify-end items-center gap-2">
+              <div className="px-2 border-r">
+                {isLoading ? (
+                  <Loader className="animate-spin" size={18} />
+                ) : (
+                  <CheckCircle2 size={18} />
+                )}
+              </div>
+
+              <MenubarMenu>
+                <MenubarTrigger asChild>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        className="px-2 py-1 h-7 rounded-sm text-sm font-medium"
+                        size="sm"
+                        variant={"ghost"}
+                        onClick={() => setIsCollapsed(!isCollapsed)}
                       >
-                        <ChevronRight />
-                      </motion.div>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent side="top">
-                    <p>{isCollapsed ? "Menu" : "Collapse"}</p>
-                  </TooltipContent>
-                </Tooltip>
-              </MenubarTrigger>
-            </MenubarMenu>
+                        <motion.div
+                          animate={{ rotate: isCollapsed ? 180 : 0 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <ChevronRight />
+                        </motion.div>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="top">
+                      <p>{isCollapsed ? "Menu" : "Collapse"}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </MenubarTrigger>
+              </MenubarMenu>
+            </div>
           </Menubar>
         </motion.div>
       </div>
