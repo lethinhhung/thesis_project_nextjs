@@ -42,6 +42,7 @@ function EditorMenubar({
   setIsChatOpen,
   editorRef,
   isLoading,
+  save,
 }: {
   editor: typeof schema.BlockNoteEditor;
   isDarkTheme: boolean;
@@ -51,6 +52,7 @@ function EditorMenubar({
   setIsChatOpen: (value: boolean) => void;
   editorRef: React.RefObject<HTMLDivElement> | null;
   isLoading: boolean;
+  save: () => void;
 }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -187,7 +189,17 @@ function EditorMenubar({
                         </MenubarItem>
                       </MenubarSubContent>
                     </MenubarSub>
-                    <MenubarItem>Save</MenubarItem>
+                    <MenubarItem
+                      onClick={(e) => {
+                        e.preventDefault();
+                        save();
+                      }}
+                    >
+                      Save
+                      <MenubarShortcut>
+                        {isLoading && <Loader className="animate-spin" />}
+                      </MenubarShortcut>
+                    </MenubarItem>
                     <MenubarSeparator />
                     <MenubarItem>Share</MenubarItem>
                     <MenubarSeparator />

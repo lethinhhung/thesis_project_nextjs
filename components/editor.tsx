@@ -8,7 +8,7 @@ import {
   lightDefaultTheme,
 } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
-import "@/app/[locale]/globals.css";
+import "@/app/globals.css";
 import {
   getDefaultReactSlashMenuItems,
   GridSuggestionMenuController,
@@ -164,6 +164,7 @@ const Editor = ({
         setIsChatOpen={setIsChatOpen}
         editorRef={editorRef}
         isLoading={isLoading}
+        save={saveContentAsJSON}
       />
 
       <div className="w-full" ref={editorRef}>

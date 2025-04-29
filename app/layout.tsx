@@ -4,9 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import ToasterClient from "@/components/toaster-client";
 import { getServerSession } from "next-auth";
 import CustomSessionProvider from "@/components/session-provider";
-import { NextIntlClientProvider, hasLocale } from "next-intl";
-import { notFound } from "next/navigation";
-import { routing } from "@/src/i18n/routing";
+import { NextIntlClientProvider } from "next-intl";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,9 +24,9 @@ export default async function RootLayout({
   params: Promise<{ locale: string }>;
 }>) {
   const { locale } = await params;
-  if (!hasLocale(routing.locales, locale)) {
-    notFound();
-  }
+  // if (!hasLocale(routing.locales, locale)) {
+  //   notFound();
+  // }
   const session = await getServerSession();
   return (
     <html lang={locale} suppressHydrationWarning className="scrollbar">
