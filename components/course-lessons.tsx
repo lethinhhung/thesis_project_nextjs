@@ -1,11 +1,11 @@
 "use client";
 
-import { Lesson } from "@/interfaces/lesson";
+import { LessonCard } from "@/interfaces/lesson";
 import { LessonCardLarge } from "./lesson-card-large";
 import SortButton from "./sort-button";
 import { CreateNewSmall } from "./create-new-small";
 
-function CourseLessons({ lessons }: { lessons: Lesson[] }) {
+function CourseLessons({ lessons }: { lessons: LessonCard[] }) {
   return (
     <div className="w-full flex p-2 md:p-4 flex-col gap-4">
       <div className="w-full flex justify-between items-center sticky top-16">

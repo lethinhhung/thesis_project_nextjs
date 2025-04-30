@@ -28,3 +28,15 @@ export interface LessonContent {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface LessonCard {
+  _id: string;
+  courseId: {
+    _id: string;
+    title: string;
+  };
+  title: string;
+  // description: string;
+  createdAt: Date;
+  updatedAt: Date;
+}

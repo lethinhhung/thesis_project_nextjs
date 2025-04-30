@@ -2,14 +2,14 @@
 
 import CourseLessons from "@/components/course-lessons";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Lesson } from "@/interfaces/lesson";
+import { LessonCard } from "@/interfaces/lesson";
 import { processResponse } from "@/lib/response-process";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 function Lessons() {
   const [isLoading, setIsLoading] = useState(true);
-  const [lessons, setLessons] = useState<Lesson[]>([]);
+  const [lessons, setLessons] = useState<LessonCard[]>([]);
   const params = useParams();
   const courseId = params.courseId as string;
 

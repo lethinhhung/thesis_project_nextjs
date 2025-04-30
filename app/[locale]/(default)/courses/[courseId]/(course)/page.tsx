@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
-import { useParams } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Course as CourseInterface } from "@/interfaces/course";
 import { processResponse } from "@/lib/response-process";
@@ -43,6 +43,10 @@ function CourseDashboard() {
 
   if (isLoading) {
     return <Skeleton className="w-full h-full min-h-80" />;
+  }
+
+  if (!course) {
+    notFound(); // Trả về trang 404
   }
 
   return (

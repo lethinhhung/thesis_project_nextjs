@@ -26,7 +26,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { LessonContent } from "@/interfaces/lesson";
 import { processResponse } from "@/lib/response-process";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useParams } from "next/navigation";
+import { notFound, useParams } from "next/navigation";
 
 function Lesson() {
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -67,6 +67,10 @@ function Lesson() {
 
   if (isLoading) {
     return <Skeleton className="w-full max-w-7xl h-full min-h-80 mx-auto" />;
+  }
+
+  if (!lesson) {
+    notFound(); // Trả về trang 404
   }
 
   return (
