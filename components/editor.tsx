@@ -8,7 +8,7 @@ import {
   lightDefaultTheme,
 } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
-import "@/app/globals.css";
+import "@/app/[locale]/globals.css";
 import {
   getDefaultReactSlashMenuItems,
   GridSuggestionMenuController,

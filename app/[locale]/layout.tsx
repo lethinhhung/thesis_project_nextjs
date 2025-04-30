@@ -27,7 +27,9 @@ export default async function RootLayout({
   // if (!hasLocale(routing.locales, locale)) {
   //   notFound();
   // }
+
   const session = await getServerSession();
+
   return (
     <html lang={locale} suppressHydrationWarning className="scrollbar">
       <body
