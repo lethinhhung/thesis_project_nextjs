@@ -16,4 +16,20 @@ const getAllCoursesAPI = (token: string) => {
   return createAxiosInstance(token).get(URL_API);
 };
 
-export { createCourseAPI, getCourseAPI, getAllCoursesAPI };
+const getOngoingCoursesAPI = (token: string) => {
+  const URL_API = "/api/course/get-ongoing-courses";
+  return createAxiosInstance(token).get(URL_API);
+};
+
+const getCompletedCoursesAPI = (token: string) => {
+  const URL_API = "/api/course/get-completed-courses";
+  return createAxiosInstance(token).get(URL_API);
+};
+
+export {
+  createCourseAPI,
+  getCourseAPI,
+  getAllCoursesAPI,
+  getOngoingCoursesAPI,
+  getCompletedCoursesAPI,
+};
