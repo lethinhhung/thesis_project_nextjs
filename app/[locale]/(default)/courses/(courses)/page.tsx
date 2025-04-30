@@ -18,7 +18,7 @@ function CoursesAll() {
   const [courses, setCourses] = useState<CourseInterface[]>();
 
   const fetchData = async () => {
-    const res = await fetch(`/api/data/get-all-courses-and-lessons`, {
+    const res = await fetch(`/api/data/get-limit-courses-and-lessons`, {
       method: "GET",
     });
     const response = await processResponse(res, {
