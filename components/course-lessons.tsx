@@ -1,11 +1,11 @@
 "use client";
 
-import { LessonCard } from "@/interfaces/lesson";
-import { LessonCardLarge } from "./lesson-card-large";
+import { LessonCard as LessonCardInterface } from "@/interfaces/lesson";
 import SortButton from "./sort-button";
 import { CreateNewSmall } from "./create-new-small";
+import { LessonCard } from "./lesson-card";
 
-function CourseLessons({ lessons }: { lessons: LessonCard[] }) {
+function CourseLessons({ lessons }: { lessons: LessonCardInterface[] }) {
   return (
     <div className="w-full flex p-2 md:p-4 flex-col gap-4">
       <div className="w-full flex justify-between items-center sticky top-16">
@@ -20,11 +20,7 @@ function CourseLessons({ lessons }: { lessons: LessonCard[] }) {
       </div>
       <div className="w-full flex grid grid-cols-1 sm:px-2 md:grid-cols-2 2xl:grid-cols-3 gap-4">
         {lessons.map((lesson) => (
-          <LessonCardLarge
-            key={lesson._id}
-            lesson={lesson}
-            className="col-span-1"
-          />
+          <LessonCard key={lesson._id} lesson={lesson} className="col-span-1" />
         ))}
       </div>
     </div>

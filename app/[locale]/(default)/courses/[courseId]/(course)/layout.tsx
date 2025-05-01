@@ -25,6 +25,10 @@ import Image from "next/image";
 import { processResponse } from "@/lib/response-process";
 import { Course as CourseInterface } from "@/interfaces/course";
 import { Skeleton } from "@/components/ui/skeleton";
+import { format } from "date-fns";
+import { useLocale } from "next-intl";
+import { enUS as en } from "date-fns/locale/en-US";
+import { vi } from "date-fns/locale/vi";
 
 const badges = [
   { title: "Math" },
@@ -41,6 +45,13 @@ function Course({ children }: { children: React.ReactNode }) {
   const [course, setCourse] = useState<CourseInterface>();
   const router = useRouter();
   const tabTop = useRef<HTMLDivElement | null>(null);
+  const locale = useLocale();
+  const dateFnsLocales = {
+    vi,
+    en,
+  };
+
+  const currentDateFnsLocale = dateFnsLocales[locale as "vi" | "en"] || vi;
 
   const pathname = usePathname();
   const currentTab = pathname.includes("/lessons")
@@ -117,7 +128,11 @@ function Course({ children }: { children: React.ReactNode }) {
             <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
               {course?.title + (isExpanded ? " 💻" : "")}
               <p className="text-sm text-muted-foreground">
-                {course?.createdAt?.toString()}
+                {course?.createdAt
+                  ? format(new Date(course.createdAt), "PPPP", {
+                      locale: currentDateFnsLocale,
+                    })
+                  : "No date"}
               </p>
             </h3>
             <div className="flex flex-col sm:flex-row gap-2 items-center">

@@ -1,7 +1,7 @@
 "use client";
 
 import { CourseCard } from "@/components/course-card";
-import { LessonCardLarge } from "@/components/lesson-card-large";
+import { LessonCardRecent } from "@/components/lesson-card-recent";
 import { Button } from "@/components/ui/button";
 import { LessonCard as LessonCardInterface } from "@/interfaces/lesson";
 import { ArrowRight } from "lucide-react";
@@ -41,7 +41,7 @@ function CoursesAll() {
     return <Skeleton className="w-full max-w-7xl h-full min-h-80" />;
   }
   return (
-    <div className="grid grid-cols-12 space-y-8 w-full h-full max-w-6xl p-2">
+    <div className="grid grid-cols-12 space-y-8 w-full h-full max-w-7xl p-2">
       <div className="col-span-12 grid grid-cols-12 gap-6">
         <div className="col-span-12 flex justify-between items-center">
           <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
@@ -55,7 +55,7 @@ function CoursesAll() {
           )
           .slice(0, 3)
           .map((lesson) => (
-            <LessonCardLarge
+            <LessonCardRecent
               key={lesson._id}
               lesson={lesson}
               className="col-span-12 md:col-span-6 2xl:col-span-4"

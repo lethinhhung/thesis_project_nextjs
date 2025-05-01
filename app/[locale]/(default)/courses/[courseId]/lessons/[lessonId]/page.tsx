@@ -27,6 +27,11 @@ import { LessonContent } from "@/interfaces/lesson";
 import { processResponse } from "@/lib/response-process";
 import { Skeleton } from "@/components/ui/skeleton";
 import { notFound, useParams } from "next/navigation";
+import { format } from "date-fns";
+import { enUS as en } from "date-fns/locale/en-US";
+import { vi } from "date-fns/locale/vi";
+import { capitalizeFirstLetter } from "@/lib/capitalize-first-letter";
+import { useLocale } from "next-intl";
 
 function Lesson() {
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -35,6 +40,13 @@ function Lesson() {
   const [lesson, setLesson] = useState<LessonContent>();
   const params = useParams();
   const lessonId = params.lessonId as string;
+  const locale = useLocale();
+  const dateFnsLocales = {
+    vi,
+    en,
+  };
+
+  const currentDateFnsLocale = dateFnsLocales[locale as "vi" | "en"] || vi;
 
   const copyText = () => {
     const text = document?.getElementById("summary")?.innerText;
@@ -85,7 +97,11 @@ function Lesson() {
               <CardHeader className="flex-1">
                 <CardTitle>{lesson?.title}</CardTitle>
                 <CardDescription>
-                  {lesson?.createdAt.toString()}
+                  {capitalizeFirstLetter(
+                    format(new Date(lesson?.createdAt), "PPPP", {
+                      locale: currentDateFnsLocale,
+                    })
+                  )}
                 </CardDescription>
                 <CardDescription>User&apos;s lesson note</CardDescription>
               </CardHeader>

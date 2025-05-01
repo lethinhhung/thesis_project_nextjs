@@ -9,8 +9,13 @@ import {
 import { LessonCard as LessonCardInterface } from "@/interfaces/lesson";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
+import { format } from "date-fns";
+import { enUS as en } from "date-fns/locale/en-US";
+import { vi } from "date-fns/locale/vi";
+import { capitalizeFirstLetter } from "@/lib/capitalize-first-letter";
+import { useLocale } from "next-intl";
 
-export function LessonCardLarge({
+export function LessonCard({
   lesson,
   className,
 }: {
@@ -18,6 +23,13 @@ export function LessonCardLarge({
   className?: string;
 }) {
   const router = useRouter();
+  const locale = useLocale();
+  const dateFnsLocales = {
+    vi,
+    en,
+  };
+
+  const currentDateFnsLocale = dateFnsLocales[locale as "vi" | "en"] || vi;
   return (
     <Card
       key={lesson.title}
@@ -32,10 +44,16 @@ export function LessonCardLarge({
       <CardHeader>
         <CardTitle className="line-clamp-2">{lesson.title}</CardTitle>
         <CardDescription className="line-clamp-3 min-h-[4rem]">
-          {lesson.courseId?.title}
+          {/* {lesson.courseId?.title} */}
+          AI summary
         </CardDescription>
         <CardDescription className="line-clamp-1">
-          {lesson?.updatedAt?.toString()}
+          {/* {lesson?.updatedAt?.toString()} */}
+          {capitalizeFirstLetter(
+            format(new Date(lesson?.createdAt), "P", {
+              locale: currentDateFnsLocale,
+            })
+          )}
         </CardDescription>
       </CardHeader>
     </Card>

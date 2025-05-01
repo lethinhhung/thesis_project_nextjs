@@ -15,6 +15,10 @@ import { Progress } from "./ui/progress";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Course as CourseInterface } from "@/interfaces/course";
+import { format } from "date-fns";
+import { useLocale } from "next-intl";
+import { enUS as en } from "date-fns/locale/en-US";
+import { vi } from "date-fns/locale/vi";
 
 export function CourseCard({
   course,
@@ -24,6 +28,13 @@ export function CourseCard({
   className?: string;
 }) {
   const router = useRouter();
+  const locale = useLocale();
+  const dateFnsLocales = {
+    vi,
+    en,
+  };
+
+  const currentDateFnsLocale = dateFnsLocales[locale as "vi" | "en"] || vi;
   return (
     <Card
       onClick={() => router.push(`/courses/${course._id}`)}
@@ -45,7 +56,11 @@ export function CourseCard({
           {course.title}
           {course.status && <CheckCircle2 size={18} />}
         </CardTitle>
-        <CardDescription>{course.createdAt.toString()}</CardDescription>
+        <CardDescription>
+          {format(new Date(course?.createdAt), "P", {
+            locale: currentDateFnsLocale,
+          })}
+        </CardDescription>
         <CardDescription className="line-clamp-3 min-h-[4rem]">
           {course.description}
         </CardDescription>
