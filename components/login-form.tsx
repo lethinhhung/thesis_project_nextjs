@@ -40,6 +40,7 @@ export function LoginForm({
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
   const hasShownErrorRef = useRef(false);
+  const callbackUrl = searchParams.get("callbackUrl") || "/home";
 
   useEffect(() => {
     if (error === "unauthorized" && !hasShownErrorRef.current) {
@@ -93,8 +94,8 @@ export function LoginForm({
     const res = await signIn("credentials", {
       username: username,
       password: password,
-      redirect: false,
-      callbackUrl: "/home",
+      redirect: true,
+      callbackUrl: callbackUrl,
     });
     if (!res?.error) {
       toast.success("Login successfully", {

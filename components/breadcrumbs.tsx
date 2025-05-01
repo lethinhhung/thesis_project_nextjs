@@ -154,7 +154,7 @@ export default function Breadcrumbs() {
             breadcrumbItems.map(({ label, path }) => (
               <div key={path} className="hidden sm:flex items-center gap-2">
                 <BreadcrumbSeparator />
-                <BreadcrumbItem>
+                <BreadcrumbItem className="truncate max-w-20">
                   <Link className="text-primary" href={path}>
                     {label}
                   </Link>
@@ -165,7 +165,7 @@ export default function Breadcrumbs() {
 
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage className="truncate w-30">
+            <BreadcrumbPage className="truncate w-40 lg:w-50">
               {lastLabel}
             </BreadcrumbPage>
           </BreadcrumbItem>
