@@ -42,7 +42,9 @@ export function LessonCard({
       }
     >
       <CardHeader>
-        <CardTitle className="line-clamp-2">{lesson.title}</CardTitle>
+        <CardTitle className="line-clamp-2 leading-[1.3]">
+          {lesson.title}
+        </CardTitle>
         <CardDescription className="line-clamp-3 min-h-[4rem]">
           {/* {lesson.courseId?.title} */}
           AI summary

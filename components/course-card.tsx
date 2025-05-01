@@ -51,7 +51,7 @@ export function CourseCard({
         className="object-cover h-50 w-full rounded-xl rounded-b-none dark:brightness-[0.2] dark:grayscale"
       />
       <CardHeader>
-        <CardTitle className="line-clamp-1 flex items-center gap-2">
+        <CardTitle className="line-clamp-1 flex items-center gap-2 leading-[1.3]">
           {/* {course.emoji}  */}
           {course.title}
           {course.status && <CheckCircle2 size={18} />}
