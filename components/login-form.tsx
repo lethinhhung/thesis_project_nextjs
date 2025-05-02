@@ -94,15 +94,16 @@ export function LoginForm({
     const res = await signIn("credentials", {
       username: username,
       password: password,
-      redirect: true,
+      redirect: false,
       callbackUrl: callbackUrl,
     });
+
     if (!res?.error) {
       toast.success("Login successfully", {
         icon: <Smile size={15} />,
         description: "Welcome back!",
       });
-      router.push("/home");
+      router.push(callbackUrl);
     } else {
       toast.error("Login failed", {
         icon: <CircleAlert size={15} />,
