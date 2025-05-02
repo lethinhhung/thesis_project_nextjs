@@ -29,6 +29,8 @@ export function NavMain({
     router.push(url);
     e.preventDefault();
   };
+  // remove locale from pathname
+  const path = pathname.replace(/\/[a-z]{2}\//, "/");
 
   return (
     <>
@@ -57,7 +59,7 @@ export function NavMain({
         </SidebarMenuItem>
         {items.map((item) => (
           <SidebarMenuItem key={item.title}>
-            <SidebarMenuButton asChild isActive={pathname === item.url}>
+            <SidebarMenuButton asChild isActive={path === item.url}>
               <a href={item.url} onClick={(e) => handleClick(e, item.url)}>
                 <item.icon />
                 <span>{item.title}</span>

@@ -25,11 +25,11 @@ export async function processResponse(
   const message = data.message || "Có lỗi xảy ra";
   const details = data.error?.details || "Có lỗi xảy ra";
 
-  switch (response.status) {
+  switch (data.error?.code) {
     case 401:
       signOut({
         redirect: true,
-        callbackUrl: "/login?error=unauthorized",
+        callbackUrl: `/login?error=SessionExpired&callbackUrl=${window.location.pathname}`,
       });
       toast.error(message || "Chưa xác thực", {
         description: details,

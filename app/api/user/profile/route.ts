@@ -26,6 +26,7 @@ export async function GET(req: NextRequest) {
 
     // Call backend API to get profile
     const response = await getProfileAPI(token?.accessToken || "");
+
     if (response.status === 201 || response.status === 200) {
       if (response.data.success) {
         return NextResponse.json(
@@ -46,22 +47,11 @@ export async function GET(req: NextRequest) {
               details: response.data.error.details,
             },
           },
-          { status: 400 }
+          { status: response.data.error.code }
         );
       }
-    } else if (response.status === 401) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Unauthorized",
-          error: {
-            code: "UNAUTHORIZED",
-            details: "User not authenticated",
-          },
-        },
-        { status: 401 }
-      );
     }
+
     return NextResponse.json(
       {
         success: false,

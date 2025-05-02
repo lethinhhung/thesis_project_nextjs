@@ -43,9 +43,9 @@ export function LoginForm({
   const callbackUrl = searchParams.get("callbackUrl") || "/home";
 
   useEffect(() => {
-    if (error === "unauthorized" && !hasShownErrorRef.current) {
+    if (error === "SessionExpired" && !hasShownErrorRef.current) {
       const timeout = setTimeout(() => {
-        toast.error("Unauthorized", {
+        toast.error("Session expired", {
           description: "Please login again",
         });
         hasShownErrorRef.current = true;

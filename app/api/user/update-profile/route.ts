@@ -49,21 +49,9 @@ export async function PUT(req: NextRequest) {
               details: response.data.error.details,
             },
           },
-          { status: 400 }
+          { status: response.data.error.code }
         );
       }
-    } else if (response.status === 401) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Unauthorized",
-          error: {
-            code: "UNAUTHORIZED",
-            details: "User not authenticated",
-          },
-        },
-        { status: 401 }
-      );
     }
 
     return NextResponse.json(

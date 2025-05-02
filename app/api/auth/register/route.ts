@@ -27,7 +27,7 @@ export async function POST(req: NextRequest) {
               details: response.data.error.details,
             },
           },
-          { status: 400 }
+          { status: response.data.error.code }
         );
       }
     }
