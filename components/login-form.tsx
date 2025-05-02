@@ -138,7 +138,11 @@ export function LoginForm({
                     <FormItem className="grid gap-3">
                       <FormLabel>{t("username")}</FormLabel>
                       <FormControl>
-                        <Input placeholder="example@example.com" {...field} />
+                        <Input
+                          spellCheck={false}
+                          placeholder="example@example.com"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -160,7 +164,7 @@ export function LoginForm({
                       </div>
 
                       <FormControl>
-                        <Input type="password" {...field} />
+                        <Input spellCheck={false} type="password" {...field} />
                       </FormControl>
 
                       <FormMessage />

@@ -16,24 +16,62 @@ import { useEffect, useState } from "react";
 const languages = [
   { code: "en", name: "English" },
   { code: "vi", name: "Tiếng Việt" },
-] as const;
+];
+
+// export function LanguageSwitcher({
+//   isSidebarOpen = true,
+//   ...props
+// }: React.ComponentProps<"button"> &
+//   VariantProps<typeof buttonVariants> & { isSidebarOpen?: boolean }) {
+//   const locale = useLocale();
+//   const router = useRouter();
+//   const pathname = usePathname();
+
+//   const handleSwitch = () => {
+//     const newLocale = locale === "en" ? "vi" : "en";
+
+//     // Xử lý để loại bỏ locale hiện tại khỏi pathname
+//     const pathWithoutLocale = pathname.replace(/^\/(en|vi)/, "") || "/";
+//     const newPath = `/${newLocale}${pathWithoutLocale}`;
+
+//     router.replace(newPath);
+//   };
+
+//   return (
+//     <TooltipProvider>
+//       <Tooltip>
+//         <TooltipTrigger asChild>
+//           <Button {...props} onClick={handleSwitch}>
+//             <Languages />
+//           </Button>
+//         </TooltipTrigger>
+//         <TooltipContent side={isSidebarOpen ? "top" : "right"}>
+//           <p>Current: {languages.find((lang) => lang.code === locale)?.name}</p>
+//         </TooltipContent>
+//       </Tooltip>
+//     </TooltipProvider>
+//   );
+// }
 
 export function LanguageSwitcher({
   isSidebarOpen = true,
   ...props
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & { isSidebarOpen?: boolean }) {
+  const [mounted, setMounted] = useState(false);
   const initialLocale = useLocale();
   const [locale, setLocale] = useState<string | null>(null);
   const router = useRouter();
   const pathname = usePathname();
 
   useEffect(() => {
+    setMounted(true);
     setLocale(initialLocale);
   }, [initialLocale]);
 
+  if (!mounted || !locale) return null; // Avoid rendering during SSR
+
   const handleSwitch = () => {
-    if (!locale) return;
     const newLocale = locale === "en" ? "vi" : "en";
     setLocale(newLocale);
 
@@ -42,8 +80,6 @@ export function LanguageSwitcher({
 
     router.replace(newPath);
   };
-
-  if (!locale) return null;
 
   return (
     <TooltipProvider>
