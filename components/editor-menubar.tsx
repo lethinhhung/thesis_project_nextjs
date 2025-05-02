@@ -18,12 +18,13 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar";
 import {
+  ArrowRightToLine,
   ArrowUpRight,
   CheckCircle2,
   ChevronRight,
   Loader,
-  Square,
-  SquareDashed,
+  ToggleLeft,
+  ToggleRight,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { AnimatePresence, motion } from "framer-motion";
@@ -55,6 +56,7 @@ function EditorMenubar({
   save: () => void;
 }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isClearBackground, setIsClearBackground] = useState(false);
 
   const downloadBlob = (blob: Blob, filename: string) => {
     const url = window.URL.createObjectURL(blob);
@@ -172,7 +174,11 @@ function EditorMenubar({
         >
           <Menubar
             autoFocus={false}
-            className="justify-between shadow-sm dark:border-dashed bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+            className={`justify-between shadow-sm ${
+              isClearBackground
+                ? "bg-foreground/95 supports-[backdrop-filter]:bg-foreground/60 text-background/95"
+                : "bg-background/95 supports-[backdrop-filter]:bg-background/60 text-foreground/95"
+            } backdrop-blur`}
           >
             {!isCollapsed && (
               <div className="flex gap-1">
@@ -202,6 +208,42 @@ function EditorMenubar({
                     </MenubarItem>
                     <MenubarSeparator />
                     <MenubarItem>Share</MenubarItem>
+                    <MenubarSeparator />
+                    <MenubarItem>Print</MenubarItem>
+                  </MenubarContent>
+                </MenubarMenu>
+                <MenubarMenu>
+                  <MenubarTrigger>View</MenubarTrigger>
+                  <MenubarContent>
+                    <MenubarItem
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setIsPlainBackground(!isPlainBackground);
+                      }}
+                    >
+                      Transparent background
+                      <MenubarShortcut>
+                        {isPlainBackground ? <ToggleRight /> : <ToggleLeft />}
+                      </MenubarShortcut>
+                    </MenubarItem>
+                    <MenubarItem
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setIsClearBackground(!isClearBackground);
+                      }}
+                    >
+                      Clear menubar background
+                      <MenubarShortcut>
+                        {isClearBackground ? <ToggleRight /> : <ToggleLeft />}
+                      </MenubarShortcut>
+                    </MenubarItem>
+                    <MenubarSeparator />
+                    <MenubarItem onClick={() => setIsCollapsed(!isCollapsed)}>
+                      Collapse menubar
+                      <MenubarShortcut>
+                        <ArrowRightToLine />
+                      </MenubarShortcut>
+                    </MenubarItem>
                     <MenubarSeparator />
                     <MenubarItem>Print</MenubarItem>
                   </MenubarContent>
@@ -244,34 +286,6 @@ function EditorMenubar({
                     <MenubarItem disabled>Type / to insert</MenubarItem>
                   </MenubarContent>
                 </MenubarMenu>
-                {isDarkTheme && (
-                  <MenubarMenu>
-                    <MenubarTrigger asChild>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <Button
-                            className="px-2 py-1 h-7 rounded-sm text-sm font-medium"
-                            onClick={() => {
-                              setIsPlainBackground(!isPlainBackground);
-                            }}
-                            size="sm"
-                            variant={isPlainBackground ? "ghost" : "secondary"}
-                          >
-                            {isPlainBackground ? <SquareDashed /> : <Square />}
-                          </Button>
-                        </TooltipTrigger>
-                        <TooltipContent side="top">
-                          <p>
-                            {"Switch to " +
-                              (isPlainBackground
-                                ? "default background"
-                                : "transparent background")}
-                          </p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </MenubarTrigger>
-                  </MenubarMenu>
-                )}
               </div>
             )}
 

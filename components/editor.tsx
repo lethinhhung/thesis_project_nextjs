@@ -32,14 +32,56 @@ import { LessonContent } from "@/interfaces/lesson";
 import { processResponse } from "@/lib/response-process";
 import { useDebounce } from "@/hooks/use-debounce";
 
+// const plainTheme = {
+//   light: lightDefaultTheme,
+//   dark: {
+//     ...darkDefaultTheme,
+//     colors: {
+//       editor: {
+//         background: "oklch(0.145 0 0)",
+//         text: "#cfcfcf",
+//       },
+//     },
+//   },
+// };
+
 const plainTheme = {
-  light: lightDefaultTheme,
+  light: {
+    ...lightDefaultTheme,
+    colors: {
+      editor: {
+        background: "oklch(1 0 0)",
+        text: "oklch(0.145 0 0)",
+      },
+    },
+  },
   dark: {
     ...darkDefaultTheme,
     colors: {
       editor: {
         background: "oklch(0.145 0 0)",
-        text: "#cfcfcf",
+        text: "oklch(0.99 0 0)",
+      },
+    },
+  },
+};
+
+const defaultTheme = {
+  light: {
+    ...lightDefaultTheme,
+    colors: {
+      editor: {
+        background: "oklch(0.97 0 0)",
+        text: "oklch(0.145 0 0)",
+      },
+    },
+  },
+  dark: {
+    ...darkDefaultTheme,
+    colors: {
+      editor: {
+        background: "oklch(0.269 0 0)",
+        text: "oklch(0.99 0 0)",
       },
     },
   },
@@ -148,9 +190,11 @@ const Editor = ({
   const editorTheme =
     isPlainBackground && isDarkTheme
       ? plainTheme.dark
-      : isDarkTheme
-      ? "dark"
-      : "light";
+      : isPlainBackground && !isDarkTheme
+      ? plainTheme.light
+      : !isPlainBackground && isDarkTheme
+      ? defaultTheme.dark
+      : defaultTheme.light;
   const editorRef = useRef<HTMLDivElement>(null!);
 
   return (
@@ -167,7 +211,7 @@ const Editor = ({
         save={saveContentAsJSON}
       />
 
-      <div className="w-full" ref={editorRef}>
+      <div className="w-full px-1 sm:px-2" ref={editorRef}>
         <BlockNoteView
           className="w-full"
           onChange={() => setPendingChange(true)}

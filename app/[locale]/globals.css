@@ -80,7 +80,8 @@
 
 .dark {
   --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
+  /* --foreground: oklch(0.985 0 0); */
+  --foreground: oklch(0.99 0 0);
   /* --card: oklch(0.205 0 0); */
   --card: oklch(0.145 0 0);
   --card-foreground: oklch(0.985 0 0);
@@ -196,12 +197,12 @@
 }
 
 @layer component {
-  .bn-editor h1,
-  h2,
-  h3,
-  h4 {
-    @apply text-primary;
-  }
+  /* .bn-editor h1,
+  .bn-editor h2,
+  .bn-editor h3,
+  .bn-editor h4 {
+    @apply text-foreground;
+  } */
 
   /* html[lang="vi"] .bn-editor * {
     @apply font-sans;
