@@ -57,7 +57,7 @@ export default function Breadcrumbs() {
   const pathSegments = pathname.split("/").filter(Boolean).slice(1);
   const isTablet = useIsTablet();
   const shouldShorten = isTablet
-    ? pathSegments.length >= 3
+    ? pathSegments.length >= 2
     : pathSegments.length >= 5;
   const courseId = params.courseId as string;
   const lessonId = params.lessonId as string;
@@ -133,7 +133,7 @@ export default function Breadcrumbs() {
           </BreadcrumbItem>
 
           {shouldShorten ? (
-            <div className="hidden sm:flex items-center gap-2">
+            <div className="flex items-center gap-2">
               <BreadcrumbSeparator />
               <BreadcrumbItem>
                 <DropdownMenu>
@@ -152,7 +152,7 @@ export default function Breadcrumbs() {
             </div>
           ) : (
             breadcrumbItems.map(({ label, path }) => (
-              <div key={path} className="hidden sm:flex items-center gap-2">
+              <div key={path} className="flex items-center gap-2">
                 <BreadcrumbSeparator />
                 <BreadcrumbItem className="truncate max-w-20 2xl:max-w-40">
                   <Link className="text-primary" href={path}>
@@ -165,7 +165,7 @@ export default function Breadcrumbs() {
 
           <BreadcrumbSeparator />
           <BreadcrumbItem>
-            <BreadcrumbPage className="truncate max-w-40 lg:max-w-50 2xl:max-w-80">
+            <BreadcrumbPage className="truncate max-w-30 sm:max-w-40 lg:max-w-50 2xl:max-w-80">
               {lastLabel}
             </BreadcrumbPage>
           </BreadcrumbItem>

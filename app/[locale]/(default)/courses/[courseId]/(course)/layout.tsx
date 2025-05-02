@@ -25,6 +25,24 @@ import Image from "next/image";
 import { processResponse } from "@/lib/response-process";
 import { Course as CourseInterface } from "@/interfaces/course";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
 import { format } from "date-fns";
 import { useLocale } from "next-intl";
 import { enUS as en } from "date-fns/locale/en-US";
@@ -42,6 +60,8 @@ function Course({ children }: { children: React.ReactNode }) {
   const { courseId } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
   const [course, setCourse] = useState<CourseInterface>();
   const router = useRouter();
   const tabTop = useRef<HTMLDivElement | null>(null);
@@ -141,9 +161,59 @@ function Course({ children }: { children: React.ReactNode }) {
                   <ImageIcon />
                 </Button>
               </CollapsibleTrigger>
-              <Button size={"icon"} variant={"ghost"}>
-                <MoreHorizontal />
-              </Button>
+
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button size={"icon"} variant={"ghost"}>
+                    <MoreHorizontal />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+
+                  <DropdownMenuItem onClick={() => setOpenEdit(!openEdit)}>
+                    Edit
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>Change cover</DropdownMenuItem>
+
+                  <DropdownMenuItem
+                    onClick={() => setOpenDelete(!openDelete)}
+                    variant="destructive"
+                  >
+                    Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+
+              <Dialog open={openEdit} onOpenChange={setOpenEdit}>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Edit this course</DialogTitle>
+                    <DialogDescription>Description</DialogDescription>
+                  </DialogHeader>
+                </DialogContent>
+              </Dialog>
+
+              <Dialog open={openDelete} onOpenChange={setOpenDelete}>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Are you absolutely sure?</DialogTitle>
+                    <DialogDescription>
+                      This action cannot be undone. This will permanently remove
+                      this course and all of its data from our servers.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter>
+                    <Button type="button" variant={"outline"}>
+                      Cancel
+                    </Button>
+                    <Button type="submit" variant={"destructive"}>
+                      Delete
+                    </Button>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
         </Collapsible>
