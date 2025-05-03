@@ -26,10 +26,16 @@ const getCompletedCoursesAPI = (token: string) => {
   return createAxiosInstance(token).get(URL_API);
 };
 
+const deleteCourseAPI = (token: string, courseId: string) => {
+  const URL_API = `/api/course/delete-course/${courseId}`;
+  return createAxiosInstance(token).delete(URL_API);
+};
+
 export {
   createCourseAPI,
   getCourseAPI,
   getAllCoursesAPI,
   getOngoingCoursesAPI,
   getCompletedCoursesAPI,
+  deleteCourseAPI,
 };

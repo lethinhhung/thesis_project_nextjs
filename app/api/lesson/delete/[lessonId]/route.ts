@@ -1,9 +1,9 @@
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
-import { updateLessonContentAPI } from "@/lib/services/lesson.service";
+import { deleteLessonAPI } from "@/lib/services/lesson.service";
 
-export async function PUT(
+export async function DELETE(
   req: NextRequest,
   { params }: { params: { lessonId: string } }
 ) {
@@ -42,27 +42,7 @@ export async function PUT(
       );
     }
 
-    const lesson = await req.json();
-
-    if (!lesson || !lesson.content) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Invalid content format",
-          error: {
-            code: "INVALID_CONTENT",
-            details: "Content is required and must be in correct format",
-          },
-        },
-        { status: 400 }
-      );
-    }
-
-    const response = await updateLessonContentAPI(
-      token?.accessToken || "",
-      lessonId,
-      lesson.content
-    );
+    const response = await deleteLessonAPI(token?.accessToken || "", lessonId);
 
     if (response.status === 201 || response.status === 200) {
       if (response.data.success) {

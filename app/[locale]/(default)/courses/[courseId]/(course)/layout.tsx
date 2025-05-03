@@ -7,6 +7,7 @@ import {
   ChartColumnIncreasing,
   Folder,
   Image as ImageIcon,
+  Loader,
   MoreHorizontal,
   Search,
   Sparkles,
@@ -47,6 +48,7 @@ import { useLocale } from "next-intl";
 import { enUS as en } from "date-fns/locale/en-US";
 import { vi } from "date-fns/locale/vi";
 import CourseSkeleton from "@/components/skeleton/course-layout-skeleton";
+import { toast } from "sonner";
 
 const badges = [
   { title: "Math" },
@@ -59,6 +61,7 @@ const badges = [
 function Course({ children }: { children: React.ReactNode }) {
   const { courseId } = useParams();
   const [isLoading, setIsLoading] = useState(true);
+  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -114,6 +117,31 @@ function Course({ children }: { children: React.ReactNode }) {
     if (response.success) {
       setCourse(response.data);
     }
+  };
+
+  const deleteCourse = async () => {
+    setIsDeleteLoading(true);
+    const res = await fetch(`/api/course/delete/${courseId}`, {
+      method: "DELETE",
+    });
+    const response = await processResponse(res, {
+      success: false,
+      error: true,
+    });
+    console.log("Course deleted:", response);
+
+    if (response.success) {
+      toast.success("Course deleted successfully", {
+        description: `${course?.title} has been deleted`,
+      });
+      setOpenDelete(false);
+      router.push("/courses");
+    } else {
+      toast.error("Failed to delete course", {
+        description: response.error || "Something went wrong",
+      });
+    }
+    setIsDeleteLoading(false);
   };
 
   useEffect(() => {
@@ -207,8 +235,17 @@ function Course({ children }: { children: React.ReactNode }) {
                     <Button type="button" variant={"outline"}>
                       Cancel
                     </Button>
-                    <Button type="submit" variant={"destructive"}>
-                      Delete
+                    <Button
+                      type="submit"
+                      variant={"destructive"}
+                      onClick={deleteCourse}
+                      className="min-w-20"
+                    >
+                      {isDeleteLoading ? (
+                        <Loader className="animate-spin" />
+                      ) : (
+                        "Delete"
+                      )}
                     </Button>
                   </DialogFooter>
                 </DialogContent>

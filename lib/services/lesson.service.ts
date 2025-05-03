@@ -29,9 +29,15 @@ const updateLessonContentAPI = (
   return createAxiosInstance(token).put(URL_API, { content });
 };
 
+const deleteLessonAPI = (token: string, lessonId: string) => {
+  const URL_API = `/api/lesson/delete-lesson/${lessonId}`;
+  return createAxiosInstance(token).delete(URL_API);
+};
+
 export {
   createLessonAPI,
   getLessonAPI,
   getAllLessonsAPI,
   updateLessonContentAPI,
+  deleteLessonAPI,
 };

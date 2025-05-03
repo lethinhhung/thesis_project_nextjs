@@ -78,7 +78,7 @@ export async function POST(
     return NextResponse.json(
       {
         success: false,
-        message: "Unexpected response from course API",
+        message: "Unexpected response from lesson API",
         error: {
           code: "UNEXPECTED_RESPONSE",
           details: `Status code: ${response.status}`,
@@ -87,7 +87,7 @@ export async function POST(
       { status: 500 }
     );
   } catch (error) {
-    console.error("Error fetching course:", error);
+    console.error("Error fetching lesson:", error);
     return NextResponse.json(
       {
         success: false,

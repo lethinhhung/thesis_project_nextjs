@@ -1,11 +1,11 @@
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
-import { updateLessonContentAPI } from "@/lib/services/lesson.service";
+import { deleteCourseAPI } from "@/lib/services/course.service";
 
-export async function PUT(
+export async function DELETE(
   req: NextRequest,
-  { params }: { params: { lessonId: string } }
+  { params }: { params: { courseId: string } }
 ) {
   try {
     // Check if user is authenticated
@@ -27,42 +27,22 @@ export async function PUT(
       );
     }
 
-    const { lessonId } = await params;
-    if (!lessonId) {
+    const { courseId } = await params;
+    if (!courseId) {
       return NextResponse.json(
         {
           success: false,
-          message: "Lesson ID is required",
+          message: "Course ID is required",
           error: {
-            code: "INVALID_LESSON_ID",
-            details: "Lesson ID is required",
+            code: "INVALID_COURSE_ID",
+            details: "Course ID is required",
           },
         },
         { status: 400 }
       );
     }
 
-    const lesson = await req.json();
-
-    if (!lesson || !lesson.content) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Invalid content format",
-          error: {
-            code: "INVALID_CONTENT",
-            details: "Content is required and must be in correct format",
-          },
-        },
-        { status: 400 }
-      );
-    }
-
-    const response = await updateLessonContentAPI(
-      token?.accessToken || "",
-      lessonId,
-      lesson.content
-    );
+    const response = await deleteCourseAPI(token?.accessToken || "", courseId);
 
     if (response.status === 201 || response.status === 200) {
       if (response.data.success) {
@@ -92,7 +72,7 @@ export async function PUT(
     return NextResponse.json(
       {
         success: false,
-        message: "Unexpected response from lesson API",
+        message: "Unexpected response from course API",
         error: {
           code: "UNEXPECTED_RESPONSE",
           details: `Status code: ${response.status}`,
@@ -101,7 +81,7 @@ export async function PUT(
       { status: 500 }
     );
   } catch (error) {
-    console.error("Error fetching lesson:", error);
+    console.error("Error fetching course:", error);
     return NextResponse.json(
       {
         success: false,
