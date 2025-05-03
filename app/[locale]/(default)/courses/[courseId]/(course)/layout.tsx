@@ -40,13 +40,13 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 
 import { format } from "date-fns";
 import { useLocale } from "next-intl";
 import { enUS as en } from "date-fns/locale/en-US";
 import { vi } from "date-fns/locale/vi";
+import CourseSkeleton from "@/components/skeleton/course-layout-skeleton";
 
 const badges = [
   { title: "Math" },
@@ -122,8 +122,7 @@ function Course({ children }: { children: React.ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (isLoading)
-    return <Skeleton className="w-full h-full max-w-7xl mx-auto" />;
+  if (isLoading) return <CourseSkeleton />;
 
   return (
     <div className="flex flex-col items-center mx-auto h-full w-full max-w-7xl rounded-xl">
@@ -306,40 +305,7 @@ function Course({ children }: { children: React.ReactNode }) {
             />
           </CollapsibleContent>
         </Collapsible>
-        {/* <TabsContent value="dashboard">
-          <CourseDashboard
-            lessons={lessons}
-            documents={documents}
-            setTab={setTab}
-            scrollToTabTop={scrollToTabTop}
-          />
-        </TabsContent>
-        <TabsContent className="" value="lessons">
-          <CourseLessons lessons={lessons} />
-        </TabsContent>
-        <TabsContent className="" value="documents">
-          <CourseDocument documents={documents} />
-        </TabsContent>
-        <TabsContent className="" value="tests">
-          <CourseTestsProjects />
-        </TabsContent>
-        <TabsContent value="ask">
-          <div className="w-full flex p-2 md:p-4 flex-col gap-4">
-            <div className="w-full flex justify-between items-center sticky top-16">
-              <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
-                Ask AI
-              </h4>
-              <div className="flex gap-2 items-center">
-                <SortButton variant={"secondary"} />
 
-                <Button>new</Button>
-              </div>
-            </div>
-            <div className="w-full flex grid grid-col-1 sm:px-2 md:grid-cols-2 2xl:grid-cols-3 gap-4">
-              Content
-            </div>
-          </div>
-        </TabsContent> */}
         {children}
       </Tabs>
     </div>

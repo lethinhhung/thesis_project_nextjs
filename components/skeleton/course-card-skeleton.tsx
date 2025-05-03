@@ -27,7 +27,7 @@ export function CourseCardSkeleton({ className }: { className?: string }) {
           <Skeleton className="h-5 w-20" />
         </CardDescription>
         <CardDescription>
-          <Skeleton className="h-16 w-full" />
+          <Skeleton className="h-20 w-full" />
         </CardDescription>
       </CardHeader>
       <CardContent>
