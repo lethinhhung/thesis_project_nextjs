@@ -36,7 +36,6 @@ import { schema } from "./blocknote";
 
 function EditorMenubar({
   editor,
-  isDarkTheme,
   isPlainBackground,
   setIsPlainBackground,
   isChatOpen,
@@ -44,9 +43,9 @@ function EditorMenubar({
   editorRef,
   isLoading,
   save,
+  markDown,
 }: {
   editor: typeof schema.BlockNoteEditor;
-  isDarkTheme: boolean;
   isPlainBackground: boolean;
   setIsPlainBackground: (value: boolean) => void;
   isChatOpen: boolean;
@@ -54,6 +53,7 @@ function EditorMenubar({
   editorRef: React.RefObject<HTMLDivElement> | null;
   isLoading: boolean;
   save: () => void;
+  markDown: string;
 }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isClearBackground, setIsClearBackground] = useState(false);
@@ -158,6 +158,16 @@ function EditorMenubar({
     toast.success("File downloaded successfully!");
   };
 
+  const copyText = () => {
+    const text = markDown;
+    navigator.clipboard
+      .writeText(text?.toString() || "")
+      .then(() => toast.success("Copied to clipboard!"))
+      .catch((err) => {
+        console.error("Err:", err);
+      });
+  };
+
   return (
     <AnimatePresence initial={false}>
       <div className="w-full pb-4 pt-2 2xl:pt-4 flex justify-end col-span-full sticky z-10 top-14 2xl:top-14">
@@ -207,9 +217,9 @@ function EditorMenubar({
                       </MenubarShortcut>
                     </MenubarItem>
                     <MenubarSeparator />
-                    <MenubarItem>Share</MenubarItem>
+                    <MenubarItem onClick={copyText}>Copy text</MenubarItem>
                     <MenubarSeparator />
-                    <MenubarItem>Print</MenubarItem>
+                    <MenubarItem>Share</MenubarItem>
                   </MenubarContent>
                 </MenubarMenu>
                 <MenubarMenu>

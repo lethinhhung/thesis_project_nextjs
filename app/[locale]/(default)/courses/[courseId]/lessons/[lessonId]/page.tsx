@@ -16,6 +16,7 @@ import {
   ArrowUpRight,
   Copy,
   FileText,
+  Loader,
   MoreHorizontal,
   Sparkles,
 } from "lucide-react";
@@ -26,20 +27,40 @@ import { AnimatePresence, motion } from "framer-motion";
 import { LessonContent } from "@/interfaces/lesson";
 import { processResponse } from "@/lib/response-process";
 import { Skeleton } from "@/components/ui/skeleton";
-import { notFound, useParams } from "next/navigation";
+import { notFound, useParams, useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { enUS as en } from "date-fns/locale/en-US";
 import { vi } from "date-fns/locale/vi";
 import { capitalizeFirstLetter } from "@/lib/capitalize-first-letter";
 import { useLocale } from "next-intl";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 function Lesson() {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [markDown, setMarkDown] = useState<string>("");
   const [isLoading, setIsLoading] = useState(true);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   const [lesson, setLesson] = useState<LessonContent>();
   const params = useParams();
+  const router = useRouter();
   const lessonId = params.lessonId as string;
+  const courseId = params.courseId as string;
   const locale = useLocale();
   const dateFnsLocales = {
     vi,
@@ -66,11 +87,34 @@ function Lesson() {
       success: false,
       error: true,
     });
-    console.log("Course data:", response);
 
     if (response.success) {
       setLesson(response.data);
     }
+  };
+
+  const deleteLesson = async () => {
+    setIsDeleteLoading(true);
+    const res = await fetch(`/api/lesson/delete/${lessonId}`, {
+      method: "DELETE",
+    });
+    const response = await processResponse(res, {
+      success: false,
+      error: true,
+    });
+
+    if (response.success) {
+      toast.success("Lesson deleted successfully", {
+        description: `${lesson?.title} has been deleted`,
+      });
+      setOpenDelete(false);
+      router.push(`/courses/${courseId}/lessons`);
+    } else {
+      toast.error("Failed to delete lesson", {
+        description: response.error || "Something went wrong",
+      });
+    }
+    setIsDeleteLoading(false);
   };
 
   useEffect(() => {
@@ -106,9 +150,59 @@ function Lesson() {
                 <CardDescription>User&apos;s lesson note</CardDescription>
               </CardHeader>
               <div className="px-4">
-                <Button size={"sm"} variant={"ghost"}>
-                  <MoreHorizontal />
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button size={"icon"} variant={"ghost"}>
+                      <MoreHorizontal />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+
+                    <DropdownMenuItem>Edit</DropdownMenuItem>
+
+                    <DropdownMenuItem
+                      variant="destructive"
+                      onClick={() => setOpenDelete(true)}
+                    >
+                      Delete
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
+                <Dialog open={openDelete} onOpenChange={setOpenDelete}>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Delete this lesson?</DialogTitle>
+                      <DialogDescription>
+                        This action cannot be undone. This will permanently
+                        remove this lesson and all of its data from our servers.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                      <Button
+                        type="button"
+                        variant={"outline"}
+                        onClick={() => setOpenDelete(false)}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        type="submit"
+                        variant={"destructive"}
+                        onClick={deleteLesson}
+                        className="min-w-20"
+                      >
+                        {isDeleteLoading ? (
+                          <Loader className="animate-spin" />
+                        ) : (
+                          "Delete"
+                        )}
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
               </div>
             </div>
             <CardContent className="border border-dashed mx-6 p-4 rounded-lg">
@@ -152,9 +246,7 @@ function Lesson() {
               <CardHeader className="flex-1">
                 <CardTitle>Summary</CardTitle>
                 <CardDescription id="summary">
-                  This is the summary of this lesson. It can be a brief
-                  description of the lesson content. It can be a brief
-                  description of the lesson content.
+                  {markDown.slice(0, 300) || "No summary available"}
                 </CardDescription>
               </CardHeader>
               <div className="px-4">

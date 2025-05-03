@@ -201,7 +201,6 @@ const Editor = ({
     <div className="col-span-full space-y-4">
       <EditorMenubar
         editor={editor}
-        isDarkTheme={isDarkTheme}
         isPlainBackground={isPlainBackground}
         setIsPlainBackground={setIsPlainBackground}
         isChatOpen={isChatOpen}
@@ -209,6 +208,7 @@ const Editor = ({
         editorRef={editorRef}
         isLoading={isLoading}
         save={saveContentAsJSON}
+        markDown={markDown}
       />
 
       <div className="w-full px-1 sm:px-2" ref={editorRef}>

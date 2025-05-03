@@ -25,7 +25,6 @@ import { useRouter, usePathname, useParams } from "next/navigation";
 import Image from "next/image";
 import { processResponse } from "@/lib/response-process";
 import { Course as CourseInterface } from "@/interfaces/course";
-import { Skeleton } from "@/components/ui/skeleton";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -225,14 +224,18 @@ function Course({ children }: { children: React.ReactNode }) {
               <Dialog open={openDelete} onOpenChange={setOpenDelete}>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Are you absolutely sure?</DialogTitle>
+                    <DialogTitle>Delete this course?</DialogTitle>
                     <DialogDescription>
                       This action cannot be undone. This will permanently remove
                       this course and all of its data from our servers.
                     </DialogDescription>
                   </DialogHeader>
                   <DialogFooter>
-                    <Button type="button" variant={"outline"}>
+                    <Button
+                      type="button"
+                      variant={"outline"}
+                      onClick={() => setOpenDelete(false)}
+                    >
                       Cancel
                     </Button>
                     <Button
