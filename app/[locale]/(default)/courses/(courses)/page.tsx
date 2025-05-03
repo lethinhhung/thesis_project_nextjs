@@ -9,7 +9,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Course as CourseInterface } from "@/interfaces/course";
 import { processResponse } from "@/lib/response-process";
-import { Skeleton } from "@/components/ui/skeleton";
+import { LessonCardRecentSkeleton } from "@/components/skeleton/lesson-card-recent-skeleton";
+import { CourseCardSkeleton } from "@/components/skeleton/course-card-skeleton";
 
 function CoursesAll() {
   const router = useRouter();
@@ -37,9 +38,6 @@ function CoursesAll() {
     fetchData().then(() => setIsLoading(false));
   }, []);
 
-  if (isLoading) {
-    return <Skeleton className="w-full max-w-7xl h-full min-h-80" />;
-  }
   return (
     <div className="grid grid-cols-12 space-y-8 w-full h-full max-w-7xl p-2">
       <div className="col-span-12 grid grid-cols-12 gap-6">
@@ -48,19 +46,27 @@ function CoursesAll() {
             Recent lessons
           </h4>
         </div>
-        {lessons
-          ?.sort(
-            (a, b) =>
-              new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-          )
-          .slice(0, 3)
-          .map((lesson) => (
-            <LessonCardRecent
-              key={lesson._id}
-              lesson={lesson}
-              className="col-span-12 md:col-span-6 2xl:col-span-4"
-            />
-          ))}
+        {isLoading
+          ? Array.from({ length: 3 }).map((_, index: number) => (
+              <LessonCardRecentSkeleton
+                key={index}
+                className="col-span-12 md:col-span-6 2xl:col-span-4"
+              />
+            ))
+          : lessons
+              ?.sort(
+                (a, b) =>
+                  new Date(b.updatedAt).getTime() -
+                  new Date(a.updatedAt).getTime()
+              )
+              .slice(0, 3)
+              .map((lesson) => (
+                <LessonCardRecent
+                  key={lesson._id}
+                  lesson={lesson}
+                  className="col-span-12 md:col-span-6 2xl:col-span-4"
+                />
+              ))}
       </div>
 
       <div className="col-span-12 grid grid-cols-12 gap-6">
@@ -88,8 +94,15 @@ function CoursesAll() {
               </Button>
             )}
         </div>
-        {courses &&
-        courses?.filter((course) => course.status === false).length > 0 ? (
+        {isLoading ? (
+          Array.from({ length: 3 }).map((_, index: number) => (
+            <CourseCardSkeleton
+              key={index}
+              className="col-span-12 md:col-span-6 2xl:col-span-4"
+            />
+          ))
+        ) : courses &&
+          courses?.filter((course) => course.status === false).length > 0 ? (
           courses
             .filter((course) => course.status === false)
             .map((course) => (
@@ -131,8 +144,15 @@ function CoursesAll() {
               </Button>
             )}
         </div>
-        {courses &&
-        courses?.filter((course) => course.status === true).length > 0 ? (
+        {isLoading ? (
+          Array.from({ length: 3 }).map((_, index: number) => (
+            <CourseCardSkeleton
+              key={index}
+              className="col-span-12 md:col-span-6 2xl:col-span-4"
+            />
+          ))
+        ) : courses &&
+          courses?.filter((course) => course.status === true).length > 0 ? (
           courses
             .filter((course) => course.status === true)
             .map((course) => (

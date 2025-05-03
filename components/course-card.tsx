@@ -4,14 +4,12 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Progress } from "./ui/progress";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { Course as CourseInterface } from "@/interfaces/course";
@@ -72,12 +70,11 @@ export function CourseCard({
               {tag}
             </Badge>
           ))}
+          <Badge variant={"outline"}>English</Badge>
+          <Badge variant={"outline"}>Code</Badge>
+          <Badge variant={"outline"}>React</Badge>
         </div>
       </CardContent>
-
-      <CardFooter className="gap-2 min-h-[1.5rem]">
-        <Progress value={course.status ? 100 : 33}></Progress>
-      </CardFooter>
     </Card>
   );
 }
