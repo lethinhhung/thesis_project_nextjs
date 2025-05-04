@@ -132,7 +132,6 @@ function Course({ children }: { children: React.ReactNode }) {
       setOpenDelete(false);
       router.push("/courses");
     }
-    fetchCourse();
     setIsActionsLoading(false);
   };
 

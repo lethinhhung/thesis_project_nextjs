@@ -1,7 +1,6 @@
 "use client";
 
 import CourseLessons from "@/components/course-lessons";
-import { Skeleton } from "@/components/ui/skeleton";
 import { LessonCard } from "@/interfaces/lesson";
 import { processResponse } from "@/lib/response-process";
 import { useParams } from "next/navigation";
@@ -19,7 +18,7 @@ function Lessons() {
     });
     const response = await processResponse(res, {
       success: false,
-      error: true,
+      error: false,
     });
     console.log("Course data:", response);
 
@@ -32,10 +31,7 @@ function Lessons() {
     fetchLessons().then(() => setIsLoading(false));
   }, []);
 
-  if (isLoading) {
-    return <Skeleton className="w-full max-w-7xl h-full min-h-80" />;
-  }
-  return <CourseLessons lessons={lessons} />;
+  return <CourseLessons lessons={lessons} isLoading={isLoading} />;
 }
 
 export default Lessons;

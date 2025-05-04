@@ -269,9 +269,17 @@ function EditorMenubar({
                       </MenubarSubContent>
                     </MenubarSub>
                     <MenubarItem
+                      className="hidden 2xl:flex hover:bg-transparent data-[state=open]:bg-transparent"
+                      onClick={() => {
+                        setIsChatOpen(!isChatOpen);
+                      }}
+                    >
+                      {isChatOpen ? "Close ask AI" : "Open ask AI"}
+                    </MenubarItem>
+                    <MenubarItem
                       onSelect={() => window.open("/chat", "_blank")}
                     >
-                      Asking
+                      Chat
                       <MenubarShortcut>
                         <ArrowUpRight />
                       </MenubarShortcut>
@@ -280,16 +288,7 @@ function EditorMenubar({
                     <MenubarItem>Generate from knownledge</MenubarItem>
                   </MenubarContent>
                 </MenubarMenu>
-                <MenubarMenu>
-                  <MenubarTrigger
-                    className="hidden 2xl:flex hover:bg-transparent data-[state=open]:bg-transparent"
-                    onClick={() => {
-                      setIsChatOpen(!isChatOpen);
-                    }}
-                  >
-                    {isChatOpen ? "Close ask AI" : "Open ask AI"}
-                  </MenubarTrigger>
-                </MenubarMenu>
+
                 <MenubarMenu>
                   <MenubarTrigger>Help</MenubarTrigger>
                   <MenubarContent>
