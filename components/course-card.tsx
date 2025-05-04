@@ -8,7 +8,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -17,6 +16,7 @@ import { format } from "date-fns";
 import { useLocale } from "next-intl";
 import { enUS as en } from "date-fns/locale/en-US";
 import { vi } from "date-fns/locale/vi";
+import { CompletedMark } from "./completed-mark";
 
 export function CourseCard({
   course,
@@ -52,7 +52,7 @@ export function CourseCard({
         <CardTitle className="line-clamp-1 flex items-center gap-2 leading-[1.3]">
           {/* {course.emoji}  */}
           {course.title}
-          {course.status && <CheckCircle2 size={18} />}
+          {course.status && <CompletedMark size={18} />}
         </CardTitle>
         <CardDescription>
           {format(new Date(course?.createdAt), "P", {

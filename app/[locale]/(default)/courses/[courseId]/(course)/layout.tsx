@@ -47,7 +47,7 @@ import { useLocale } from "next-intl";
 import { enUS as en } from "date-fns/locale/en-US";
 import { vi } from "date-fns/locale/vi";
 import CourseSkeleton from "@/components/skeleton/course-layout-skeleton";
-import { toast } from "sonner";
+import { CompletedMark } from "@/components/completed-mark";
 
 const badges = [
   { title: "Math" },
@@ -60,7 +60,7 @@ const badges = [
 function Course({ children }: { children: React.ReactNode }) {
   const { courseId } = useParams();
   const [isLoading, setIsLoading] = useState(true);
-  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
+  const [isActionsLoading, setIsActionsLoading] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
@@ -119,28 +119,34 @@ function Course({ children }: { children: React.ReactNode }) {
   };
 
   const deleteCourse = async () => {
-    setIsDeleteLoading(true);
+    setIsActionsLoading(true);
     const res = await fetch(`/api/course/delete/${courseId}`, {
       method: "DELETE",
     });
     const response = await processResponse(res, {
-      success: false,
+      success: true,
       error: true,
     });
-    console.log("Course deleted:", response);
 
     if (response.success) {
-      toast.success("Course deleted successfully", {
-        description: `${course?.title} has been deleted`,
-      });
       setOpenDelete(false);
       router.push("/courses");
-    } else {
-      toast.error("Failed to delete course", {
-        description: response.error || "Something went wrong",
-      });
     }
-    setIsDeleteLoading(false);
+    fetchCourse();
+    setIsActionsLoading(false);
+  };
+
+  const updateCourseStatus = async () => {
+    setIsActionsLoading(true);
+    const res = await fetch(`/api/course/update-status/${courseId}`, {
+      method: "PATCH",
+    });
+    await processResponse(res, {
+      success: true,
+      error: true,
+    });
+    fetchCourse();
+    setIsActionsLoading(false);
   };
 
   useEffect(() => {
@@ -172,7 +178,14 @@ function Course({ children }: { children: React.ReactNode }) {
           </CollapsibleContent>
           <div className="flex justify-between items-center">
             <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-              {course?.title + (isExpanded ? " 💻" : "")}
+              <div className="flex gap-2 items-center">
+                {`${course?.title} ${isExpanded ? "💻" : ""}`}
+                {isActionsLoading ? (
+                  <Loader className="animate-spin" />
+                ) : (
+                  course?.status && <CompletedMark />
+                )}
+              </div>
               <p className="text-sm text-muted-foreground">
                 {course?.createdAt
                   ? format(new Date(course.createdAt), "PPPP", {
@@ -201,8 +214,13 @@ function Course({ children }: { children: React.ReactNode }) {
                   <DropdownMenuItem onClick={() => setOpenEdit(!openEdit)}>
                     Edit
                   </DropdownMenuItem>
-                  <DropdownMenuItem>Change cover</DropdownMenuItem>
 
+                  <DropdownMenuItem onClick={updateCourseStatus}>
+                    {course?.status
+                      ? "Unmark as completed"
+                      : "Mark as completed"}
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>View details</DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => setOpenDelete(!openDelete)}
                     variant="destructive"
@@ -244,7 +262,7 @@ function Course({ children }: { children: React.ReactNode }) {
                       onClick={deleteCourse}
                       className="min-w-20"
                     >
-                      {isDeleteLoading ? (
+                      {isActionsLoading ? (
                         <Loader className="animate-spin" />
                       ) : (
                         "Delete"

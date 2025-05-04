@@ -31,6 +31,11 @@ const deleteCourseAPI = (token: string, courseId: string) => {
   return createAxiosInstance(token).delete(URL_API);
 };
 
+const updateCourseStatusAPI = (token: string, courseId: string) => {
+  const URL_API = `/api/course/update-course-status/${courseId}`;
+  return createAxiosInstance(token).patch(URL_API);
+};
+
 export {
   createCourseAPI,
   getCourseAPI,
@@ -38,4 +43,5 @@ export {
   getOngoingCoursesAPI,
   getCompletedCoursesAPI,
   deleteCourseAPI,
+  updateCourseStatusAPI,
 };
