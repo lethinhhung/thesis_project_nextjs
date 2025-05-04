@@ -10,7 +10,10 @@ export const Divider = createReactBlockSpec(
   {
     render: () => {
       return (
-        <Separator contentEditable={false} className="my-[0.5rem]"></Separator>
+        <Separator
+          contentEditable={false}
+          className="my-[0.5rem] !bg-[rgba(128,128,128,0.3)]"
+        ></Separator>
       );
     },
   }

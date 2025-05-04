@@ -29,6 +29,7 @@ export const schema = BlockNoteSchema.create({
 
 export const insertDivider = (editor: typeof schema.BlockNoteEditor) => ({
   title: "Divider",
+  subtext: "A horizontal line to separate content",
   onItemClick: () => {
     insertOrUpdateBlock(editor, {
       type: "divider",
@@ -41,6 +42,7 @@ export const insertDivider = (editor: typeof schema.BlockNoteEditor) => ({
 
 export const insertQuote = (editor: typeof schema.BlockNoteEditor) => ({
   title: "Quote",
+  subtext: "A block of text that is quoted from another source",
   onItemClick: () => {
     insertOrUpdateBlock(editor, {
       type: "quote",
@@ -63,6 +65,7 @@ export const insertQuote = (editor: typeof schema.BlockNoteEditor) => ({
 
 export const insertHeading4 = (editor: typeof schema.BlockNoteEditor) => ({
   title: "Heading 4",
+  subtext: "A subheading for your content",
   onItemClick: () => {
     insertOrUpdateBlock(editor, {
       type: "heading4",
@@ -75,6 +78,7 @@ export const insertHeading4 = (editor: typeof schema.BlockNoteEditor) => ({
 
 export const insertInlineCode = (editor: typeof schema.BlockNoteEditor) => ({
   title: "Inline code",
+  subtext: "A short snippet of code or text",
   onItemClick: () => {
     insertOrUpdateBlock(editor, {
       type: "inlinecode",
@@ -87,6 +91,7 @@ export const insertInlineCode = (editor: typeof schema.BlockNoteEditor) => ({
 
 export const insertMuted = (editor: typeof schema.BlockNoteEditor) => ({
   title: "Muted text",
+  subtext: "A block of text that is muted or faded",
   onItemClick: () => {
     insertOrUpdateBlock(editor, {
       type: "muted",
