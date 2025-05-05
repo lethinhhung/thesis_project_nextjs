@@ -27,4 +27,8 @@ export interface SearchParams {
   query?: string;
   tags?: string[];
   status?: boolean;
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  order?: "asc" | "desc";
 }

@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { searchCoursesAPI } from "@/lib/services/course.service";
+import { SearchParams } from "@/interfaces/course";
 
 export async function GET(req: NextRequest) {
   try {
@@ -24,19 +25,23 @@ export async function GET(req: NextRequest) {
 
     // Get search parameters from URL
     const searchParams = req.nextUrl.searchParams;
-    const query = searchParams.get("query") || undefined;
-    const tags = searchParams.get("tags")?.split(",") || undefined;
-    const status = searchParams.get("status")
-      ? searchParams.get("status") === "true"
-      : undefined;
 
-    const response = await searchCoursesAPI(token?.accessToken || "", {
-      query,
-      tags,
-      status,
-    });
+    const params: SearchParams = {
+      query: searchParams.get("query") || undefined,
+      tags: searchParams.get("tags")?.split(",") || undefined,
+      status: searchParams.get("status")
+        ? searchParams.get("status") === "true"
+        : undefined,
+      page: searchParams.get("page") ? parseInt(searchParams.get("page")!) : 1,
+      limit: searchParams.get("limit")
+        ? parseInt(searchParams.get("limit")!)
+        : 10,
+      sortBy: searchParams.get("sortBy") || "createdAt",
+      order: (searchParams.get("order") as "asc" | "desc") || "desc",
+    };
 
-    console.log("API Response:", response.data);
+    const response = await searchCoursesAPI(token?.accessToken || "", params);
+    console.log("Search response", response.data);
 
     if (response.status === 200) {
       if (response.data.success) {
@@ -50,10 +55,7 @@ export async function GET(req: NextRequest) {
         {
           success: false,
           message: response.data.message,
-          error: {
-            code: response.data.error.code,
-            details: response.data.error.details,
-          },
+          error: response.data.error,
         },
         { status: response.data.error.code }
       );

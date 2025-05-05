@@ -32,9 +32,10 @@ import {
 import { cn } from "@/lib/utils";
 import { Tag } from "lucide-react";
 import SortButton from "./sort-button";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useSearch } from "./search-provider";
+import { useContext, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { SearchContext } from "./search-provider";
+import { Skeleton } from "./ui/skeleton";
 
 const badges = [
   { title: "All", total: "50" },
@@ -60,6 +61,26 @@ const badges = [
   { title: "Software Testing", total: "4" },
 ];
 
+function getPageNumbers(current: number, total: number) {
+  const delta = 1;
+  const range: (number | "...")[] = [];
+
+  const left = Math.max(2, current - delta);
+  const right = Math.min(total - 1, current + delta);
+
+  range.push(1);
+  if (left > 2) range.push("...");
+
+  for (let i = left; i <= right; i++) {
+    range.push(i);
+  }
+
+  if (right < total - 1) range.push("...");
+  if (total > 1) range.push(total);
+
+  return range;
+}
+
 function SearchBarWithTags({
   className,
   placeholder,
@@ -71,12 +92,37 @@ function SearchBarWithTags({
 }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
-  const { setQuery } = useSearch();
+  const searchParams = useSearchParams();
+  const { totalPage, loading } = useContext(SearchContext);
+
+  const params = new URLSearchParams(searchParams);
+  const page = parseInt(params.get("page") || "1");
+
+  const handlePageChange = (newPage: number) => {
+    // Cập nhật URL với page mới
+    const params = new URLSearchParams(searchParams);
+    params.set("page", newPage.toString());
+
+    // Chuyển hướng với params mới
+    router.push(`/courses/search?${params.toString()}`);
+  };
 
   const handleSearch = (e: { target: { value: string } }) => {
+    const params = new URLSearchParams(searchParams);
+
+    const page = params.get("page") || "1";
+    const limit = params.get("limit") || "2";
+    const sortBy = params.get("sortBy") || "createdAt";
+    const order = params.get("order") || "desc";
     const keyword = e.target.value;
-    setQuery(keyword);
-    router.push("/courses/search");
+    if (keyword) params.set("query", keyword);
+    else params.delete("query");
+    params.set("page", page);
+    params.set("limit", limit);
+    params.set("sortBy", sortBy);
+    params.set("order", order);
+    // Cập nhật URL với params mới
+    router.push(`/courses/search?${params.toString()}`);
   };
   return (
     <div
@@ -132,33 +178,69 @@ function SearchBarWithTags({
         </TooltipProvider>
       </div>
 
-      <Pagination
-        hidden={!withPagination}
-        className="mt-auto w-full rounded-xl bg-transparent"
-      >
-        <PaginationContent>
-          <PaginationItem>
-            <PaginationPreviousNoTitle href="#" />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#" isActive className="border border-dashed">
-              2
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">3</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationNextNoTitle href="#" />
-          </PaginationItem>
-        </PaginationContent>
-      </Pagination>
+      {searchParams.toString() &&
+        (loading ? (
+          <div className="flex w-full mx-auto gap-2 justify-center items-center">
+            {Array.from({ length: 5 }).map((_, index) => (
+              <Skeleton key={index} className="h-9 w-9" />
+            ))}
+          </div>
+        ) : (
+          totalPage > 1 && (
+            <Pagination
+              hidden={!withPagination}
+              className="mt-auto w-full rounded-xl bg-transparent"
+            >
+              <PaginationContent>
+                {page !== 1 && (
+                  <PaginationItem>
+                    <PaginationPreviousNoTitle
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handlePageChange((page - 1) as number);
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                    />
+                  </PaginationItem>
+                )}
+
+                {getPageNumbers(page, totalPage).map((p, index) => (
+                  <PaginationItem key={index}>
+                    {p === "..." ? (
+                      <PaginationEllipsis className="hidden sm:flex" />
+                    ) : (
+                      <PaginationLink
+                        isActive={p === page}
+                        href="#"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handlePageChange(p as number);
+                          window.scrollTo({ top: 0, behavior: "smooth" });
+                        }}
+                      >
+                        {p}
+                      </PaginationLink>
+                    )}
+                  </PaginationItem>
+                ))}
+
+                {page !== totalPage && (
+                  <PaginationItem>
+                    <PaginationNextNoTitle
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handlePageChange((page + 1) as number);
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                    />
+                  </PaginationItem>
+                )}
+              </PaginationContent>
+            </Pagination>
+          )
+        ))}
     </div>
   );
 }

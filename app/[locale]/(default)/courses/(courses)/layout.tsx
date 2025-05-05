@@ -9,7 +9,7 @@ function Courses({ children }: { children: React.ReactNode }) {
         <SearchBarWithTags
           className="max-w-3xl top-18"
           placeholder="Search for courses or lessons"
-          withPagination={false}
+          withPagination
         />
         {children}
       </SearchProvider>
