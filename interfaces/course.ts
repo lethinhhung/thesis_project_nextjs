@@ -17,3 +17,9 @@ export interface Course {
   updatedAt: Date;
   status: boolean;
 }
+
+export interface SearchParams {
+  query?: string;
+  tags?: string[];
+  status?: boolean;
+}

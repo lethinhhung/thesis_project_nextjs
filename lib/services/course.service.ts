@@ -1,5 +1,5 @@
 import { createAxiosInstance } from "../axios.customize-server";
-import { CreateCourse } from "@/interfaces/course";
+import { CreateCourse, SearchParams } from "@/interfaces/course";
 
 const createCourseAPI = (token: string, course: CreateCourse) => {
   const URL_API = "/api/course/create-course";
@@ -36,6 +36,25 @@ const updateCourseStatusAPI = (token: string, courseId: string) => {
   return createAxiosInstance(token).patch(URL_API);
 };
 
+const searchCoursesAPI = (token: string, params: SearchParams) => {
+  const queryString = new URLSearchParams();
+
+  if (params.query) {
+    queryString.append("query", params.query);
+  }
+
+  if (params.tags && params.tags.length > 0) {
+    queryString.append("tags", params.tags.join(","));
+  }
+
+  if (params.status !== undefined) {
+    queryString.append("status", params.status.toString());
+  }
+
+  const URL_API = `/api/course/search-courses?${queryString.toString()}`;
+  return createAxiosInstance(token).get(URL_API);
+};
+
 export {
   createCourseAPI,
   getCourseAPI,
@@ -44,4 +63,5 @@ export {
   getCompletedCoursesAPI,
   deleteCourseAPI,
   updateCourseStatusAPI,
+  searchCoursesAPI,
 };

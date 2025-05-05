@@ -18,6 +18,25 @@ function CoursesAll() {
   const [lessons, setLessons] = useState<LessonCardInterface[]>();
   const [courses, setCourses] = useState<CourseInterface[]>();
 
+  // Ví dụ cách gọi API từ client
+  const searchCourses = async () => {
+    const res = await fetch(
+      `/api/course/search?query=react&tags=frontend,web&status=false`,
+      {
+        method: "GET",
+      }
+    );
+    const response = await processResponse(res, {
+      success: false,
+      error: true,
+    });
+
+    if (response.success) {
+      // Xử lý dữ liệu
+      console.log(response.data);
+    }
+  };
+
   const fetchData = async () => {
     const res = await fetch(`/api/data/get-limit-courses-and-lessons`, {
       method: "GET",
@@ -35,7 +54,7 @@ function CoursesAll() {
   };
 
   useEffect(() => {
-    fetchData().then(() => setIsLoading(false));
+    fetchData().then(() => searchCourses().then(() => setIsLoading(false)));
   }, []);
 
   return (
