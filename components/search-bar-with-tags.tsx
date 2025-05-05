@@ -32,10 +32,11 @@ import {
 import { cn } from "@/lib/utils";
 import { Tag } from "lucide-react";
 import SortButton from "./sort-button";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { SearchContext } from "./search-provider";
 import { Skeleton } from "./ui/skeleton";
+import { useDebounce } from "@/hooks/use-debounce";
 
 const badges = [
   { title: "All", total: "50" },
@@ -91,12 +92,14 @@ function SearchBarWithTags({
   withPagination?: boolean;
 }) {
   const [open, setOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const { totalPage, loading } = useContext(SearchContext);
 
   const params = new URLSearchParams(searchParams);
-  const page = parseInt(params.get("page") || "1");
+  const [page, setPage] = useState(parseInt(params.get("page") || "1"));
 
   const handlePageChange = (newPage: number) => {
     // Cập nhật URL với page mới
@@ -107,23 +110,35 @@ function SearchBarWithTags({
     router.push(`/courses/search?${params.toString()}`);
   };
 
-  const handleSearch = (e: { target: { value: string } }) => {
-    const params = new URLSearchParams(searchParams);
+  useDebounce(
+    () => {
+      const params = new URLSearchParams(searchParams);
+      const page = params.get("page") || "1";
+      const limit = params.get("limit") || "12";
+      const sortBy = params.get("sortBy") || "createdAt";
+      const order = params.get("order") || "desc";
 
-    const page = params.get("page") || "1";
-    const limit = params.get("limit") || "2";
-    const sortBy = params.get("sortBy") || "createdAt";
-    const order = params.get("order") || "desc";
-    const keyword = e.target.value;
-    if (keyword) params.set("query", keyword);
-    else params.delete("query");
-    params.set("page", page);
-    params.set("limit", limit);
-    params.set("sortBy", sortBy);
-    params.set("order", order);
-    // Cập nhật URL với params mới
-    router.push(`/courses/search?${params.toString()}`);
+      if (searchValue) params.set("query", searchValue);
+      else params.delete("query");
+      params.set("page", page);
+      params.set("limit", limit);
+      params.set("sortBy", sortBy);
+      params.set("order", order);
+
+      router.push(`/courses/search?${params.toString()}`);
+    },
+    500,
+    [searchValue]
+  );
+
+  const handleSearch = (e: { target: { value: string } }) => {
+    setSearchValue(e.target.value);
   };
+
+  useEffect(() => {
+    setPage(parseInt(params.get("page") || "1"));
+  }, [searchParams.get("page")]);
+
   return (
     <div
       className={cn(
@@ -133,6 +148,7 @@ function SearchBarWithTags({
     >
       <div className="flex flex-row flex-wrap gap-2 p-2 w-full">
         <Input
+          spellCheck={false}
           onChange={handleSearch}
           className="flex-1 border border-dashed"
           placeholder={placeholder}

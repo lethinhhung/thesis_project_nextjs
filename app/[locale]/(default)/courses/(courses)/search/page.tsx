@@ -2,7 +2,7 @@
 
 import { CourseCard } from "@/components/course-card";
 import { processResponse } from "@/lib/response-process";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Course as CourseInterface } from "@/interfaces/course";
 import { CourseCardSkeleton } from "@/components/skeleton/course-card-skeleton";
 import { useSearch } from "@/components/search-provider";
@@ -90,11 +90,12 @@ function CoursesSearch() {
 
   useEffect(() => {
     setIsLoading(true);
-    const timeout = setTimeout(() => {
-      navSearchCourses().then(() => setIsLoading(false));
-    }, 300);
-    return () => clearTimeout(timeout);
-  }, [searchParams.get("page")]); // Re-run when query changes
+    navSearchCourses().then(() => setIsLoading(false));
+  }, [
+    searchParams.get("page"),
+    searchParams.get("sortBy"),
+    searchParams.get("order"),
+  ]); // Re-run when query changes
 
   useEffect(() => {
     setIsLoading(true);

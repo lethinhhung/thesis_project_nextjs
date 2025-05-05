@@ -59,6 +59,14 @@ const searchCoursesAPI = (token: string, params: SearchParams) => {
     queryString.append("limit", params.limit.toString());
   }
 
+  if (params.sortBy) {
+    queryString.append("sortBy", params.sortBy);
+  }
+
+  if (params.order) {
+    queryString.append("order", params.order);
+  }
+
   const URL_API = `/api/course/search-courses?${queryString.toString()}`;
   return createAxiosInstance(token).get(URL_API);
 };
