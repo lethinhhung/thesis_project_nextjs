@@ -30,37 +30,15 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { Tag } from "lucide-react";
+import { Loader, Tag } from "lucide-react";
 import SortButton from "./sort-button";
 import { useContext, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { SearchContext } from "./search-provider";
 import { Skeleton } from "./ui/skeleton";
 import { useDebounce } from "@/hooks/use-debounce";
-
-const badges = [
-  { title: "All", total: "50" },
-  { title: "Math", total: "7" },
-  { title: "Physics", total: "5" },
-  { title: "Chemistry", total: "8" },
-  { title: "Biology", total: "6" },
-  { title: "Computer Science", total: "9" },
-  { title: "Artificial Intelligence", total: "10" },
-  { title: "Data Science", total: "7" },
-  { title: "Machine Learning", total: "9" },
-  { title: "Web Development", total: "6" },
-  { title: "Software Engineering", total: "8" },
-  { title: "Cybersecurity", total: "5" },
-  { title: "Cloud Computing", total: "7" },
-  { title: "Networking", total: "4" },
-  { title: "Game Development", total: "10" },
-  { title: "UI/UX Design", total: "3" },
-  { title: "Blockchain", total: "5" },
-  { title: "Embedded Systems", total: "6" },
-  { title: "Mobile Development", total: "8" },
-  { title: "Databases", total: "9" },
-  { title: "Software Testing", total: "4" },
-];
+import { processResponse } from "@/lib/response-process";
+import { TagWithTotalCourse } from "@/interfaces/tag";
 
 function getPageNumbers(current: number, total: number) {
   const delta = 1;
@@ -93,6 +71,9 @@ function SearchBarWithTags({
 }) {
   const [open, setOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [tags, setTags] = useState<TagWithTotalCourse[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -107,6 +88,26 @@ function SearchBarWithTags({
     params.set("page", newPage.toString());
 
     // Chuyển hướng với params mới
+    router.push(`/courses/search?${params.toString()}`);
+  };
+
+  const handleTagsChange = (tagTitle: string) => {
+    const newSelectedTags = selectedTags.includes(tagTitle)
+      ? selectedTags.filter((t) => t !== tagTitle)
+      : [...selectedTags, tagTitle];
+
+    setSelectedTags(newSelectedTags);
+
+    const params = new URLSearchParams(searchParams);
+    if (newSelectedTags.length > 0) {
+      params.set("tags", newSelectedTags.join(","));
+    } else {
+      params.delete("tags");
+    }
+    params.set("page", "1");
+    params.set("limit", "12");
+    if (!params.get("sortBy")) params.set("sortBy", "title");
+    if (!params.get("order")) params.set("order", "asc");
     router.push(`/courses/search?${params.toString()}`);
   };
 
@@ -135,9 +136,38 @@ function SearchBarWithTags({
     setSearchValue(e.target.value);
   };
 
+  const fetchTags = async () => {
+    setIsLoading(true);
+    const res = await fetch(`/api/tag/get-all`, {
+      method: "GET",
+    });
+    const response = await processResponse(res, {
+      success: false,
+      error: true,
+    });
+
+    if (response.success) {
+      setTags(response.data);
+    }
+  };
+
+  useEffect(() => {
+    fetchTags().then(() => setIsLoading(false));
+  }, []);
+
   useEffect(() => {
     setPage(parseInt(params.get("page") || "1"));
   }, [searchParams.get("page")]);
+
+  useEffect(() => {
+    // Đồng bộ selected tags từ URL
+    const tagsParam = searchParams.get("tags");
+    if (tagsParam) {
+      setSelectedTags(tagsParam.split(","));
+    } else {
+      setSelectedTags([]);
+    }
+  }, [searchParams]);
 
   return (
     <div
@@ -164,9 +194,20 @@ function SearchBarWithTags({
                   <Button
                     size={"icon"}
                     variant={"ghost"}
-                    className="border border-dashed"
+                    className="border border-dashed relative"
                   >
-                    <Tag />
+                    {isLoading ? (
+                      <Loader className="animate-spin" />
+                    ) : (
+                      <>
+                        <Tag />
+                        {selectedTags.length > 0 && (
+                          <div className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center">
+                            {selectedTags.length}
+                          </div>
+                        )}
+                      </>
+                    )}
                   </Button>
                 </DialogTrigger>
               </TooltipTrigger>
@@ -178,14 +219,21 @@ function SearchBarWithTags({
                 <DialogDescription>Filter by tags</DialogDescription>
               </DialogHeader>
               <div className="w-full flex flex-wrap gap-2">
-                {badges.map((badge) => (
+                {tags.map((tag) => (
                   <Badge
-                    onClick={() => console.log(badge.title)}
-                    variant={"secondary"}
-                    className="cursor-pointer"
-                    key={badge.title}
+                    onClick={() => handleTagsChange(tag.title)}
+                    variant={
+                      selectedTags.includes(tag.title) ? "default" : "secondary"
+                    }
+                    className={cn(
+                      "cursor-pointer transition-colors",
+                      selectedTags.includes(tag.title)
+                        ? "hover:bg-primary/80"
+                        : "hover:bg-secondary/80"
+                    )}
+                    key={tag.title}
                   >
-                    {badge.title} ({badge.total})
+                    {tag.title} ({tag.totalCourses})
                   </Badge>
                 ))}
               </div>
@@ -202,60 +250,58 @@ function SearchBarWithTags({
             ))}
           </div>
         ) : (
-          totalPage > 1 && (
-            <Pagination
-              hidden={!withPagination}
-              className="mt-auto w-full rounded-xl bg-transparent"
-            >
-              <PaginationContent>
-                {page !== 1 && (
-                  <PaginationItem>
-                    <PaginationPreviousNoTitle
+          <Pagination
+            hidden={!withPagination}
+            className="mt-auto w-full rounded-xl bg-transparent"
+          >
+            <PaginationContent>
+              {page !== 1 && (
+                <PaginationItem>
+                  <PaginationPreviousNoTitle
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handlePageChange((page - 1) as number);
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
+                  />
+                </PaginationItem>
+              )}
+
+              {getPageNumbers(page, totalPage).map((p, index) => (
+                <PaginationItem key={index}>
+                  {p === "..." ? (
+                    <PaginationEllipsis className="hidden sm:flex" />
+                  ) : (
+                    <PaginationLink
+                      isActive={p === page}
                       href="#"
                       onClick={(e) => {
                         e.preventDefault();
-                        handlePageChange((page - 1) as number);
+                        handlePageChange(p as number);
                         window.scrollTo({ top: 0, behavior: "smooth" });
                       }}
-                    />
-                  </PaginationItem>
-                )}
+                    >
+                      {p}
+                    </PaginationLink>
+                  )}
+                </PaginationItem>
+              ))}
 
-                {getPageNumbers(page, totalPage).map((p, index) => (
-                  <PaginationItem key={index}>
-                    {p === "..." ? (
-                      <PaginationEllipsis className="hidden sm:flex" />
-                    ) : (
-                      <PaginationLink
-                        isActive={p === page}
-                        href="#"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handlePageChange(p as number);
-                          window.scrollTo({ top: 0, behavior: "smooth" });
-                        }}
-                      >
-                        {p}
-                      </PaginationLink>
-                    )}
-                  </PaginationItem>
-                ))}
-
-                {page !== totalPage && (
-                  <PaginationItem>
-                    <PaginationNextNoTitle
-                      href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handlePageChange((page + 1) as number);
-                        window.scrollTo({ top: 0, behavior: "smooth" });
-                      }}
-                    />
-                  </PaginationItem>
-                )}
-              </PaginationContent>
-            </Pagination>
-          )
+              {page !== totalPage && (
+                <PaginationItem>
+                  <PaginationNextNoTitle
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handlePageChange((page + 1) as number);
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }}
+                  />
+                </PaginationItem>
+              )}
+            </PaginationContent>
+          </Pagination>
         ))}
     </div>
   );

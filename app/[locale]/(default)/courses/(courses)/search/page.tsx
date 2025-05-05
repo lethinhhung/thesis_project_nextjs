@@ -103,7 +103,7 @@ function CoursesSearch() {
       searchCourses().then(() => setIsLoading(false));
     }, 300);
     return () => clearTimeout(timeout);
-  }, [searchParams.get("query")]); // Re-run when query changes
+  }, [searchParams.get("query"), searchParams.get("tags")]); // Re-run when query changes
 
   return (
     <div className="col-span-12 flex flex-col gap-6 max-w-6xl w-full">

@@ -62,7 +62,8 @@ export function SortButton({
     const newParams = new URLSearchParams(searchParams);
     newParams.set("sortBy", field);
     newParams.set("order", order);
-    newParams.set("page", "1"); // Reset to the first page when sorting changes
+    newParams.set("page", "1");
+    newParams.set("limit", "12");
     router.push(`/courses/search?${newParams.toString()}`);
   };
 
