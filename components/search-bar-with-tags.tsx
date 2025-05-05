@@ -34,6 +34,7 @@ import { Tag } from "lucide-react";
 import SortButton from "./sort-button";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useSearch } from "./search-provider";
 
 const badges = [
   { title: "All", total: "50" },
@@ -70,6 +71,13 @@ function SearchBarWithTags({
 }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  const { setQuery } = useSearch();
+
+  const handleSearch = (e: { target: { value: string } }) => {
+    const keyword = e.target.value;
+    setQuery(keyword);
+    router.push("/courses/search");
+  };
   return (
     <div
       className={cn(
@@ -79,7 +87,7 @@ function SearchBarWithTags({
     >
       <div className="flex flex-row flex-wrap gap-2 p-2 w-full">
         <Input
-          onChange={(e) => router.push(`/search/${e.target.value}`)}
+          onChange={handleSearch}
           className="flex-1 border border-dashed"
           placeholder={placeholder}
         />

@@ -67,12 +67,9 @@ export function CourseCard({
         <div className="flex flex-nowrap gap-2 overflow-hidden">
           {course.tags.map((tag, index) => (
             <Badge variant={"outline"} key={index}>
-              {tag}
+              {tag.title}
             </Badge>
           ))}
-          <Badge variant={"outline"}>English</Badge>
-          <Badge variant={"outline"}>Code</Badge>
-          <Badge variant={"outline"}>React</Badge>
         </div>
       </CardContent>
     </Card>

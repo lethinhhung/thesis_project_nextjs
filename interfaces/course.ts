@@ -8,7 +8,12 @@ export interface Course {
   _id: string;
   title: string;
   description: string;
-  tags: string[];
+  tags: [
+    {
+      _id: string;
+      title: string;
+    }
+  ];
   creator: string;
   aiGenerated?: boolean;
   lessons: string[];
