@@ -8,6 +8,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
 } from "@/components/ui/dropdown-menu";
 import {
   Tooltip,
@@ -16,7 +19,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
-import { CalendarClock, SortAsc, Tag } from "lucide-react";
+import { CalendarClock, Check, SortAsc, Tag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
@@ -47,6 +50,10 @@ export function SortButton({
     params.get("order") || "asc"
   );
 
+  const [filterStatus, setFilterStatus] = useState<string | null>(
+    params.get("status") || null
+  );
+
   const handleSortOrderChange = () => {
     const newOrder = sortOrder === "asc" ? "desc" : "asc";
     setSortOrder(newOrder);
@@ -56,6 +63,18 @@ export function SortButton({
   const handleSortFieldChange = (field: string) => {
     setSortField(field);
     updateURL(field, sortOrder);
+  };
+
+  const handleStatusFilter = (status: string | null) => {
+    const newParams = new URLSearchParams(searchParams);
+    if (status === null) {
+      newParams.delete("status");
+    } else {
+      newParams.set("status", status);
+    }
+    newParams.set("page", "1");
+    router.push(`/courses/search?${newParams.toString()}`);
+    setFilterStatus(status);
   };
 
   const updateURL = (field: string, order: string) => {
@@ -90,9 +109,9 @@ export function SortButton({
               </Button>
             </DropdownMenuTrigger>
           </TooltipTrigger>
-          <TooltipContent side="top">Sorting</TooltipContent>
+          <TooltipContent side="top">Sorting & Filtering</TooltipContent>
         </Tooltip>
-        <DropdownMenuContent>
+        <DropdownMenuContent className="space-y-1">
           <DropdownMenuLabel className="flex items-center justify-between">
             Sort by
             <Button
@@ -104,6 +123,33 @@ export function SortButton({
             </Button>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
+          <DropdownMenuSub>
+            <DropdownMenuSubTrigger
+              className={cn(sortField === "status" && "bg-accent")}
+            >
+              Status
+            </DropdownMenuSubTrigger>
+            <DropdownMenuSubContent>
+              <DropdownMenuItem
+                onClick={() => handleStatusFilter(null)}
+                className={cn(filterStatus === null && "bg-accent")}
+              >
+                All
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => handleStatusFilter("true")}
+                className={cn(filterStatus === "true" && "bg-accent")}
+              >
+                Completed
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => handleStatusFilter("false")}
+                className={cn(filterStatus === "false" && "bg-accent")}
+              >
+                In Progress
+              </DropdownMenuItem>
+            </DropdownMenuSubContent>
+          </DropdownMenuSub>
           <DropdownMenuItem
             onClick={() => handleSortFieldChange("title")}
             className={cn(sortField === "title" && "bg-accent")}

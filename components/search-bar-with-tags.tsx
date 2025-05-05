@@ -33,7 +33,7 @@ import { cn } from "@/lib/utils";
 import { Loader, Tag } from "lucide-react";
 import SortButton from "./sort-button";
 import { useContext, useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { SearchContext } from "./search-provider";
 import { Skeleton } from "./ui/skeleton";
 import { useDebounce } from "@/hooks/use-debounce";
@@ -76,6 +76,7 @@ function SearchBarWithTags({
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const { totalPage, loading } = useContext(SearchContext);
 
@@ -113,6 +114,11 @@ function SearchBarWithTags({
 
   useDebounce(
     () => {
+      // Chỉ thực hiện chuyển hướng khi đang ở trang search
+      if (!pathname.includes("/courses/search")) {
+        return;
+      }
+
       const params = new URLSearchParams(searchParams);
       const page = params.get("page") || "1";
       const limit = params.get("limit") || "12";
@@ -134,6 +140,9 @@ function SearchBarWithTags({
 
   const handleSearch = (e: { target: { value: string } }) => {
     setSearchValue(e.target.value);
+    if (!pathname.includes("/courses/search") && e.target.value) {
+      router.push(`/courses/search?query=${e.target.value}`);
+    }
   };
 
   const fetchTags = async () => {
@@ -249,11 +258,8 @@ function SearchBarWithTags({
               <Skeleton key={index} className="h-9 w-9" />
             ))}
           </div>
-        ) : (
-          <Pagination
-            hidden={!withPagination}
-            className="mt-auto w-full rounded-xl bg-transparent"
-          >
+        ) : withPagination ? (
+          <Pagination className="mt-auto w-full rounded-xl bg-transparent">
             <PaginationContent>
               {page !== 1 && (
                 <PaginationItem>
@@ -302,7 +308,7 @@ function SearchBarWithTags({
               )}
             </PaginationContent>
           </Pagination>
-        ))}
+        ) : null)}
     </div>
   );
 }
