@@ -18,7 +18,6 @@ function CoursesCompleted() {
       success: false,
       error: true,
     });
-    console.log("Data:", response);
 
     if (response.success) {
       setCourses(response.data);

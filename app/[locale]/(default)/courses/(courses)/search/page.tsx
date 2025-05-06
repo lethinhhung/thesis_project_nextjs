@@ -50,8 +50,6 @@ function CoursesSearch() {
       error: true,
     });
 
-    console.log("Search response", response.data);
-
     if (response.success) {
       setTotalPage(response.data.pagination.totalPages);
       setResults(response.data);
@@ -80,8 +78,6 @@ function CoursesSearch() {
       success: false,
       error: true,
     });
-
-    console.log("Search response", response.data);
 
     if (response.success) {
       setTotalPage(response.data.pagination.totalPages);

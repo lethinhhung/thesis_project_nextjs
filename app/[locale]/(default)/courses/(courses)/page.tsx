@@ -28,7 +28,6 @@ function CoursesAll() {
       success: false,
       error: true,
     });
-    console.log("Data:", response);
 
     if (response.success) {
       setLessons(response.data.lessons);
@@ -109,7 +108,7 @@ function CoursesAll() {
             .filter((course) => course.status === false)
             .map((course) => (
               <CourseCard
-                key={course._id}
+                key={course._id.toString()}
                 className="col-span-12 md:col-span-6 2xl:col-span-4"
                 course={course}
               />

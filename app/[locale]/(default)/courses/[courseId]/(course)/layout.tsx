@@ -111,7 +111,6 @@ function Course({ children }: { children: React.ReactNode }) {
       success: false,
       error: true,
     });
-    console.log("Course data:", response);
 
     if (response.success) {
       setCourse(response.data);
