@@ -140,7 +140,7 @@ function Lesson() {
           <Card className="dark:border-dashed break-inside-avoid-column">
             <div className="flex justify-between">
               <CardHeader className="flex-1">
-                <CardTitle>{lesson?.title}</CardTitle>
+                <CardTitle className="break-all">{lesson?.title}</CardTitle>
                 <CardDescription>
                   {capitalizeFirstLetter(
                     format(new Date(lesson?.createdAt), "PPPP", {

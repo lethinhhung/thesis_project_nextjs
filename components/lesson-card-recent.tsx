@@ -45,7 +45,7 @@ export function LessonCardRecent({
         <CardTitle className="line-clamp-2 leading-[1.3]">
           {lesson.title}
         </CardTitle>
-        <CardDescription className="line-clamp-3 min-h-[4rem]">
+        <CardDescription className="line-clamp-3 min-h-[4rem] break-all">
           {lesson.courseId?.title}
         </CardDescription>
         <CardDescription className="line-clamp-1">

@@ -151,7 +151,7 @@ function Course({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="flex flex-col items-center mx-auto h-full w-full max-w-7xl rounded-xl">
-      <div className="w-full flex p-2 md:p-4 flex-col gap-4 border-b border-dashed">
+      <div className="w-full flex p-2 md:p-4 flex-col gap-4 border-b border-dashed break-all">
         <Collapsible open={isExpanded} onOpenChange={setIsExpanded}>
           <CollapsibleContent
             className={
@@ -175,16 +175,18 @@ function Course({ children }: { children: React.ReactNode }) {
           </CollapsibleContent>
           <div className="flex justify-between items-center">
             <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-              <div className="flex gap-2 items-center">
+              <span className="break-words inline">
                 {`${course?.title} ${
                   isExpanded ? course?.customization?.emoji : ""
                 }`}
                 {isActionsLoading ? (
-                  <Loader className="animate-spin" />
+                  <Loader className="inline ml-1 animate-spin align-middle" />
                 ) : (
-                  course?.status && <CompletedMark />
+                  course?.status && (
+                    <CompletedMark className="inline ml-1 align-middle" />
+                  )
                 )}
-              </div>
+              </span>
               <p className="text-sm text-muted-foreground">
                 {course?.createdAt
                   ? format(new Date(course.createdAt), "PPPP", {
@@ -193,6 +195,7 @@ function Course({ children }: { children: React.ReactNode }) {
                   : "No date"}
               </p>
             </h3>
+
             <div className="flex flex-col sm:flex-row gap-2 items-center">
               <CollapsibleTrigger asChild>
                 <Button size={"icon"} variant={"ghost"}>
@@ -241,13 +244,15 @@ function Course({ children }: { children: React.ReactNode }) {
               <Dialog open={openDetails} onOpenChange={setOpenDetails}>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>{course?.title}</DialogTitle>
+                    <DialogTitle className="break-all">
+                      {course?.title}
+                    </DialogTitle>
                     <DialogDescription>Course details</DialogDescription>
                   </DialogHeader>
                   <div className="flex flex-col gap-4">
                     <div className="space-y-1">
                       <h4 className="font-medium leading-none">Description</h4>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-muted-foreground break-all">
                         {course?.description}
                       </p>
                     </div>
@@ -287,7 +292,7 @@ function Course({ children }: { children: React.ReactNode }) {
                     </div>
                     <div className="space-y-1">
                       <h4 className="font-medium leading-none">Tags</h4>
-                      <p className="text-sm text-muted-foreground">
+                      <p className="text-sm text-muted-foreground break-all">
                         {course?.tags && course?.tags.length > 0
                           ? course?.tags.map((tag) => tag.title).join(", ")
                           : "No tag(s)"}
@@ -335,7 +340,11 @@ function Course({ children }: { children: React.ReactNode }) {
         <div className="flex flex-wrap gap-2">
           {course?.tags && course?.tags.length > 0 ? (
             course?.tags.map((tag) => (
-              <Badge key={tag._id} variant="outline">
+              <Badge
+                key={tag._id}
+                variant="outline"
+                className="break-all line-clamp-1 max-w-60"
+              >
                 {tag.title}
               </Badge>
             ))

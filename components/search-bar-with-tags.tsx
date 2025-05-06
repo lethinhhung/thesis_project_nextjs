@@ -237,7 +237,7 @@ function SearchBarWithTags({
                       selectedTags.includes(tag.title) ? "default" : "secondary"
                     }
                     className={cn(
-                      "cursor-pointer transition-colors",
+                      "cursor-pointer transition-colors break-all line-clamp-1 max-w-60",
                       selectedTags.includes(tag.title)
                         ? "hover:bg-primary/80"
                         : "hover:bg-secondary/80"

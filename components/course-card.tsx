@@ -45,15 +45,15 @@ export function CourseCard({
         width={1000}
         height={1000}
         src={
-          course.customization.cover !== ""
-            ? course.customization.cover
+          course?.customization?.cover !== "" && course?.customization?.cover
+            ? course?.customization?.cover
             : "/placeholder.svg"
         }
         alt="Course Image"
         className="object-cover h-50 w-full rounded-xl rounded-b-none dark:brightness-[0.7]"
       />
       <CardHeader>
-        <CardTitle className="line-clamp-1 flex items-center gap-2 leading-[1.3]">
+        <CardTitle className="line-clamp-2 break-words inline flex items-center gap-2 leading-[1.3]">
           {/* {course.emoji}  */}
           {course.title}
           {course.status && <CompletedMark size={18} />}
@@ -63,14 +63,18 @@ export function CourseCard({
             locale: currentDateFnsLocale,
           })}
         </CardDescription>
-        <CardDescription className="line-clamp-3 min-h-[4rem]">
+        <CardDescription className="line-clamp-3 min-h-[4rem] break-all">
           {course.description}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex flex-nowrap gap-2 overflow-hidden">
           {course.tags.map((tag, index) => (
-            <Badge variant={"outline"} key={index}>
+            <Badge
+              variant={"outline"}
+              key={index}
+              className="break-all line-clamp-1 max-w-60"
+            >
               {tag.title}
             </Badge>
           ))}

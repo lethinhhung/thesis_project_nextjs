@@ -119,10 +119,10 @@ export default function SearchBarDialog({
   const handleSearch = (searchValue: string) => {
     // Reset result if input is empty
     if (searchValue === "") {
-      setResult({
-        courses: [],
-        lessons: [],
-      });
+      // setResult({
+      //   courses: [],
+      //   lessons: [],
+      // });
       setIsLoading(false);
       return;
     }
@@ -187,15 +187,19 @@ export default function SearchBarDialog({
 
             {result.courses.length > 0 && (
               <>
-                <CommandGroup heading="Courses">
+                <CommandGroup
+                  heading={searchValue ? "Courses" : "Recent course results"}
+                >
                   {result.courses.map((course) => (
                     <CommandItem
                       value={`${course.title} ${course.description}`}
                       onSelect={() => handleClick(`/courses/${course._id}`)}
                       key={course._id}
                     >
-                      <Calculator />
-                      <span>{course.title}</span>
+                      <span>{course.customization.emoji}</span>
+                      <span className="break-all line-clamp-1">
+                        {course.title}
+                      </span>
                       <CommandShortcut>
                         {format(new Date(course?.createdAt), "P", {
                           locale: currentDateFnsLocale,
@@ -210,7 +214,9 @@ export default function SearchBarDialog({
 
             {result.lessons.length > 0 && (
               <>
-                <CommandGroup heading="Lessons">
+                <CommandGroup
+                  heading={searchValue ? "Lessons" : "Recent lesson results"}
+                >
                   {result.lessons.map((lesson) => (
                     <CommandItem
                       value={`${lesson.title} ${lesson.courseId.title}`}
@@ -221,9 +227,13 @@ export default function SearchBarDialog({
                       }
                       key={lesson._id}
                     >
-                      <Calculator />
-                      <span>{lesson.title}</span>
-                      <CommandShortcut>{lesson.courseId.title}</CommandShortcut>
+                      <span className="break-all line-clamp-1">
+                        {lesson.title}
+                      </span>
+
+                      <CommandShortcut className="max-w-30 sm:max-w-50 break-all line-clamp-1">
+                        {lesson.courseId.title}
+                      </CommandShortcut>
                     </CommandItem>
                   ))}
                 </CommandGroup>

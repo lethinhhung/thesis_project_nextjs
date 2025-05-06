@@ -45,7 +45,11 @@ export function DocumentCard({
       <CardContent>
         <div className="flex flex-wrap gap-2">
           {document.tags.map((tag, index) => (
-            <Badge variant={"outline"} key={index}>
+            <Badge
+              variant={"outline"}
+              key={index}
+              className="break-all line-clamp-1 max-w-60"
+            >
               {tag}
             </Badge>
           ))}

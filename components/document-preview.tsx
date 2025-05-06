@@ -61,7 +61,11 @@ function DocumentPreview({
             <CardContent>
               <div className="flex gap-2 flex-wrap ">
                 {document?.tags.map((tag) => (
-                  <Badge key={tag} variant={"secondary"}>
+                  <Badge
+                    key={tag}
+                    variant={"secondary"}
+                    className="break-all line-clamp-1 max-w-60"
+                  >
                     {tag}
                   </Badge>
                 ))}

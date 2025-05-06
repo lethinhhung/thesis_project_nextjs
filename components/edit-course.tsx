@@ -117,6 +117,11 @@ export function EditCourse({
   };
 
   const handleUpdateImage = async () => {
+    if (!file || !cover) {
+      toast.error("Please select a file to upload");
+      return;
+    }
+
     setIsLoading(true);
     try {
       const form = new FormData();
@@ -144,7 +149,14 @@ export function EditCourse({
   };
 
   return (
-    <Dialog open={openEdit} onOpenChange={setOpenEdit}>
+    <Dialog
+      open={openEdit}
+      onOpenChange={(e) => {
+        setOpenEdit(e);
+        setCover(null);
+        setFile(null);
+      }}
+    >
       <DialogContent aria-describedby="create-dialog-description">
         <DialogHeader>
           <DialogTitle>{`Edit course`}</DialogTitle>
@@ -274,7 +286,11 @@ export function EditCourse({
               <Button
                 type="button"
                 variant={"outline"}
-                onClick={() => setOpenEdit(false)}
+                onClick={() => {
+                  setOpenEdit(false);
+                  setCover(null);
+                  setFile(null);
+                }}
               >
                 Cancel
               </Button>

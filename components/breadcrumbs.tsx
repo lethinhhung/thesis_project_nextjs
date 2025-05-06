@@ -122,7 +122,7 @@ export default function Breadcrumbs() {
   return (
     <Breadcrumb>
       {isLoading ? (
-        <Skeleton className="h-5 w-60" />
+        <Skeleton className="h-5 w-40 sm:w-60" />
       ) : (
         <BreadcrumbList>
           <BreadcrumbItem>

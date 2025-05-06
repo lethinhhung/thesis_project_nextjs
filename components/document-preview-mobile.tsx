@@ -46,7 +46,11 @@ function DocumentPreviewMobile({
             <DrawerDescription>{document?.date}</DrawerDescription>
             <div className="flex gap-2 flex-wrap">
               {document?.tags.map((tag, index) => (
-                <Badge key={index} variant={"secondary"}>
+                <Badge
+                  key={index}
+                  variant={"secondary"}
+                  className="break-all line-clamp-1 max-w-60"
+                >
                   {tag}
                 </Badge>
               ))}
