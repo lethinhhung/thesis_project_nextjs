@@ -48,14 +48,7 @@ import { enUS as en } from "date-fns/locale/en-US";
 import { vi } from "date-fns/locale/vi";
 import CourseSkeleton from "@/components/skeleton/course-layout-skeleton";
 import { CompletedMark } from "@/components/completed-mark";
-
-const badges = [
-  { title: "Math" },
-  { title: "Physics" },
-  { title: "Chemistry" },
-  { title: "Biology" },
-  { title: "Computer Science" },
-];
+import { EditCourse } from "@/components/edit-course";
 
 function Course({ children }: { children: React.ReactNode }) {
   const { courseId } = useParams();
@@ -238,14 +231,12 @@ function Course({ children }: { children: React.ReactNode }) {
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              <Dialog open={openEdit} onOpenChange={setOpenEdit}>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Edit this course</DialogTitle>
-                    <DialogDescription>Description</DialogDescription>
-                  </DialogHeader>
-                </DialogContent>
-              </Dialog>
+              <EditCourse
+                openEdit={openEdit}
+                setOpenEdit={setOpenEdit}
+                course={course}
+                fetchCourse={fetchCourse}
+              />
 
               <Dialog open={openDetails} onOpenChange={setOpenDetails}>
                 <DialogContent>

@@ -71,6 +71,15 @@ const searchCoursesAPI = (token: string, params: SearchParams) => {
   return createAxiosInstance(token).get(URL_API);
 };
 
+const updateCourseDetailsAPI = (
+  token: string,
+  courseId: string,
+  course: CreateCourse
+) => {
+  const URL_API = `/api/course/update-course-details/${courseId}`;
+  return createAxiosInstance(token).patch(URL_API, course);
+};
+
 export {
   createCourseAPI,
   getCourseAPI,
@@ -80,4 +89,5 @@ export {
   deleteCourseAPI,
   updateCourseStatusAPI,
   searchCoursesAPI,
+  updateCourseDetailsAPI,
 };

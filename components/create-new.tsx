@@ -109,13 +109,14 @@ export function CreateNew() {
         body: JSON.stringify(submitting),
       });
 
-      const course = await processResponse(res);
-      if (course.success) {
+      const response = await processResponse(res);
+
+      if (response.success) {
         form.reset();
-        router.push(`/courses/${course.data._id}`);
+        router.push(`/courses/${response.data._id}`);
       } else {
         form.reset();
-        console.error("Error creating course:", course.error.details);
+        console.error("Error creating course:", response.error.details);
       }
     } catch (error) {
       console.error("Error creating course:", error);
@@ -226,6 +227,7 @@ export function CreateNew() {
 
                       <FormControl>
                         <Textarea
+                          spellCheck={false}
                           className="resize-none h-40 scrollbar"
                           placeholder="Discrete mathematics is the study of mathematical structures that are countable or otherwise distinct and separable. Examples of structures that are discrete are combinations, graphs, and logical statements. Discrete structures can be finite or infinite."
                           {...field}
