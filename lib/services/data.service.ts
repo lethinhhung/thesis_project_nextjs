@@ -5,4 +5,15 @@ const getAllCoursesAndLessons = (token: string) => {
   return createAxiosInstance(token).get(URL_API);
 };
 
-export { getAllCoursesAndLessons };
+const searchAPI = (token: string, params: { query: string }) => {
+  const queryString = new URLSearchParams();
+
+  if (params.query) {
+    queryString.append("query", params.query);
+  }
+
+  const URL_API = `/api/data/search?${queryString.toString()}`;
+  return createAxiosInstance(token).get(URL_API);
+};
+
+export { getAllCoursesAndLessons, searchAPI };
