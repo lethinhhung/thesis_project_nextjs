@@ -63,6 +63,7 @@ function Course({ children }: { children: React.ReactNode }) {
   const [isActionsLoading, setIsActionsLoading] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
+  const [openDetails, setOpenDetails] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
   const [course, setCourse] = useState<CourseInterface>();
   const router = useRouter();
@@ -218,7 +219,9 @@ function Course({ children }: { children: React.ReactNode }) {
                       ? "Unmark as completed"
                       : "Mark as completed"}
                   </DropdownMenuItem>
-                  <DropdownMenuItem>View details</DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setOpenDetails(true)}>
+                    View details
+                  </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => setOpenDelete(!openDelete)}
                     variant="destructive"
@@ -234,6 +237,65 @@ function Course({ children }: { children: React.ReactNode }) {
                     <DialogTitle>Edit this course</DialogTitle>
                     <DialogDescription>Description</DialogDescription>
                   </DialogHeader>
+                </DialogContent>
+              </Dialog>
+
+              <Dialog open={openDetails} onOpenChange={setOpenDetails}>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>{course?.title}</DialogTitle>
+                    <DialogDescription>Course details</DialogDescription>
+                  </DialogHeader>
+                  <div className="flex flex-col gap-4">
+                    <div className="space-y-1">
+                      <h4 className="font-medium leading-none">Description</h4>
+                      <p className="text-sm text-muted-foreground">
+                        {course?.description}
+                      </p>
+                    </div>
+                    <div className="space-y-1">
+                      <h4 className="font-medium leading-none">
+                        Total lessons
+                      </h4>
+                      <p className="text-sm text-muted-foreground">
+                        {course?.lessons.length} lesson(s)
+                      </p>
+                    </div>
+                    <div className="space-y-1">
+                      <h4 className="font-medium leading-none">Created At</h4>
+                      <p className="text-sm text-muted-foreground">
+                        {course?.createdAt
+                          ? format(new Date(course.createdAt), "PPPP", {
+                              locale: currentDateFnsLocale,
+                            })
+                          : "No date"}
+                      </p>
+                    </div>
+                    <div className="space-y-1">
+                      <h4 className="font-medium leading-none">Last updated</h4>
+                      <p className="text-sm text-muted-foreground">
+                        {course?.updatedAt
+                          ? format(new Date(course.updatedAt), "PPPP", {
+                              locale: currentDateFnsLocale,
+                            })
+                          : "No date"}
+                      </p>
+                    </div>
+                    <div className="space-y-1">
+                      <h4 className="font-medium leading-none">Status</h4>
+                      <p className="text-sm text-muted-foreground">
+                        {course?.status ? "Completed" : "In Progress"}
+                      </p>
+                    </div>
+                    <div className="space-y-1">
+                      <h4 className="font-medium leading-none">Tags</h4>
+                      <p className="text-sm text-muted-foreground">
+                        {course?.tags && course?.tags.length > 0
+                          ? course?.tags.map((tag) => tag.title).join(", ")
+                          : "No tag(s)"}
+                      </p>
+                    </div>
+                  </div>
                 </DialogContent>
               </Dialog>
 
@@ -273,16 +335,15 @@ function Course({ children }: { children: React.ReactNode }) {
           </div>
         </Collapsible>
         <div className="flex flex-wrap gap-2">
-          {badges.map((badge) => (
-            <Badge
-              onClick={() => console.log(badge.title)}
-              variant={"secondary"}
-              className="cursor-pointer"
-              key={badge.title}
-            >
-              {badge.title}
-            </Badge>
-          ))}
+          {course?.tags && course?.tags.length > 0 ? (
+            course?.tags.map((tag) => (
+              <Badge key={tag._id} variant="outline">
+                {tag.title}
+              </Badge>
+            ))
+          ) : (
+            <Badge variant="outline">No tag(s)</Badge>
+          )}
         </div>
         {course?.description}
       </div>
