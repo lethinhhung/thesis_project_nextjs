@@ -68,6 +68,8 @@ function ChatBox({
         ]);
       } else {
         setMessages([]);
+        const audio = new Audio("/notification.mp3");
+        audio.play();
         toast.error("Something went wrong. Please try again later.", {
           className: "!bg-destructive !text-white dark:!bg-red-900",
         });

@@ -15,6 +15,8 @@ export function useAutoSignOut() {
 
     if (timeout <= 0) {
       signOut({ callbackUrl: "/en/login" });
+      const audio = new Audio("/notification.mp3");
+      audio.play();
       toast.error("Session expired. Please log in again.");
       return;
     }

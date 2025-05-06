@@ -123,6 +123,8 @@ const Editor = ({
   );
 
   async function uploadFile(file: File) {
+    const audio = new Audio("/notification.mp3");
+    audio.play();
     toast.loading("Uploading file...");
     try {
       const form = new FormData();
@@ -141,15 +143,24 @@ const Editor = ({
 
       if (response.success) {
         const { url } = response.data;
+
+        audio.play();
         toast.dismiss();
+
+        audio.play();
         toast.success("File uploaded successfully!");
         return url;
       } else {
+        audio.play();
         toast.dismiss();
+
+        audio.play();
         toast.error("Failed to upload file");
       }
     } catch (error) {
       console.error("Error updating profile:", error);
+      const audio = new Audio("/notification.mp3");
+      audio.play();
       toast.error("Failed to update profile");
     }
   }
@@ -160,7 +171,11 @@ const Editor = ({
   });
 
   async function loadInitialJSON() {
-    if (!content) return;
+    setIsLoading(true);
+    if (!content) {
+      setIsLoading(false);
+      return;
+    }
 
     try {
       const blocks = JSON.parse(content || "");
@@ -169,6 +184,8 @@ const Editor = ({
       }, 0);
     } catch (error) {
       console.error("Failed to parse blocks JSON:", error);
+    } finally {
+      setIsLoading(false);
     }
   }
 

@@ -73,7 +73,11 @@ function Lesson() {
     const text = document?.getElementById("summary")?.innerText;
     navigator.clipboard
       .writeText(text?.toString() || "")
-      .then(() => toast.success("Copied to clipboard!"))
+      .then(() => {
+        const audio = new Audio("/notification.mp3");
+        audio.play();
+        toast.success("Copied to clipboard!");
+      })
       .catch((err) => {
         console.error("Err:", err);
       });
@@ -104,12 +108,16 @@ function Lesson() {
     });
 
     if (response.success) {
+      const audio = new Audio("/notification.mp3");
+      audio.play();
       toast.success("Lesson deleted successfully", {
         description: `${lesson?.title} has been deleted`,
       });
       setOpenDelete(false);
       router.push(`/courses/${courseId}/lessons`);
     } else {
+      const audio = new Audio("/notification.mp3");
+      audio.play();
       toast.error("Failed to delete lesson", {
         description: response.error || "Something went wrong",
       });

@@ -65,6 +65,8 @@ function EditorMenubar({
     a.download = filename;
     a.click();
     window.URL.revokeObjectURL(url);
+    const audio = new Audio("/notification.mp3");
+    audio.play();
     toast.success("File downloaded successfully!");
   };
 
@@ -104,7 +106,8 @@ function EditorMenubar({
   //   pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
   //   pdf.save("pdf.pdf");
   //   document.body.style.cursor = "auto";
-  //   toast.success("File downloaded successfully!");
+  //   const audio = new Audio("/notification.mp3");
+
   // };
 
   const downloadPDF = async () => {
@@ -112,6 +115,8 @@ function EditorMenubar({
 
     if (!editorRef?.current) {
       document.body.style.cursor = "auto";
+      const audio = new Audio("/notification.mp3");
+      audio.play();
       toast.error("Editor not found.");
       return;
     }
@@ -155,6 +160,8 @@ function EditorMenubar({
     document.body.removeChild(clone);
     pdf.save("document.pdf");
     document.body.style.cursor = "auto";
+    const audio = new Audio("/notification.mp3");
+    audio.play();
     toast.success("File downloaded successfully!");
   };
 
@@ -162,7 +169,11 @@ function EditorMenubar({
     const text = markDown;
     navigator.clipboard
       .writeText(text?.toString() || "")
-      .then(() => toast.success("Copied to clipboard!"))
+      .then(() => {
+        const audio = new Audio("/notification.mp3");
+        audio.play();
+        toast.success("Copied to clipboard!");
+      })
       .catch((err) => {
         console.error("Err:", err);
       });

@@ -76,6 +76,8 @@ function Settings() {
       await processResponse(res);
     } catch (error) {
       console.error("Error updating profile:", error);
+      const audio = new Audio("/notification.mp3");
+      audio.play();
       toast.error("Failed to update profile");
     } finally {
       setIsDialogOpen(false);

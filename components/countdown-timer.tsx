@@ -30,6 +30,8 @@ export function CountdownTimer() {
     const timer = setInterval(() => {
       setTimeLeft((prev) => {
         if (prev === 1) {
+          const audio = new Audio("/notification.mp3");
+          audio.play();
           toast.error("Out of time", {
             icon: <Hourglass size={15} />,
             description: "The countdown has ended.",

@@ -45,6 +45,8 @@ export function LoginForm({
   useEffect(() => {
     if (error === "SessionExpired" && !hasShownErrorRef.current) {
       const timeout = setTimeout(() => {
+        const audio = new Audio("/notification.mp3");
+        audio.play();
         toast.error("Session expired", {
           description: "Please login again",
         });
@@ -99,12 +101,16 @@ export function LoginForm({
     });
 
     if (!res?.error) {
+      const audio = new Audio("/notification.mp3");
+      audio.play();
       toast.success("Login successfully", {
         icon: <Smile size={15} />,
         description: "Welcome back!",
       });
       router.push(callbackUrl);
     } else {
+      const audio = new Audio("/notification.mp3");
+      audio.play();
       toast.error("Login failed", {
         icon: <CircleAlert size={15} />,
         description: "Invalid username or password",

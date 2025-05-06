@@ -118,6 +118,8 @@ export function EditCourse({
 
   const handleUpdateImage = async () => {
     if (!file || !cover) {
+      const audio = new Audio("/notification.mp3");
+      audio.play();
       toast.error("Please select a file to upload");
       return;
     }
@@ -138,6 +140,8 @@ export function EditCourse({
       await processResponse(res);
     } catch (error) {
       console.error("Error updating profile:", error);
+      const audio = new Audio("/notification.mp3");
+      audio.play();
       toast.error("Failed to update profile");
     } finally {
       setFile(null);
