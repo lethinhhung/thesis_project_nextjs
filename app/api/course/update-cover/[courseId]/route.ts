@@ -52,8 +52,6 @@ export async function PATCH(
       form
     );
 
-    console.log("Response from course API:", response);
-
     if (response.status === 201 || response.status === 200) {
       if (response.data.success) {
         return NextResponse.json(

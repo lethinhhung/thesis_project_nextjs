@@ -169,7 +169,7 @@ function Course({ children }: { children: React.ReactNode }) {
                     : "/placeholder.svg"
                 }
                 alt="Image"
-                className="inset-0 h-[30vh] w-full object-cover dark:brightness-[0.2] dark:grayscale"
+                className="inset-0 h-full max-h-120 w-full object-cover dark:brightness-[0.7]"
               />
             </div>
           </CollapsibleContent>

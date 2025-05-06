@@ -50,7 +50,7 @@ export function CourseCard({
             : "/placeholder.svg"
         }
         alt="Course Image"
-        className="object-cover h-50 w-full rounded-xl rounded-b-none dark:brightness-[0.2] dark:grayscale"
+        className="object-cover h-50 w-full rounded-xl rounded-b-none dark:brightness-[0.7]"
       />
       <CardHeader>
         <CardTitle className="line-clamp-1 flex items-center gap-2 leading-[1.3]">

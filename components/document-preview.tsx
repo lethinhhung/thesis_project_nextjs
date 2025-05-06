@@ -110,7 +110,7 @@ function DocumentPreview({
                   height={1000}
                   alt="Document preview"
                   src="/placeholder.svg"
-                  className="inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+                  className="inset-0 h-full w-full object-cover dark:brightness-[0.7]"
                 />
               </CardContent>
             </Card>

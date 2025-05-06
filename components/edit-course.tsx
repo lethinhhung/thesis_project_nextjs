@@ -256,7 +256,7 @@ export function EditCourse({
           <TabsContent value="cover" className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
               <Image
-                className="w-full h-80 object-cover rounded-md dark:brightness-[0.2] dark:grayscale"
+                className="w-full h-80 object-cover rounded-md dark:brightness-[0.7]"
                 src={cover ? cover : "/placeholder.svg"}
                 alt="cover"
                 width={600}
