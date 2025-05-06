@@ -5,7 +5,7 @@ import { getLessonAPI } from "@/lib/services/lesson.service";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { lessonId: string } }
+  { params }: { params: Promise<{ lessonId: string }> }
 ) {
   try {
     // Check if user is authenticated
@@ -27,7 +27,7 @@ export async function GET(
       );
     }
 
-    const { lessonId } = await params;
+    const lessonId = (await params).lessonId;
     if (!lessonId) {
       return NextResponse.json(
         {

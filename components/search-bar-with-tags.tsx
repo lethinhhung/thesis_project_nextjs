@@ -166,6 +166,8 @@ function SearchBarWithTags({
 
   useEffect(() => {
     setPage(parseInt(params.get("page") || "1"));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams.get("page")]);
 
   useEffect(() => {

@@ -5,7 +5,7 @@ import { updateCourseStatusAPI } from "@/lib/services/course.service";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { courseId: string } }
+  { params }: { params: Promise<{ courseId: string }> }
 ) {
   try {
     // Check if user is authenticated
@@ -27,7 +27,7 @@ export async function PATCH(
       );
     }
 
-    const { courseId } = await params;
+    const courseId = (await params).courseId;
     if (!courseId) {
       return NextResponse.json(
         {

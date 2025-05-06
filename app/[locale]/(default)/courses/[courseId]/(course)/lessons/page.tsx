@@ -29,6 +29,8 @@ function Lessons() {
 
   useEffect(() => {
     fetchLessons().then(() => setIsLoading(false));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return <CourseLessons lessons={lessons} isLoading={isLoading} />;

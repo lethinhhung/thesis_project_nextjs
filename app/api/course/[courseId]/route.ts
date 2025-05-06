@@ -5,7 +5,7 @@ import { getCourseAPI } from "@/lib/services/course.service";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { courseId: string } }
+  { params }: { params: Promise<{ courseId: string }> }
 ) {
   try {
     // Check if user is authenticated
@@ -27,7 +27,7 @@ export async function GET(
       );
     }
 
-    const { courseId } = await params;
+    const courseId = (await params).courseId;
     if (!courseId) {
       return NextResponse.json(
         {
