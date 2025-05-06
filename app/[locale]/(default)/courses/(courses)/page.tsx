@@ -84,16 +84,7 @@ function CoursesAll() {
                 variant={"ghost"}
                 onClick={() => router.push("/courses/ongoing")}
               >
-                <div className="flex items-center gap-1">
-                  View all
-                  <p className="text-sm text-muted-foreground">
-                    {`(${
-                      result?.courses?.filter(
-                        (course) => course.status === false
-                      ).length
-                    })`}
-                  </p>
-                </div>
+                View all
                 <ArrowRight />
               </Button>
             )}
@@ -138,16 +129,7 @@ function CoursesAll() {
                 variant={"ghost"}
                 onClick={() => router.push("/courses/completed")}
               >
-                <div className="flex items-center gap-1">
-                  View all
-                  <p className="text-sm text-muted-foreground">
-                    {`(${
-                      result?.courses?.filter(
-                        (course) => course.status === true
-                      ).length
-                    })`}
-                  </p>
-                </div>
+                View all
                 <ArrowRight />
               </Button>
             )}

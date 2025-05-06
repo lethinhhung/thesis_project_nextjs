@@ -179,7 +179,8 @@ export function SidebarLeft({
 }: React.ComponentProps<typeof Sidebar>) {
   const { isMobile, open } = useSidebar();
   const pathname = usePathname();
-  const isChatPage = pathname.startsWith("/chat");
+  const isChatPage =
+    pathname.startsWith("/en/chat") || pathname.startsWith("/vi/chat");
   const [result, setResult] = useState<{
     courses: CourseInterface[];
     lessons: LessonInterface[];
