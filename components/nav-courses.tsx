@@ -10,26 +10,21 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useRouter } from "next/navigation";
+import { Course as CourseInterface } from "@/interfaces/course";
 
-export function NavCourses({
-  courses,
-}: {
-  courses: {
-    name: string;
-    url: string;
-    emoji: string;
-  }[];
-}) {
+export function NavCourses({ courses }: { courses?: CourseInterface[] }) {
   const router = useRouter();
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Recent courses</SidebarGroupLabel>
       <SidebarMenu>
-        {courses.map((item) => (
-          <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton onClick={() => router.push(item.url)}>
-              <span>{item.emoji}</span>
-              <span>{item.name}</span>
+        {courses?.map((course) => (
+          <SidebarMenuItem key={course._id}>
+            <SidebarMenuButton
+              onClick={() => router.push(`/courses/${course._id}`)}
+            >
+              <span>😀</span>
+              <span>{course.title}</span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         ))}

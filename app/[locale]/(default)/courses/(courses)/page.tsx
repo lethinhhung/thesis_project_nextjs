@@ -15,8 +15,10 @@ import { CourseCardSkeleton } from "@/components/skeleton/course-card-skeleton";
 function CoursesAll() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
-  const [lessons, setLessons] = useState<LessonCardInterface[]>();
-  const [courses, setCourses] = useState<CourseInterface[]>();
+  const [result, setResult] = useState<{
+    lessons: LessonCardInterface[];
+    courses: CourseInterface[];
+  }>();
 
   // Ví dụ cách gọi API từ client
 
@@ -30,8 +32,7 @@ function CoursesAll() {
     });
 
     if (response.success) {
-      setLessons(response.data.lessons);
-      setCourses(response.data.courses);
+      setResult(response.data);
     }
   };
 
@@ -48,19 +49,19 @@ function CoursesAll() {
           </h4>
         </div>
         {isLoading
-          ? Array.from({ length: 3 }).map((_, index: number) => (
+          ? Array.from({ length: 6 }).map((_, index: number) => (
               <LessonCardRecentSkeleton
                 key={index}
                 className="col-span-12 md:col-span-6 2xl:col-span-4"
               />
             ))
-          : lessons
+          : result?.lessons
               ?.sort(
                 (a, b) =>
                   new Date(b.updatedAt).getTime() -
                   new Date(a.updatedAt).getTime()
               )
-              .slice(0, 3)
+
               .map((lesson) => (
                 <LessonCardRecent
                   key={lesson._id}
@@ -76,8 +77,9 @@ function CoursesAll() {
             Ongoing courses
           </h4>
 
-          {courses &&
-            courses?.filter((course) => course.status === false).length > 0 && (
+          {result?.courses &&
+            result?.courses?.filter((course) => course.status === false)
+              .length > 0 && (
               <Button
                 variant={"ghost"}
                 onClick={() => router.push("/courses/ongoing")}
@@ -86,8 +88,9 @@ function CoursesAll() {
                   View all
                   <p className="text-sm text-muted-foreground">
                     {`(${
-                      courses?.filter((course) => course.status === false)
-                        .length
+                      result?.courses?.filter(
+                        (course) => course.status === false
+                      ).length
                     })`}
                   </p>
                 </div>
@@ -102,9 +105,10 @@ function CoursesAll() {
               className="col-span-12 md:col-span-6 2xl:col-span-4"
             />
           ))
-        ) : courses &&
-          courses?.filter((course) => course.status === false).length > 0 ? (
-          courses
+        ) : result?.courses &&
+          result?.courses?.filter((course) => course.status === false).length >
+            0 ? (
+          result?.courses
             .filter((course) => course.status === false)
             .map((course) => (
               <CourseCard
@@ -127,8 +131,9 @@ function CoursesAll() {
           <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
             Completed courses
           </h4>
-          {courses &&
-            courses?.filter((course) => course.status === true).length > 0 && (
+          {result?.courses &&
+            result?.courses?.filter((course) => course.status === true).length >
+              0 && (
               <Button
                 variant={"ghost"}
                 onClick={() => router.push("/courses/completed")}
@@ -137,7 +142,9 @@ function CoursesAll() {
                   View all
                   <p className="text-sm text-muted-foreground">
                     {`(${
-                      courses?.filter((course) => course.status === true).length
+                      result?.courses?.filter(
+                        (course) => course.status === true
+                      ).length
                     })`}
                   </p>
                 </div>
@@ -152,9 +159,10 @@ function CoursesAll() {
               className="col-span-12 md:col-span-6 2xl:col-span-4"
             />
           ))
-        ) : courses &&
-          courses?.filter((course) => course.status === true).length > 0 ? (
-          courses
+        ) : result?.courses &&
+          result?.courses?.filter((course) => course.status === true).length >
+            0 ? (
+          result?.courses
             .filter((course) => course.status === true)
             .map((course) => (
               <CourseCard

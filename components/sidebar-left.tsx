@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import {
   Briefcase,
   Home,
@@ -24,15 +23,15 @@ import { NavControls } from "./nav-controls";
 import { NavCourses } from "./nav-courses";
 import { NavPinned } from "./nav-pinned";
 import { usePathname } from "next/navigation";
+import { LessonCard as LessonInterface } from "@/interfaces/lesson";
+import { Course as CourseInterface } from "@/interfaces/course";
+import { processResponse } from "@/lib/response-process";
+import { useEffect, useState } from "react";
+import { NavLessons } from "./nav-lessons";
+import { NavSkeleton } from "./skeleton/nav-skeleton";
 
 // This is sample data.
 const data = {
-  user: {
-    name: "kongtrua",
-    email: "thung260803@gmail.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-
   navMain: [
     {
       title: "Home",
@@ -63,79 +62,6 @@ const data = {
       title: "Library",
       url: "/library",
       icon: LibraryBig,
-    },
-  ],
-
-  courses: [
-    {
-      name: "Data Science & Statistical Analysis",
-      url: "/courses/hehe",
-      emoji: "📊",
-    },
-    {
-      name: "Mechanical Engineering & Product Design",
-      url: "/courses/hehe",
-      emoji: "⚙️",
-    },
-    {
-      name: "Biotechnology & Biomedical Science",
-      url: "/courses/hehe",
-      emoji: "🧬",
-    },
-    {
-      name: "Business Management & Corporate Strategy",
-      url: "/courses/hehe",
-      emoji: "🏢",
-    },
-    {
-      name: "Personal Finance & Stock Market Investment",
-      url: "/courses/hehe",
-      emoji: "💰",
-    },
-    {
-      name: "Digital Marketing & Brand Management",
-      url: "/courses/hehe",
-      emoji: "📈",
-    },
-    {
-      name: "Photography & Professional Editing",
-      url: "/courses/hehe",
-      emoji: "📷",
-    },
-    {
-      name: "Music Composition & Audio Production",
-      url: "/courses/hehe",
-      emoji: "🎵",
-    },
-    {
-      name: "Graphic Design with Photoshop & Illustrator",
-      url: "/courses/hehe",
-      emoji: "🎨",
-    },
-    {
-      name: "Creative Writing & Storytelling",
-      url: "/courses/hehe",
-      emoji: "✍️",
-    },
-    {
-      name: "Fitness Training & Strength Workouts",
-      url: "/courses/hehe",
-      emoji: "💪",
-    },
-    {
-      name: "English Communication & IELTS Preparation",
-      url: "/courses/hehe",
-      emoji: "🗣️",
-    },
-    {
-      name: "Critical Thinking & Problem Solving",
-      url: "/courses/hehe",
-      emoji: "🧐",
-    },
-    {
-      name: "Time Management & Productivity",
-      url: "/courses/hehe",
-      emoji: "⏳",
     },
   ],
 
@@ -254,6 +180,30 @@ export function SidebarLeft({
   const { isMobile, open } = useSidebar();
   const pathname = usePathname();
   const isChatPage = pathname.startsWith("/chat");
+  const [result, setResult] = useState<{
+    courses: CourseInterface[];
+    lessons: LessonInterface[];
+  }>();
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchData = async () => {
+    const res = await fetch(`/api/data/get-limit-courses-and-lessons`, {
+      method: "GET",
+    });
+    const response = await processResponse(res, {
+      success: false,
+      error: true,
+    });
+
+    if (response.success) {
+      setResult(response.data);
+    }
+  };
+
+  useEffect(() => {
+    fetchData().then(() => setIsLoading(false));
+  }, []);
+
   return (
     <Sidebar collapsible="icon" className="border-r-0 z-40" {...props}>
       <SidebarHeader className="md:gap-0">
@@ -261,18 +211,25 @@ export function SidebarLeft({
         {!isMobile && <NavControls isSidebarOpen={open} />}
         <NavMain items={data.navMain} />
       </SidebarHeader>
-      {
-        <SidebarContent className="scrollbar">
-          {isChatPage && (
-            <NavConversations isChatPage conversations={data.conversations} />
-          )}
-          <NavPinned conversations={data.conversations} />
-          <NavCourses courses={data.courses} />
-          {!isChatPage && (
-            <NavConversations conversations={data.conversations} />
-          )}
-        </SidebarContent>
-      }
+
+      <SidebarContent className="scrollbar">
+        {isLoading ? (
+          <NavSkeleton />
+        ) : (
+          <>
+            {isChatPage && (
+              <NavConversations isChatPage conversations={data.conversations} />
+            )}
+            <NavPinned conversations={data.conversations} />
+            <NavLessons lessons={result?.lessons} />
+            <NavCourses courses={result?.courses} />
+            {!isChatPage && (
+              <NavConversations conversations={data.conversations} />
+            )}
+          </>
+        )}
+      </SidebarContent>
+
       <SidebarRail />
     </Sidebar>
   );
