@@ -8,6 +8,11 @@ export interface Course {
   _id: string;
   title: string;
   description: string;
+  customization: {
+    emoji: string;
+    color: string;
+    cover: string;
+  };
   tags: [
     {
       _id: string;

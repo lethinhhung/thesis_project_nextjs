@@ -101,6 +101,7 @@ export function CreateNew() {
     const submitting = {
       ...values,
       aiGenerated: false,
+      emoji: emoji,
     };
     try {
       const res = await fetch("/api/course/create", {

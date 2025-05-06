@@ -18,16 +18,22 @@ export function NavCourses({ courses }: { courses?: CourseInterface[] }) {
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Recent courses</SidebarGroupLabel>
       <SidebarMenu>
-        {courses?.map((course) => (
-          <SidebarMenuItem key={course._id}>
-            <SidebarMenuButton
-              onClick={() => router.push(`/courses/${course._id}`)}
-            >
-              <span>😀</span>
-              <span>{course.title}</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        ))}
+        {courses
+          ?.sort(
+            (a, b) =>
+              new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
+          )
+          .slice(0, 6)
+          .map((course) => (
+            <SidebarMenuItem key={course._id}>
+              <SidebarMenuButton
+                onClick={() => router.push(`/courses/${course._id}`)}
+              >
+                <span>{course?.customization?.emoji}</span>
+                <span>{course.title}</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
         <SidebarMenuItem>
           <SidebarMenuButton
             onClick={() => router.push("/courses")}

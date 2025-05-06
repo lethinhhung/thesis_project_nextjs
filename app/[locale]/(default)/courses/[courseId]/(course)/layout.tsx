@@ -169,7 +169,12 @@ function Course({ children }: { children: React.ReactNode }) {
               <Image
                 width={1000}
                 height={1000}
-                src="/placeholder.svg"
+                src={
+                  course?.customization?.cover !== "" &&
+                  course?.customization?.cover
+                    ? course?.customization?.cover
+                    : "/placeholder.svg"
+                }
                 alt="Image"
                 className="inset-0 h-[30vh] w-full object-cover dark:brightness-[0.2] dark:grayscale"
               />
@@ -178,7 +183,9 @@ function Course({ children }: { children: React.ReactNode }) {
           <div className="flex justify-between items-center">
             <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
               <div className="flex gap-2 items-center">
-                {`${course?.title} ${isExpanded ? "💻" : ""}`}
+                {`${course?.title} ${
+                  isExpanded ? course?.customization?.emoji : ""
+                }`}
                 {isActionsLoading ? (
                   <Loader className="animate-spin" />
                 ) : (
