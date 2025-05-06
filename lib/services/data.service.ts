@@ -16,4 +16,9 @@ const searchAPI = (token: string, params: { query: string }) => {
   return createAxiosInstance(token).get(URL_API);
 };
 
-export { getAllCoursesAndLessons, searchAPI };
+const uploadImageAPI = (token: string, form: FormData) => {
+  const URL_API = "/api/data/upload-image";
+  return createAxiosInstance(token).post(URL_API, form);
+};
+
+export { getAllCoursesAndLessons, searchAPI, uploadImageAPI };

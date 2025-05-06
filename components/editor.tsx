@@ -31,6 +31,7 @@ import {
 import { LessonContent } from "@/interfaces/lesson";
 import { processResponse } from "@/lib/response-process";
 import { useDebounce } from "@/hooks/use-debounce";
+import { toast } from "sonner";
 
 // const plainTheme = {
 //   light: lightDefaultTheme,
@@ -100,9 +101,6 @@ const Editor = ({
   markDown: string;
   setMarkDown: (value: string) => void;
 }) => {
-  const editor = useCreateBlockNote({
-    schema,
-  });
   const isMobile = useIsMobile();
   const { theme } = useTheme();
   const [isPlainBackground, setIsPlainBackground] = useState(true);
@@ -123,6 +121,43 @@ const Editor = ({
     3000,
     [pendingChange]
   );
+
+  async function uploadFile(file: File) {
+    toast.loading("Uploading file...");
+    try {
+      const form = new FormData();
+
+      form.append("image", file);
+
+      const res = await fetch(`/api/data/upload-image`, {
+        method: "POST",
+        body: form,
+      });
+
+      const response = await processResponse(res, {
+        success: false,
+        error: false,
+      });
+
+      if (response.success) {
+        const { url } = response.data;
+        toast.dismiss();
+        toast.success("File uploaded successfully!");
+        return url;
+      } else {
+        toast.dismiss();
+        toast.error("Failed to upload file");
+      }
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      toast.error("Failed to update profile");
+    }
+  }
+
+  const editor = useCreateBlockNote({
+    schema,
+    uploadFile,
+  });
 
   async function loadInitialJSON() {
     if (!content) return;

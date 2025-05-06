@@ -73,18 +73,6 @@ function Settings() {
         body: form,
       });
 
-      // const res = await response.json();
-      // if (!res.success) {
-      //   setIsDialogOpen(false);
-      //   toast.error("Error fetching user data");
-      //   fetchUserData();
-      // } else {
-      //   await update();
-      //   setIsDialogOpen(false);
-      //   toast.success("Profile updated successfully");
-      //   fetchUserData();
-      // }
-
       await processResponse(res);
     } catch (error) {
       console.error("Error updating profile:", error);
