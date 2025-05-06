@@ -33,6 +33,7 @@ import { Loader } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useTheme } from "next-themes";
 import Image from "next/image";
+import { toast } from "sonner";
 
 export function EditCourse({
   openEdit,
@@ -50,6 +51,7 @@ export function EditCourse({
   );
   const [isLoading, setIsLoading] = useState(false);
   const [isOpenEmoji, setIsOpenEmoji] = useState(false);
+  const [file, setFile] = useState<File | null>(null);
   const [cover, setCover] = useState<string | null>(null);
   const isMobile = useIsMobile();
   const theme = useTheme();
@@ -107,8 +109,37 @@ export function EditCourse({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
+
       const url = URL.createObjectURL(file);
+      setFile(file);
       setCover(url);
+    }
+  };
+
+  const handleUpdateImage = async () => {
+    setIsLoading(true);
+    try {
+      const form = new FormData();
+
+      if (file) {
+        form.append("image", file);
+      }
+
+      const res = await fetch(`/api/course/update-cover/${course?._id}`, {
+        method: "PATCH",
+        body: form,
+      });
+
+      await processResponse(res);
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      toast.error("Failed to update profile");
+    } finally {
+      setFile(null);
+      setCover(null);
+      setIsLoading(false);
+      fetchCourse();
+      setOpenEdit(false);
     }
   };
 
@@ -247,7 +278,7 @@ export function EditCourse({
               >
                 Cancel
               </Button>
-              <Button className="min-w-32" type="submit">
+              <Button className="min-w-32" onClick={handleUpdateImage}>
                 {isLoading ? (
                   <Loader className="animate-spin" />
                 ) : (

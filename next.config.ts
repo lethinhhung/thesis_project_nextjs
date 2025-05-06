@@ -6,6 +6,15 @@ const nextConfig: NextConfig = {
   experimental: {
     externalDir: true, // Giảm theo dõi file không cần thiết
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "kiwncwjmonveleywaapt.supabase.co",
+        pathname: "/**",
+      },
+    ],
+  },
 };
 
 const withNextIntl = createNextIntlPlugin();

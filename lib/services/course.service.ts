@@ -80,6 +80,15 @@ const updateCourseDetailsAPI = (
   return createAxiosInstance(token).patch(URL_API, course);
 };
 
+const updateCourseCoverAPI = (
+  token: string,
+  courseId: string,
+  form: FormData
+) => {
+  const URL_API = `/api/course/update-course-cover/${courseId}`;
+  return createAxiosInstance(token).patch(URL_API, form);
+};
+
 export {
   createCourseAPI,
   getCourseAPI,
@@ -90,4 +99,5 @@ export {
   updateCourseStatusAPI,
   searchCoursesAPI,
   updateCourseDetailsAPI,
+  updateCourseCoverAPI,
 };

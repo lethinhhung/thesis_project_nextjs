@@ -246,7 +246,7 @@ function Lesson() {
             <div className="flex justify-between">
               <CardHeader className="flex-1">
                 <CardTitle>Summary</CardTitle>
-                <CardDescription id="summary">
+                <CardDescription id="summary" className="break-all">
                   {markDown.slice(0, 300) || "No summary available"}
                 </CardDescription>
               </CardHeader>

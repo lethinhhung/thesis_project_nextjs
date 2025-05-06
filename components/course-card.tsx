@@ -44,7 +44,11 @@ export function CourseCard({
       <Image
         width={1000}
         height={1000}
-        src="/placeholder.svg"
+        src={
+          course.customization.cover !== ""
+            ? course.customization.cover
+            : "/placeholder.svg"
+        }
         alt="Course Image"
         className="object-cover h-50 w-full rounded-xl rounded-b-none dark:brightness-[0.2] dark:grayscale"
       />
