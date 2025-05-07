@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/drawer";
 import MailPreview from "./mail-preview";
 import { Mail as MailInterface } from "@/interfaces/mail";
-import DeleteButton from "./delete-document-button";
 
 function MailPreviewMobile({
   mail,
@@ -39,7 +38,7 @@ function MailPreviewMobile({
             <DrawerDescription>{mail?.date}</DrawerDescription>
           </DrawerHeader>
           <div className="p-4 gap-2 flex items-center">
-            <DeleteButton type="mail" variant={"ghost"} />
+            {/* <DeleteButton type="mail" variant={"ghost"} /> */}
 
             <Button variant={"ghost"} size={"icon"}>
               {mail?.status ? <MailOpen /> : <Mail />}

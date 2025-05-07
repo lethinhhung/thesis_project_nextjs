@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Mail, MailOpen } from "lucide-react";
-import { DeleteButton } from "@/components/delete-document-button";
+// import { DeleteButton } from "@/components/delete-document-button";
 import { Mail as MailInterface } from "@/interfaces/mail";
 
 function MailPreview({ mail }: { mail: MailInterface | null }) {
@@ -28,7 +28,7 @@ function MailPreview({ mail }: { mail: MailInterface | null }) {
                 <Button size={"icon"} variant={"ghost"}>
                   {mail?.status ? <MailOpen /> : <Mail />}
                 </Button>
-                <DeleteButton variant={"ghost"} type="mail" />
+                {/* <DeleteButton variant={"ghost"} type="mail" /> */}
               </div>
             </CardHeader>
           </Card>

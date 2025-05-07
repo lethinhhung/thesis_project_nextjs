@@ -16,6 +16,8 @@ function CourseDocument({ documents }: { documents: Document[] }) {
     setSelectedDocument(document);
     setOpenDocumentPreview(true);
   };
+
+  const fetchDocuments = () => {};
   return (
     <div className="w-full flex p-2 md:p-4 flex-col gap-4">
       <div className="w-full flex justify-between items-center sticky top-16">
@@ -33,14 +35,14 @@ function CourseDocument({ documents }: { documents: Document[] }) {
         open={openDocumentPreview}
         onOpenChange={setOpenDocumentPreview}
         document={selectedDocument}
-        header={false}
+        fetchDocuments={fetchDocuments}
       />
 
       <div className="w-full flex grid grid-cols-1 sm:px-2 md:grid-cols-2 2xl:grid-cols-3 gap-4">
-        {documents.map((document) => (
+        {documents.map((document, index) => (
           <DocumentCard
             className="col-span-1"
-            key={document.id}
+            key={index}
             document={document}
             onClick={() => {
               handleDocumentSelect(document);
