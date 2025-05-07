@@ -10,4 +10,15 @@ const getAllDocumentsAPI = (token: string) => {
   return createAxiosInstance(token).get(URL_API);
 };
 
-export { createDocumentAPI, getAllDocumentsAPI };
+const downloadDocumentAPI = (token: string, documentId: string) => {
+  const URL_API = `/api/document/download/${documentId}`;
+  return createAxiosInstance(token).get(URL_API, {
+    responseType: "arraybuffer",
+    headers: {
+      Accept:
+        "application/pdf,application/msword,application/vnd.openxmlformats-officedocument.*,application/vnd.ms-excel",
+    },
+  });
+};
+
+export { createDocumentAPI, getAllDocumentsAPI, downloadDocumentAPI };

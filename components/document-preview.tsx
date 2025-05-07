@@ -19,13 +19,13 @@ import {
   TooltipTrigger,
 } from "./ui/tooltip";
 import { DeleteButton } from "@/components/delete-button";
-import { DownloadButton } from "@/components/download-button";
 import { Document } from "@/interfaces/document";
 import Image from "next/image";
 import { format } from "date-fns";
 import { useLocale } from "next-intl";
 import { enUS as en } from "date-fns/locale/en-US";
 import { vi } from "date-fns/locale/vi";
+import { DownloadDocumentButton } from "./download-document-button";
 
 function DocumentPreview({
   document,
@@ -105,7 +105,10 @@ function DocumentPreview({
 
                 <DeleteButton variant="ghost" type="document" />
 
-                <DownloadButton variant={"ghost"} />
+                <DownloadDocumentButton
+                  variant={"ghost"}
+                  documentId={document._id}
+                />
               </div>
             </CardFooter>
           </Card>
