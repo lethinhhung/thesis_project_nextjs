@@ -10,15 +10,17 @@ import {
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { notFound, useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Course as CourseInterface } from "@/interfaces/course";
 import { processResponse } from "@/lib/response-process";
 import { Skeleton } from "@/components/ui/skeleton";
+import { scrollToTabTop } from "@/lib/scrollToTabTop";
 
 function CourseDashboard() {
   const { courseId } = useParams();
   const [isLoading, setIsLoading] = useState(true);
   const [course, setCourse] = useState<CourseInterface>();
+  const tabTop = useRef<HTMLDivElement>(null);
 
   const fetchCourse = async () => {
     const res = await fetch(`/api/course/${courseId}`, {
@@ -36,7 +38,9 @@ function CourseDashboard() {
   };
 
   useEffect(() => {
-    fetchCourse().then(() => setIsLoading(false));
+    fetchCourse()
+      .then(() => setIsLoading(false))
+      .then(() => scrollToTabTop(tabTop, 116));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -50,7 +54,7 @@ function CourseDashboard() {
   }
 
   return (
-    <div className="w-full flex p-2 md:p-4 flex-col gap-4">
+    <div className="w-full flex p-2 md:p-4 flex-col gap-4" ref={tabTop}>
       <div className="w-full flex justify-between items-center">
         <div className="flex flex-col">
           <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">

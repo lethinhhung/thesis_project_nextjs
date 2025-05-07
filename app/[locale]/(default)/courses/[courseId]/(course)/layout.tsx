@@ -19,7 +19,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { useRouter, usePathname, useParams } from "next/navigation";
 import Image from "next/image";
@@ -60,7 +60,7 @@ function Course({ children }: { children: React.ReactNode }) {
   const [openDelete, setOpenDelete] = useState(false);
   const [course, setCourse] = useState<CourseInterface>();
   const router = useRouter();
-  const tabTop = useRef<HTMLDivElement | null>(null);
+  // const tabTop = useRef<HTMLDivElement | null>(null);
   const locale = useLocale();
   const dateFnsLocales = {
     vi,
@@ -82,20 +82,20 @@ function Course({ children }: { children: React.ReactNode }) {
 
   const [tab, setTab] = useState(currentTab);
 
-  const scrollToTabTop = () => {
-    const navbarHeight = 56;
-    if (tabTop.current) {
-      const topOffset =
-        tabTop.current.getBoundingClientRect().top +
-        window.scrollY -
-        navbarHeight;
+  // const scrollToTabTop = () => {
+  //   const navbarHeight = 56;
+  //   if (tabTop.current) {
+  //     const topOffset =
+  //       tabTop.current.getBoundingClientRect().top +
+  //       window.scrollY -
+  //       navbarHeight;
 
-      //delay
-      setTimeout(() => {
-        window.scrollTo({ top: topOffset, behavior: "smooth" });
-      }, 1000);
-    }
-  };
+  //     //delay
+  //     setTimeout(() => {
+  //       window.scrollTo({ top: topOffset, behavior: "smooth" });
+  //     }, 1000);
+  //   }
+  // };
 
   const fetchCourse = async () => {
     const res = await fetch(`/api/course/${courseId}`, {
@@ -358,7 +358,7 @@ function Course({ children }: { children: React.ReactNode }) {
       <Tabs
         value={tab}
         onValueChange={setTab}
-        ref={tabTop}
+        // ref={tabTop}
         defaultValue="dashboard"
         className="w-full py-4"
       >
@@ -367,7 +367,7 @@ function Course({ children }: { children: React.ReactNode }) {
             <TabsTrigger
               onClick={() => {
                 router.push(`/courses/${courseId}`);
-                scrollToTabTop();
+                // scrollToTabTop();
               }}
               value="dashboard"
             >
@@ -377,7 +377,7 @@ function Course({ children }: { children: React.ReactNode }) {
             <TabsTrigger
               onClick={() => {
                 router.push(`/courses/${courseId}/lessons`);
-                scrollToTabTop();
+                // scrollToTabTop();
               }}
               value="lessons"
             >
@@ -387,7 +387,7 @@ function Course({ children }: { children: React.ReactNode }) {
             <TabsTrigger
               onClick={() => {
                 router.push(`/courses/${courseId}/documents`);
-                scrollToTabTop();
+                // scrollToTabTop();
               }}
               value="documents"
             >
@@ -397,7 +397,7 @@ function Course({ children }: { children: React.ReactNode }) {
             <TabsTrigger
               onClick={() => {
                 router.push(`/courses/${courseId}/tests`);
-                scrollToTabTop();
+                // scrollToTabTop();
               }}
               value="tests"
             >
@@ -407,7 +407,7 @@ function Course({ children }: { children: React.ReactNode }) {
             <TabsTrigger
               onClick={() => {
                 router.push(`/courses/${courseId}/ask-ai`);
-                scrollToTabTop();
+                // scrollToTabTop();
               }}
               value="ask"
             >
