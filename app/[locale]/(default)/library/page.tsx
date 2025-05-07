@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { Document } from "@/interfaces/document";
 import { useIsTablet } from "@/hooks/use-tablet";
 import { processResponse } from "@/lib/response-process";
+import { DocumentCardSkeleton } from "@/components/skeleton/document-skeleton";
 
 function Library() {
   const [isLoading, setIsLoading] = useState(true);
@@ -28,6 +29,7 @@ function Library() {
 
   const fetchDocuments = async () => {
     setIsLoading(true);
+    setSelectedDocument(null);
     const res = await fetch(`/api/document/get-all`, {
       method: "GET",
     });
@@ -40,6 +42,7 @@ function Library() {
     if (response.success) {
       setDocuments(response.data);
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -55,28 +58,51 @@ function Library() {
           <SearchBarWithTags placeholder="Search for documents" />
 
           <div className="py-2 w-full grid grid-cols-1 2xl:grid-cols-2 gap-2 px-3 overflow-y-auto scrollbar">
-            {documents.map((document) => (
-              <DocumentCard
-                className="col-span-1"
-                key={document._id}
-                document={document}
-                onClick={() => handleDocumentSelect(document)}
-              />
-            ))}
+            {isLoading ? (
+              Array.from({ length: 6 }).map((_, index: number) => (
+                <DocumentCardSkeleton key={index} className="col-span-1" />
+              ))
+            ) : documents.length === 0 ? (
+              <div className="col-span-full h-100 flex justify-center items-center">
+                <small className="text-sm font-medium leading-none">
+                  No documents found
+                </small>
+              </div>
+            ) : (
+              documents.map((document) => (
+                <DocumentCard
+                  className="col-span-1"
+                  key={document._id}
+                  document={document}
+                  onClick={() => handleDocumentSelect(document)}
+                />
+              ))
+            )}
           </div>
         </div>
 
-        {isTablet && (
+        {!selectedDocument && (
+          <div className="col-span-full h-full flex justify-center items-center border rounded-xl border-dashed ">
+            <small className="text-sm font-medium leading-none">
+              Select a document to view details
+            </small>
+          </div>
+        )}
+
+        <div className="w-full h-full lg:hidden col-span-full">
           <DocumentPreviewMobile
             open={openDocumentPreview}
             onOpenChange={setOpenDocumentPreview}
             document={selectedDocument}
-            header={false}
+            fetchDocuments={fetchDocuments}
           />
-        )}
+        </div>
 
         <div className="w-full h-full hidden lg:flex col-span-1">
-          <DocumentPreview document={selectedDocument} header={true} />
+          <DocumentPreview
+            fetchDocuments={fetchDocuments}
+            document={selectedDocument}
+          />
         </div>
       </div>
     </div>

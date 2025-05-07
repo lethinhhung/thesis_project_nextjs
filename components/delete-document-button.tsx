@@ -26,6 +26,7 @@ export function DeleteDocumentButton({
   variant,
   documentId,
   onDelete,
+  fetchDocuments,
 }: {
   variant?:
     | "link"
@@ -36,6 +37,7 @@ export function DeleteDocumentButton({
     | "ghost";
   documentId?: string;
   onDelete?: () => void;
+  fetchDocuments: () => void;
 }) {
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -71,6 +73,7 @@ export function DeleteDocumentButton({
     } finally {
       setIsLoading(false);
       setOpen(false);
+      fetchDocuments();
     }
   };
 

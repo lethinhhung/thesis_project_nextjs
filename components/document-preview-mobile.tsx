@@ -15,24 +15,24 @@ import {
 import DocumentPreview from "./document-preview";
 import { Document } from "@/interfaces/document";
 import { DeleteDocumentButton } from "./delete-document-button";
-import DownloadButton from "./download-button";
 import { TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 import { Tooltip } from "@radix-ui/react-tooltip";
 import { format } from "date-fns";
 import { useLocale } from "next-intl";
 import { enUS as en } from "date-fns/locale/en-US";
 import { vi } from "date-fns/locale/vi";
+import { DownloadDocumentButton } from "./download-document-button";
 
 function DocumentPreviewMobile({
   document,
   open,
   onOpenChange,
-  header,
+  fetchDocuments,
 }: {
   document: Document | null;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  header: boolean;
+  fetchDocuments: () => void;
 }) {
   const locale = useLocale();
   const dateFnsLocales = {
@@ -41,6 +41,11 @@ function DocumentPreviewMobile({
   };
 
   const currentDateFnsLocale = dateFnsLocales[locale as "vi" | "en"] || vi;
+
+  if (!document) {
+    return null;
+  }
+
   return (
     <Drawer open={open} onOpenChange={onOpenChange} autoFocus={open}>
       <DrawerContent onInteractOutside={() => onOpenChange(false)}>
@@ -84,14 +89,25 @@ function DocumentPreviewMobile({
                 <TooltipContent>Ask AI</TooltipContent>
               </Tooltip>
             </TooltipProvider>
-            <DeleteDocumentButton type="document" variant="ghost" />
+            <DeleteDocumentButton
+              variant="ghost"
+              documentId={document?._id}
+              fetchDocuments={fetchDocuments}
+            />
 
-            <DownloadButton variant={"ghost"} />
+            <DownloadDocumentButton
+              fetchDocuments={fetchDocuments}
+              variant={"ghost"}
+              documentId={document?._id}
+            />
           </div>
         </div>
         <div className="flex p-2 justify-center overflow-y-auto h-full w-full">
           <div className="max-w-3xl">
-            <DocumentPreview document={document} header={header} />
+            <DocumentPreview
+              fetchDocuments={fetchDocuments}
+              document={document}
+            />
           </div>
         </div>
         <DrawerFooter className="flex">

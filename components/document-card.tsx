@@ -71,17 +71,6 @@ export function DocumentCard({
           ))}
         </div>
       </CardContent>
-
-      {/* <CardFooter
-        className="flex lg:hidden"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex gap-2 h-full w-full justify-end">
-          <DeleteButton type="document" variant="ghost" />
-
-          <DownloadButton variant="ghost" />
-        </div>
-      </CardFooter> */}
     </Card>
   );
 }

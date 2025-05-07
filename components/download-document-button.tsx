@@ -13,9 +13,11 @@ import {
 export function DownloadDocumentButton({
   documentId,
   variant = "ghost",
+  fetchDocuments,
 }: {
   documentId: string;
   variant?: "ghost" | "outline";
+  fetchDocuments: () => void;
 }) {
   const handleDownload = async () => {
     try {
@@ -58,6 +60,8 @@ export function DownloadDocumentButton({
       const audio = new Audio("/notification.mp3");
       audio.play();
       toast.error("Failed to download file");
+    } finally {
+      fetchDocuments();
     }
   };
 

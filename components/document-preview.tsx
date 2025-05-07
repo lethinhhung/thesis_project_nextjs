@@ -29,10 +29,10 @@ import { DeleteDocumentButton } from "./delete-document-button";
 
 function DocumentPreview({
   document,
-  header,
+  fetchDocuments,
 }: {
   document: Document | null;
-  header: boolean;
+  fetchDocuments: () => void;
 }) {
   const locale = useLocale();
   const dateFnsLocales = {
@@ -41,14 +41,13 @@ function DocumentPreview({
   };
 
   const currentDateFnsLocale = dateFnsLocales[locale as "vi" | "en"] || vi;
+
+  if (!document) return null;
   return (
     <div className="w-full h-full flex">
       {document ? (
         <div className="h-full w-full rounded-xl flex flex-col">
-          <Card
-            hidden={!header}
-            className="flex w-full sticky top-0 left-0 z-10 rounded-xl border border-dashed shadow-none"
-          >
+          <Card className="hidden lg:flex w-full sticky top-0 left-0 z-10 rounded-xl border border-dashed shadow-none ">
             <CardHeader>
               <CardTitle>
                 <div className="flex items-center gap-1">
@@ -106,9 +105,11 @@ function DocumentPreview({
                 <DeleteDocumentButton
                   variant="ghost"
                   documentId={document._id}
+                  fetchDocuments={fetchDocuments}
                 />
 
                 <DownloadDocumentButton
+                  fetchDocuments={fetchDocuments}
                   variant={"ghost"}
                   documentId={document._id}
                 />
