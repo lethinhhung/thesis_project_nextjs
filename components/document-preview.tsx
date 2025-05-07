@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { BookOpen, CheckCircle2, Sparkles } from "lucide-react";
+import { BookOpen, Sparkles } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -22,6 +22,10 @@ import { DeleteButton } from "@/components/delete-button";
 import { DownloadButton } from "@/components/download-button";
 import { Document } from "@/interfaces/document";
 import Image from "next/image";
+import { format } from "date-fns";
+import { useLocale } from "next-intl";
+import { enUS as en } from "date-fns/locale/en-US";
+import { vi } from "date-fns/locale/vi";
 
 function DocumentPreview({
   document,
@@ -30,6 +34,13 @@ function DocumentPreview({
   document: Document | null;
   header: boolean;
 }) {
+  const locale = useLocale();
+  const dateFnsLocales = {
+    vi,
+    en,
+  };
+
+  const currentDateFnsLocale = dateFnsLocales[locale as "vi" | "en"] || vi;
   return (
     <div className="w-full h-full flex">
       {document ? (
@@ -42,7 +53,7 @@ function DocumentPreview({
               <CardTitle>
                 <div className="flex items-center gap-1">
                   {document?.title}
-                  {document?.status && (
+                  {/* {document?.status && (
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger>
@@ -53,20 +64,24 @@ function DocumentPreview({
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
-                  )}
+                  )} */}
                 </div>
               </CardTitle>
-              <CardDescription>{document?.date}</CardDescription>
+              <CardDescription>
+                {format(new Date(document?.createdAt), "PPPP", {
+                  locale: currentDateFnsLocale,
+                })}
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="flex gap-2 flex-wrap ">
-                {document?.tags.map((tag) => (
+                {document?.tags.map((tag, index) => (
                   <Badge
-                    key={tag}
+                    key={index}
                     variant={"secondary"}
                     className="break-all line-clamp-1 max-w-60"
                   >
-                    {tag}
+                    {tag.title}
                   </Badge>
                 ))}
               </div>
@@ -77,7 +92,7 @@ function DocumentPreview({
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
-                        disabled={!document?.status}
+                        // disabled={!document?.status}
                         size={"icon"}
                         variant={"ghost"}
                       >
@@ -97,7 +112,10 @@ function DocumentPreview({
 
           <div className="flex flex-col py-2 gap-2 w-full rounded-xl overflow-y-auto scrollbar">
             <Card className="w-full bg-background rounded-xl border border-dashed shadow-none">
-              <CardContent>{document?.description}</CardContent>
+              <CardContent>
+                {/* {document?.description} */}
+                AI sumarry
+              </CardContent>
               <CardFooter>
                 <div className="w-full flex justify-end">
                   <Button size={"sm"} variant={"ghost"}>

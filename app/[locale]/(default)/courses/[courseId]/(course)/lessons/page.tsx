@@ -18,6 +18,7 @@ function Lessons() {
   const tabTop = useRef<HTMLDivElement>(null);
 
   const fetchLessons = async () => {
+    setIsLoading(true);
     const res = await fetch(`/api/lesson/get-all/${courseId}`, {
       method: "GET",
     });

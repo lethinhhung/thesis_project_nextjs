@@ -1,9 +1,14 @@
 export interface Document {
-  id: string;
+  _id: string;
+  userId: string;
   title: string;
-  description: string;
-  summary: string;
-  tags: string[];
-  date: string;
-  status: boolean;
+  fileUrl: string;
+  tags: [
+    {
+      _id: string;
+      title: string;
+    }
+  ];
+  createdAt: Date;
+  updatedAt: Date;
 }

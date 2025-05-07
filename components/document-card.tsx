@@ -8,9 +8,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle2 } from "lucide-react";
+
 import { Document } from "@/interfaces/document";
 import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { useLocale } from "next-intl";
+import { enUS as en } from "date-fns/locale/en-US";
+import { vi } from "date-fns/locale/vi";
 
 export function DocumentCard({
   document,
@@ -21,6 +25,13 @@ export function DocumentCard({
   onClick: (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => void;
   className?: string;
 }) {
+  const locale = useLocale();
+  const dateFnsLocales = {
+    vi,
+    en,
+  };
+
+  const currentDateFnsLocale = dateFnsLocales[locale as "vi" | "en"] || vi;
   return (
     <Card
       onClick={onClick}
@@ -34,13 +45,18 @@ export function DocumentCard({
           <div className="flex items-center gap-1 line-clamp-1">
             {document.title}
 
-            {document.status && <CheckCircle2 size={"1rem"} />}
+            {/* {document.status && <CheckCircle2 size={"1rem"} />} */}
           </div>
         </CardTitle>
         <CardDescription className="line-clamp-3 min-h-[4rem]">
-          {document.summary}
+          {/* {document.summary} */}
+          Ai <summary></summary>
         </CardDescription>
-        <CardDescription>{document.date}</CardDescription>
+        <CardDescription>
+          {format(new Date(document?.createdAt), "P", {
+            locale: currentDateFnsLocale,
+          })}
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex flex-wrap gap-2">
@@ -50,7 +66,7 @@ export function DocumentCard({
               key={index}
               className="break-all line-clamp-1 max-w-60"
             >
-              {tag}
+              {tag.title}
             </Badge>
           ))}
         </div>
