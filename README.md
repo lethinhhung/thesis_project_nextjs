@@ -1,6 +1,6 @@
-# E-Learning Platform Frontend (Ongoing)
+# AI-Powered Study Assistant Platform (Ongoing)
 
-An online learning platform built with NextJS 14, focusing on course management, document handling and AI interaction.
+Frontend for personalized learning support platform with AI integration that helps students manage notes, track study progress, and generate quizzes or tests based on uploaded documents.
 
 ## Technologies Used
 
