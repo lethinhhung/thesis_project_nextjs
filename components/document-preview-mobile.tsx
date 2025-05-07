@@ -22,6 +22,7 @@ import { useLocale } from "next-intl";
 import { enUS as en } from "date-fns/locale/en-US";
 import { vi } from "date-fns/locale/vi";
 import { DownloadDocumentButton } from "./download-document-button";
+import { useIsTablet } from "@/hooks/use-tablet";
 
 function DocumentPreviewMobile({
   document,
@@ -34,6 +35,7 @@ function DocumentPreviewMobile({
   onOpenChange: (open: boolean) => void;
   fetchDocuments: () => void;
 }) {
+  const isTablet = useIsTablet();
   const locale = useLocale();
   const dateFnsLocales = {
     vi,
@@ -43,6 +45,10 @@ function DocumentPreviewMobile({
   const currentDateFnsLocale = dateFnsLocales[locale as "vi" | "en"] || vi;
 
   if (!document) {
+    return null;
+  }
+
+  if (!isTablet) {
     return null;
   }
 

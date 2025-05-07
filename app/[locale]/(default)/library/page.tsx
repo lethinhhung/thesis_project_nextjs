@@ -6,7 +6,6 @@ import DocumentPreviewMobile from "@/components/document-preview-mobile";
 import SearchBarWithTags from "@/components/search-bar-with-tags";
 import { useEffect, useState } from "react";
 import { Document } from "@/interfaces/document";
-import { useIsTablet } from "@/hooks/use-tablet";
 import { processResponse } from "@/lib/response-process";
 import { DocumentCardSkeleton } from "@/components/skeleton/document-skeleton";
 import { Button } from "@/components/ui/button";
@@ -19,14 +18,11 @@ function Library() {
     null
   );
   const [openDocumentPreview, setOpenDocumentPreview] = useState(false);
-  const isTablet = useIsTablet();
 
   const handleDocumentSelect = (document: Document) => {
     setSelectedDocument(document);
-    if (isTablet) {
-      setOpenDocumentPreview(true);
-      return;
-    }
+
+    setOpenDocumentPreview(true);
   };
 
   const fetchDocuments = async () => {
@@ -49,8 +45,6 @@ function Library() {
 
   useEffect(() => {
     fetchDocuments().then(() => setIsLoading(false));
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
