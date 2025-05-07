@@ -9,6 +9,8 @@ import { Document } from "@/interfaces/document";
 import { useIsTablet } from "@/hooks/use-tablet";
 import { processResponse } from "@/lib/response-process";
 import { DocumentCardSkeleton } from "@/components/skeleton/document-skeleton";
+import { Button } from "@/components/ui/button";
+import { Loader, RefreshCcw } from "lucide-react";
 
 function Library() {
   const [isLoading, setIsLoading] = useState(true);
@@ -56,6 +58,19 @@ function Library() {
       <div className="w-full h-full rounded-xl columns-1 lg:columns-2">
         <div className="h-full w-full col-span-1 rounded-xl flex flex-col">
           <SearchBarWithTags placeholder="Search for documents" />
+          <div className="py-2 w-full px-3 flex justify-between items-center">
+            <small className="text-sm font-medium leading-none text-gray-500">
+              {documents.length} document(s) found
+            </small>
+            <Button
+              size={"sm"}
+              onClick={() => fetchDocuments()}
+              disabled={isLoading}
+              variant={"ghost"}
+            >
+              {isLoading ? <Loader className="animate-spin" /> : <RefreshCcw />}
+            </Button>
+          </div>
 
           <div className="py-2 w-full grid grid-cols-1 2xl:grid-cols-2 gap-2 px-3 overflow-y-auto scrollbar">
             {isLoading ? (

@@ -201,6 +201,7 @@ export function CreateNew() {
       console.error("Error creating document:", error);
     } finally {
       setIsLoading(false);
+      router.push("/library");
       setIsOpen(false);
     }
   };
@@ -299,7 +300,11 @@ export function CreateNew() {
                           </Dialog>
 
                           <FormControl>
-                            <Input placeholder="Discrete Math" {...field} />
+                            <Input
+                              spellCheck={false}
+                              placeholder="Discrete Math"
+                              {...field}
+                            />
                           </FormControl>
                         </div>
                         <FormMessage />
@@ -359,7 +364,11 @@ export function CreateNew() {
                       <FormItem className="grid gap-3">
                         <FormLabel>Title</FormLabel>
                         <FormControl>
-                          <Input placeholder="Document title" {...field} />
+                          <Input
+                            spellCheck={false}
+                            placeholder="Document title"
+                            {...field}
+                          />
                         </FormControl>
 
                         <FormMessage />
