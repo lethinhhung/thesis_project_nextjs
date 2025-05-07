@@ -324,6 +324,7 @@ function Course({ children }: { children: React.ReactNode }) {
                       variant={"destructive"}
                       onClick={deleteCourse}
                       className="min-w-20"
+                      disabled={isActionsLoading}
                     >
                       {isActionsLoading ? (
                         <Loader className="animate-spin" />

@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Mail, MailOpen } from "lucide-react";
-import { DeleteButton } from "@/components/delete-button";
+import { DeleteButton } from "@/components/delete-document-button";
 import { Mail as MailInterface } from "@/interfaces/mail";
 
 function MailPreview({ mail }: { mail: MailInterface | null }) {

@@ -21,4 +21,14 @@ const downloadDocumentAPI = (token: string, documentId: string) => {
   });
 };
 
-export { createDocumentAPI, getAllDocumentsAPI, downloadDocumentAPI };
+const deleteDocumentAPI = (token: string, documentId: string) => {
+  const URL_API = `/api/document/delete/${documentId}`;
+  return createAxiosInstance(token).delete(URL_API);
+};
+
+export {
+  createDocumentAPI,
+  getAllDocumentsAPI,
+  downloadDocumentAPI,
+  deleteDocumentAPI,
+};

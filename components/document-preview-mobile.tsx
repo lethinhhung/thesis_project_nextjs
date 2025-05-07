@@ -2,7 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import {
   Drawer,
   DrawerClose,
@@ -14,10 +14,14 @@ import {
 } from "@/components/ui/drawer";
 import DocumentPreview from "./document-preview";
 import { Document } from "@/interfaces/document";
-import DeleteButton from "./delete-button";
+import { DeleteDocumentButton } from "./delete-document-button";
 import DownloadButton from "./download-button";
 import { TooltipContent, TooltipProvider, TooltipTrigger } from "./ui/tooltip";
 import { Tooltip } from "@radix-ui/react-tooltip";
+import { format } from "date-fns";
+import { useLocale } from "next-intl";
+import { enUS as en } from "date-fns/locale/en-US";
+import { vi } from "date-fns/locale/vi";
 
 function DocumentPreviewMobile({
   document,
@@ -30,6 +34,13 @@ function DocumentPreviewMobile({
   onOpenChange: (open: boolean) => void;
   header: boolean;
 }) {
+  const locale = useLocale();
+  const dateFnsLocales = {
+    vi,
+    en,
+  };
+
+  const currentDateFnsLocale = dateFnsLocales[locale as "vi" | "en"] || vi;
   return (
     <Drawer open={open} onOpenChange={onOpenChange} autoFocus={open}>
       <DrawerContent onInteractOutside={() => onOpenChange(false)}>
@@ -39,11 +50,17 @@ function DocumentPreviewMobile({
               <div className="flex justify-between w-full">
                 <div className="flex items-center gap-1">
                   {document?.title}{" "}
-                  {document?.status && <CheckCircle2 size={"1rem"} />}
+                  {/* {document?.status && <CheckCircle2 size={"1rem"} />} */}
                 </div>
               </div>
             </DrawerTitle>
-            <DrawerDescription>{document?.date}</DrawerDescription>
+            <DrawerDescription>
+              {document?.createdAt
+                ? format(new Date(document.createdAt), "PPPP", {
+                    locale: currentDateFnsLocale,
+                  })
+                : "No date"}
+            </DrawerDescription>
             <div className="flex gap-2 flex-wrap">
               {document?.tags.map((tag, index) => (
                 <Badge
@@ -51,7 +68,7 @@ function DocumentPreviewMobile({
                   variant={"secondary"}
                   className="break-all line-clamp-1 max-w-60"
                 >
-                  {tag}
+                  {tag.title}
                 </Badge>
               ))}
             </div>
@@ -67,7 +84,7 @@ function DocumentPreviewMobile({
                 <TooltipContent>Ask AI</TooltipContent>
               </Tooltip>
             </TooltipProvider>
-            <DeleteButton type="document" variant="ghost" />
+            <DeleteDocumentButton type="document" variant="ghost" />
 
             <DownloadButton variant={"ghost"} />
           </div>

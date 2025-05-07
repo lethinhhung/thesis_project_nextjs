@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/drawer";
 import MailPreview from "./mail-preview";
 import { Mail as MailInterface } from "@/interfaces/mail";
-import DeleteButton from "./delete-button";
+import DeleteButton from "./delete-document-button";
 
 function MailPreviewMobile({
   mail,

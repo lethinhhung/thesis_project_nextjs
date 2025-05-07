@@ -202,6 +202,7 @@ function Lesson() {
                         variant={"destructive"}
                         onClick={deleteLesson}
                         className="min-w-20"
+                        disabled={isDeleteLoading}
                       >
                         {isDeleteLoading ? (
                           <Loader className="animate-spin" />

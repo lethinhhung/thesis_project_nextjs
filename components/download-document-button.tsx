@@ -50,9 +50,13 @@ export function DownloadDocumentButton({
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
 
+      const audio = new Audio("/notification.mp3");
+      audio.play();
       toast.success("File downloaded successfully");
     } catch (error) {
       console.error("Download error:", error);
+      const audio = new Audio("/notification.mp3");
+      audio.play();
       toast.error("Failed to download file");
     }
   };

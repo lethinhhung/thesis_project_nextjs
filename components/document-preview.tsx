@@ -18,7 +18,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "./ui/tooltip";
-import { DeleteButton } from "@/components/delete-button";
 import { Document } from "@/interfaces/document";
 import Image from "next/image";
 import { format } from "date-fns";
@@ -26,6 +25,7 @@ import { useLocale } from "next-intl";
 import { enUS as en } from "date-fns/locale/en-US";
 import { vi } from "date-fns/locale/vi";
 import { DownloadDocumentButton } from "./download-document-button";
+import { DeleteDocumentButton } from "./delete-document-button";
 
 function DocumentPreview({
   document,
@@ -103,7 +103,10 @@ function DocumentPreview({
                   </Tooltip>
                 </TooltipProvider>
 
-                <DeleteButton variant="ghost" type="document" />
+                <DeleteDocumentButton
+                  variant="ghost"
+                  documentId={document._id}
+                />
 
                 <DownloadDocumentButton
                   variant={"ghost"}
