@@ -54,6 +54,7 @@ function CoursesSearch() {
       setTotalPage(response.data.pagination.totalPages);
       setResults(response.data);
     }
+
     setLoading(false);
   };
 

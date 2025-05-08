@@ -9,6 +9,8 @@ export interface Document {
       title: string;
     }
   ];
+  status: "processing" | "completed" | "failed";
+  size: number;
   createdAt: Date;
   updatedAt: Date;
 }

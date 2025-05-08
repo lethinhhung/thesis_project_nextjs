@@ -39,6 +39,8 @@ function Library() {
 
     if (response.success) {
       setDocuments(response.data);
+    } else {
+      setDocuments([]);
     }
     setIsLoading(false);
   };
@@ -53,9 +55,9 @@ function Library() {
         <div className="h-full w-full col-span-1 rounded-xl flex flex-col">
           <SearchBarWithTags placeholder="Search for documents" />
           <div className="py-2 w-full px-3 flex justify-between items-center">
-            <small className="text-sm font-medium leading-none text-gray-500">
+            <p className="text-sm text-muted-foreground">
               {documents.length} document(s) found
-            </small>
+            </p>
             <Button
               size={"sm"}
               onClick={() => fetchDocuments()}

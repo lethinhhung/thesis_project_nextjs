@@ -27,6 +27,8 @@ function CoursesOngoing() {
 
     if (response.success) {
       setCourses(response.data);
+    } else {
+      setCourses([]);
     }
   };
 

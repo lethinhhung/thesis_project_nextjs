@@ -26,6 +26,7 @@ import { enUS as en } from "date-fns/locale/en-US";
 import { vi } from "date-fns/locale/vi";
 import { DownloadDocumentButton } from "./download-document-button";
 import { DeleteDocumentButton } from "./delete-document-button";
+import { DocumentStatusMark } from "./document-status-mark";
 
 function DocumentPreview({
   document,
@@ -52,24 +53,17 @@ function DocumentPreview({
               <CardTitle>
                 <div className="flex items-center gap-1">
                   {document?.title}
-                  {/* {document?.status && (
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <CheckCircle2 size={"1rem"} />
-                        </TooltipTrigger>
-                        <TooltipContent side="right">
-                          This document? has been processed
-                        </TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  )} */}
+                  <DocumentStatusMark status={document?.status} />
                 </div>
               </CardTitle>
               <CardDescription>
                 {format(new Date(document?.createdAt), "PPPP", {
                   locale: currentDateFnsLocale,
                 })}
+              </CardDescription>
+
+              <CardDescription>
+                {`${(document.size / (1024 * 1024)).toFixed(2)} MB`}
               </CardDescription>
             </CardHeader>
             <CardContent>

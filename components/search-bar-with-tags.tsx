@@ -157,6 +157,8 @@ function SearchBarWithTags({
 
     if (response.success) {
       setTags(response.data);
+    } else {
+      setTags([]);
     }
   };
 

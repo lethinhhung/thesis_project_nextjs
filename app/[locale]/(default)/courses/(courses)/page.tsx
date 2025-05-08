@@ -33,6 +33,11 @@ function CoursesAll() {
 
     if (response.success) {
       setResult(response.data);
+    } else {
+      setResult({
+        lessons: [],
+        courses: [],
+      });
     }
   };
 

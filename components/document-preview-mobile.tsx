@@ -23,6 +23,7 @@ import { enUS as en } from "date-fns/locale/en-US";
 import { vi } from "date-fns/locale/vi";
 import { DownloadDocumentButton } from "./download-document-button";
 import { useIsTablet } from "@/hooks/use-tablet";
+import { DocumentStatusMark } from "./document-status-mark";
 
 function DocumentPreviewMobile({
   document,
@@ -61,7 +62,7 @@ function DocumentPreviewMobile({
               <div className="flex justify-between w-full">
                 <div className="flex items-center gap-1">
                   {document?.title}{" "}
-                  {/* {document?.status && <CheckCircle2 size={"1rem"} />} */}
+                  <DocumentStatusMark status={document.status} />
                 </div>
               </div>
             </DrawerTitle>
@@ -71,6 +72,9 @@ function DocumentPreviewMobile({
                     locale: currentDateFnsLocale,
                   })
                 : "No date"}
+            </DrawerDescription>
+            <DrawerDescription>
+              {`${(document.size / (1024 * 1024)).toFixed(2)} MB`}
             </DrawerDescription>
             <div className="flex gap-2 flex-wrap">
               {document?.tags.map((tag, index) => (

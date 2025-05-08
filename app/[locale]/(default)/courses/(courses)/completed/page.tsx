@@ -26,6 +26,8 @@ function CoursesCompleted() {
 
     if (response.success) {
       setCourses(response.data);
+    } else {
+      setCourses([]);
     }
   };
 

@@ -102,6 +102,9 @@ function Settings() {
         name: response.data.profile.name,
         bio: response.data.profile.bio,
       });
+    } else {
+      setUserData(undefined);
+      setUpdateData(undefined);
     }
 
     setIsLoading(false);

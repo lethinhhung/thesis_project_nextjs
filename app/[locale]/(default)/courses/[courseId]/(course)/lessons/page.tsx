@@ -30,6 +30,8 @@ function Lessons() {
 
     if (response.success) {
       setLessons(response.data);
+    } else {
+      setLessons([]);
     }
   };
 
