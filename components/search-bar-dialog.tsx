@@ -14,6 +14,10 @@ import {
   Plus,
   Library,
   Loader,
+  Languages,
+  Sun,
+  Moon,
+  SunMoon,
 } from "lucide-react";
 
 import {
@@ -27,9 +31,7 @@ import {
   CommandShortcut,
 } from "@/components/ui/command";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { LanguageSwitcher } from "./language-switcher";
-import { DarkModeSwitcher } from "./dark-mode-switcher";
+import { usePathname, useRouter } from "next/navigation";
 import { processResponse } from "@/lib/response-process";
 import { Course as CourseInterface } from "@/interfaces/course";
 import { LessonCard as LessonInterface } from "@/interfaces/lesson";
@@ -37,6 +39,8 @@ import { format } from "date-fns";
 import { enUS as en } from "date-fns/locale/en-US";
 import { vi } from "date-fns/locale/vi";
 import { useLocale } from "next-intl";
+import { Document as DocumentInterface } from "@/interfaces/document";
+import { useTheme } from "next-themes";
 
 const navigattionItems = [
   { title: "Home", url: "/home", icon: Home },
@@ -72,6 +76,11 @@ const actionsItems = [
   },
 ];
 
+const languages = [
+  { code: "en", name: "English" },
+  { code: "vi", name: "Tiếng Việt" },
+];
+
 export default function SearchBarDialog({
   open,
   setOpen,
@@ -82,9 +91,11 @@ export default function SearchBarDialog({
   const [result, setResult] = useState<{
     courses: CourseInterface[];
     lessons: LessonInterface[];
+    documents: DocumentInterface[];
   }>({
     courses: [],
     lessons: [],
+    documents: [],
   });
   const [isLoading, setIsLoading] = useState(false);
   const [searchValue, setSearchValue] = useState("");
@@ -95,6 +106,18 @@ export default function SearchBarDialog({
   };
 
   const currentDateFnsLocale = dateFnsLocales[locale as "vi" | "en"] || vi;
+
+  const initialLocale = useLocale();
+  const [localeLang, setLocaleLang] = useState<string | null>(null);
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const [icon, setIcon] = useState(<Sun />);
+  const { theme, setTheme } = useTheme();
+
+  useEffect(() => {
+    setLocaleLang(initialLocale);
+  }, [initialLocale]);
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -108,11 +131,31 @@ export default function SearchBarDialog({
     return () => document.removeEventListener("keydown", down);
   }, [setOpen, open]);
 
-  const router = useRouter();
+  useEffect(() => {
+    setIcon(
+      theme === "light" ? <Sun /> : theme === "dark" ? <Moon /> : <SunMoon />
+    );
+  }, [theme]);
+
+  const handleModeSwitch = () => {
+    setTheme(
+      theme === "light" ? "dark" : theme === "dark" ? "system" : "light"
+    );
+  };
 
   const handleClick = (url: string) => {
     setOpen(false);
     router.push(url);
+  };
+
+  const handleLangSwitch = () => {
+    const newLocale = localeLang === "en" ? "vi" : "en";
+    setLocaleLang(newLocale);
+
+    const pathWithoutLocale = pathname.replace(/^\/(en|vi)/, "") || "/";
+    const newPath = `/${newLocale}${pathWithoutLocale}`;
+
+    router.replace(newPath);
   };
 
   const handleSearch = (searchValue: string) => {
@@ -143,6 +186,7 @@ export default function SearchBarDialog({
           setResult({
             courses: [],
             lessons: [],
+            documents: [],
           });
         }
       } catch (error) {
@@ -150,6 +194,7 @@ export default function SearchBarDialog({
         setResult({
           courses: [],
           lessons: [],
+          documents: [],
         });
       }
     };
@@ -239,6 +284,35 @@ export default function SearchBarDialog({
                 <CommandSeparator />
               </>
             )}
+
+            {result.documents.length > 0 && (
+              <>
+                <CommandGroup
+                  heading={
+                    searchValue ? "Documents" : "Recent document results"
+                  }
+                >
+                  {result.documents.map((document) => (
+                    <CommandItem
+                      value={`${document.title}`}
+                      onSelect={() => handleClick(`/library`)}
+                      key={document._id}
+                    >
+                      <span className="break-all line-clamp-1">
+                        {document.title}
+                      </span>
+
+                      <CommandShortcut className="max-w-30 sm:max-w-50 break-all line-clamp-1">
+                        {format(new Date(document?.createdAt), "P", {
+                          locale: currentDateFnsLocale,
+                        })}
+                      </CommandShortcut>
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+                <CommandSeparator />
+              </>
+            )}
             <CommandGroup heading="Documents">
               <CommandItem>
                 <User />
@@ -296,16 +370,28 @@ export default function SearchBarDialog({
             </CommandGroup>
             <CommandSeparator />
             <CommandGroup heading="Controls">
-              <CommandItem value="appearance dark light mode">
+              <CommandItem
+                value="appearance dark light mode"
+                onSelect={() => handleModeSwitch()}
+              >
+                {icon}
                 <span>Appearance</span>
                 <CommandShortcut className="flex items-center">
-                  <DarkModeSwitcher className="w-4 h-4" variant={"ghost"} />
+                  {theme === "light"
+                    ? "Light"
+                    : theme === "dark"
+                    ? "Dark"
+                    : "System"}
                 </CommandShortcut>
               </CommandItem>
-              <CommandItem value="languages english vietnamese">
+              <CommandItem
+                value="languages english vietnamese"
+                onSelect={() => handleLangSwitch()}
+              >
+                <Languages />
                 <span>Languagues</span>
                 <CommandShortcut className="flex items-center">
-                  <LanguageSwitcher className="w-4 h-4" variant={"ghost"} />
+                  <p>{languages.find((lang) => lang.code === locale)?.name}</p>
                 </CommandShortcut>
               </CommandItem>
             </CommandGroup>

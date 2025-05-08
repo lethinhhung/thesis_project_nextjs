@@ -84,7 +84,9 @@ export function DarkModeSwitcher({
           </Button>
         </TooltipTrigger>
         <TooltipContent side={isSidebarOpen ? "top" : "right"}>
-          <p>Change appearance</p>
+          <p>
+            {theme === "light" ? "Light" : theme === "dark" ? "Dark" : "System"}
+          </p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

@@ -90,7 +90,7 @@ export function LanguageSwitcher({
           </Button>
         </TooltipTrigger>
         <TooltipContent side={isSidebarOpen ? "top" : "right"}>
-          <p>Current: {languages.find((lang) => lang.code === locale)?.name}</p>
+          <p>{languages.find((lang) => lang.code === locale)?.name}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
