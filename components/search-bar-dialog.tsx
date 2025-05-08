@@ -11,8 +11,8 @@ import {
   LibraryBig,
   Book,
   Inbox,
-  Plus,
-  Library,
+  // Plus,
+  // Library,
   Loader,
   Languages,
   Sun,
@@ -54,27 +54,27 @@ const navigattionItems = [
   { title: "Inbox", url: "/inbox", icon: Inbox },
 ];
 
-const actionsItems = [
-  {
-    title: "New course",
-    url: "/courses",
-    icon: Briefcase,
-    action: <Plus />,
-  },
-  { title: "New page", url: "/pages", icon: Book, action: <Plus /> },
-  {
-    title: "New document",
-    url: "/library",
-    icon: Library,
-    action: <Plus />,
-  },
-  {
-    title: "New chat",
-    url: "/chat",
-    icon: Sparkles,
-    action: <Plus />,
-  },
-];
+// const actionsItems = [
+//   {
+//     title: "New course",
+//     url: "/courses",
+//     icon: Briefcase,
+//     action: <Plus />,
+//   },
+//   { title: "New page", url: "/pages", icon: Book, action: <Plus /> },
+//   {
+//     title: "New document",
+//     url: "/library",
+//     icon: Library,
+//     action: <Plus />,
+//   },
+//   {
+//     title: "New chat",
+//     url: "/chat",
+//     icon: Sparkles,
+//     action: <Plus />,
+//   },
+// ];
 
 const languages = [
   { code: "en", name: "English" },
@@ -313,7 +313,7 @@ export default function SearchBarDialog({
                 <CommandSeparator />
               </>
             )}
-            <CommandGroup heading="Documents">
+            {/* <CommandGroup heading="Documents">
               <CommandItem>
                 <User />
                 <span>Javascript</span>
@@ -342,8 +342,8 @@ export default function SearchBarDialog({
                 <span>Chapter 1: Introduction</span>
               </CommandItem>
             </CommandGroup>
-            <CommandSeparator />
-            <CommandGroup heading="Actions">
+            <CommandSeparator /> */}
+            {/* <CommandGroup heading="Actions">
               {actionsItems.map((item) => (
                 <CommandItem
                   onSelect={() => handleClick(item.url)}
@@ -355,7 +355,7 @@ export default function SearchBarDialog({
                 </CommandItem>
               ))}
             </CommandGroup>
-            <CommandSeparator />
+            <CommandSeparator /> */}
             <CommandGroup heading="Navigation">
               {navigattionItems.map((item) => (
                 <CommandItem
