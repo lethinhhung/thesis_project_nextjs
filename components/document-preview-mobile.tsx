@@ -102,7 +102,6 @@ function DocumentPreviewMobile({
             />
 
             <DownloadDocumentButton
-              fetchDocuments={fetchDocuments}
               variant={"ghost"}
               documentId={document?._id}
             />
