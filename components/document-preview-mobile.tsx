@@ -24,6 +24,7 @@ import { vi } from "date-fns/locale/vi";
 import { DownloadDocumentButton } from "./download-document-button";
 import { useIsTablet } from "@/hooks/use-tablet";
 import { DocumentStatusMark } from "./document-status-mark";
+import { getDocumentMeta } from "@/lib/getDocumentMeta";
 
 function DocumentPreviewMobile({
   document,
@@ -59,11 +60,9 @@ function DocumentPreviewMobile({
         <div className="flex justify-between w-full max-w-5xl mx-auto">
           <DrawerHeader>
             <DrawerTitle>
-              <div className="flex justify-between w-full">
-                <div className="flex items-center gap-1">
-                  {document?.title}{" "}
-                  <DocumentStatusMark status={document.status} />
-                </div>
+              <div className="flex items-center gap-1 w-full">
+                {document?.title}
+                <DocumentStatusMark status={document.status} />
               </div>
             </DrawerTitle>
             <DrawerDescription>
@@ -73,7 +72,8 @@ function DocumentPreviewMobile({
                   })
                 : "No date"}
             </DrawerDescription>
-            <DrawerDescription>
+            <DrawerDescription className="flex gap-1 items-center">
+              <Badge>{getDocumentMeta(document.fileUrl).type}</Badge>
               {`${(document.size / (1024 * 1024)).toFixed(2)} MB`}
             </DrawerDescription>
             <div className="flex gap-2 flex-wrap">

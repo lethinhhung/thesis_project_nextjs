@@ -15,7 +15,6 @@ import {
 import {
   ArrowUpRight,
   Copy,
-  FileText,
   Loader,
   MoreHorizontal,
   Sparkles,
@@ -24,7 +23,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import ChatBox from "@/components/chat-box";
 import { AnimatePresence, motion } from "framer-motion";
-import { LessonContent } from "@/interfaces/lesson";
+import { LessonWithContent } from "@/interfaces/lesson";
 import { processResponse } from "@/lib/response-process";
 import { Skeleton } from "@/components/ui/skeleton";
 import { notFound, useParams, useRouter } from "next/navigation";
@@ -49,6 +48,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { CreateNewSmall } from "@/components/create-new-small";
+import { DocumentCardSkeleton } from "@/components/skeleton/document-skeleton";
+import { DocumentCard } from "@/components/document-card";
 
 function Lesson() {
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -56,7 +58,7 @@ function Lesson() {
   const [isLoading, setIsLoading] = useState(true);
   const [openDelete, setOpenDelete] = useState(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
-  const [lesson, setLesson] = useState<LessonContent>();
+  const [lesson, setLesson] = useState<LessonWithContent>();
   const params = useParams();
   const router = useRouter();
   const lessonId = params.lessonId as string;
@@ -215,37 +217,46 @@ function Lesson() {
                 </Dialog>
               </div>
             </div>
-            <CardContent className="border border-dashed mx-6 p-4 rounded-lg">
-              <div className="w-full grid grid-cols-2 md:grid-cols-3 gap-2">
-                <p className="col-span-2 md:col-span-3 text-sm text-muted-foreground">
-                  Reference documents
+          </Card>
+          <Card className="dark:border-dashed break-inside-avoid-column">
+            <CardHeader>
+              <CardTitle className="break-all">Reference documents</CardTitle>
+              <CardDescription></CardDescription>
+            </CardHeader>
+            <CardContent className="w-full columns-3xs">
+              {isLoading ? (
+                Array.from({ length: 3 }, (_, index) => (
+                  <DocumentCardSkeleton
+                    key={index}
+                    variant="sm"
+                    className="w-full break-inside-avoid-column"
+                  />
+                ))
+              ) : lesson.refDocuments.length > 0 ? (
+                lesson.refDocuments.map((document, index) => (
+                  <DocumentCard
+                    variant="sm"
+                    className="break-inside-avoid-column"
+                    key={index}
+                    document={document}
+                    onClick={() => {}}
+                  />
+                ))
+              ) : (
+                <p className="text-muted-foreground">
+                  No reference documents available
                 </p>
-                <Button variant={"ghost"}>
-                  <FileText />
-                  <p className="line-clamp-1">Document.docx</p>
-                </Button>
-                <Button variant={"ghost"}>
-                  <FileText />
-                  <p className="line-clamp-1">Document.docx</p>
-                </Button>
-                <Button variant={"ghost"}>
-                  <FileText />
-                  <p className="line-clamp-1">Document.docx</p>
-                </Button>
-                <Button variant={"ghost"}>
-                  <FileText />
-                  <p className="line-clamp-1">Document.docx</p>
-                </Button>
-                <Button variant={"ghost"}>
-                  <FileText />
-                  <p className="line-clamp-1">Document.docx</p>
-                </Button>
-                <Button variant={"ghost"}>
-                  <FileText />
-                  <p className="line-clamp-1">Document.docx</p>
-                </Button>
-              </div>
+              )}
             </CardContent>
+            <CardFooter className="flex flex-wrap justify-end gap-2">
+              <CreateNewSmall
+                variant="ghost"
+                size="sm"
+                type="document"
+                courseId={courseId}
+                lessonId={lessonId}
+              />
+            </CardFooter>
           </Card>
           <Card
             className={

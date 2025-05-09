@@ -10,7 +10,13 @@ import {
 import { cn } from "@/lib/utils";
 import { Skeleton } from "../ui/skeleton";
 
-export function DocumentCardSkeleton({ className }: { className?: string }) {
+export function DocumentCardSkeleton({
+  className,
+  variant = "default",
+}: {
+  className?: string;
+  variant?: "default" | "sm";
+}) {
   return (
     <Card
       className={cn(
@@ -22,16 +28,20 @@ export function DocumentCardSkeleton({ className }: { className?: string }) {
         <CardTitle>
           <Skeleton className="w-1/2 h-5" />
         </CardTitle>
-        <CardDescription className="line-clamp-3 min-h-[4rem]">
-          <Skeleton className="w-full h-16" />
-        </CardDescription>
+        {variant == "default" && (
+          <CardDescription className="line-clamp-3 min-h-[4rem]">
+            <Skeleton className="w-full h-16" />
+          </CardDescription>
+        )}
         <CardDescription>
           <Skeleton className="w-1/3 h-5" />
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <Skeleton className="w-full h-5" />
-      </CardContent>
+      {variant == "default" && (
+        <CardContent>
+          <Skeleton className="w-full h-5" />
+        </CardContent>
+      )}
     </Card>
   );
 }

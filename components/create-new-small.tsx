@@ -34,11 +34,21 @@ export function CreateNewSmall({
   courseId,
   lessonId,
   refetchData,
+  variant,
+  size,
 }: {
   type: "lesson" | "document";
   courseId?: string;
   lessonId?: string;
   refetchData?: () => Promise<void>;
+  variant?:
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost"
+    | "link";
+  size?: "default" | "sm" | "lg" | "icon";
 }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -179,11 +189,13 @@ export function CreateNewSmall({
         }}
       >
         <DialogTrigger asChild>
-          <Button onClick={() => setOpen(true)}>new</Button>
+          <Button variant={variant} size={size} onClick={() => setOpen(true)}>
+            new
+          </Button>
         </DialogTrigger>
         <DialogContent aria-describedby="create-dialog-description">
           <DialogHeader>
-            <DialogTitle>{`Create new ${type} for this course`}</DialogTitle>
+            <DialogTitle>{`Create new ${type}`}</DialogTitle>
 
             <SheetDescription className="sr-only">
               {`Create a new ${type}`}

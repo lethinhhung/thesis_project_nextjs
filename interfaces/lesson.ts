@@ -1,3 +1,5 @@
+import { Document } from "./document";
+
 export interface Lesson {
   _id: string;
   courseId: string;
@@ -19,11 +21,12 @@ export interface LessonName {
   title: string;
 }
 
-export interface LessonContent {
+export interface LessonWithContent {
   _id: string;
   courseId: string;
   title: string;
   content: string;
+  refDocuments: [Document];
   // description: string;
   createdAt: Date;
   updatedAt: Date;

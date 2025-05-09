@@ -27,6 +27,7 @@ import { vi } from "date-fns/locale/vi";
 import { DownloadDocumentButton } from "./download-document-button";
 import { DeleteDocumentButton } from "./delete-document-button";
 import { DocumentStatusMark } from "./document-status-mark";
+import { getDocumentMeta } from "@/lib/getDocumentMeta";
 
 function DocumentPreview({
   document,
@@ -50,11 +51,12 @@ function DocumentPreview({
         <div className="h-full w-full rounded-xl flex flex-col">
           <Card className="hidden lg:flex w-full sticky top-0 left-0 z-10 rounded-xl border border-dashed shadow-none ">
             <CardHeader>
-              <CardTitle>
+              <CardTitle className="flex items-center justify-between gap-1">
                 <div className="flex items-center gap-1">
                   {document?.title}
                   <DocumentStatusMark status={document?.status} />
                 </div>
+                <Badge>{getDocumentMeta(document.fileUrl).type}</Badge>
               </CardTitle>
               <CardDescription>
                 {format(new Date(document?.createdAt), "PPPP", {
