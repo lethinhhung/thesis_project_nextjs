@@ -26,6 +26,7 @@ function Library() {
   };
 
   const fetchDocuments = async () => {
+    setOpenDocumentPreview(false);
     setIsLoading(true);
     setSelectedDocument(null);
     const res = await fetch(`/api/document/get-all`, {

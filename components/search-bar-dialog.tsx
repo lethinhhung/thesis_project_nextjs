@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  CreditCard,
   Settings,
   User,
   Home,

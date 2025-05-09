@@ -68,14 +68,23 @@ export function CreateNew() {
   const [isOpen, setIsOpen] = useState(false);
   const [currentType, setCurrentType] = useState<string | null>(null);
   const [emoji, setEmoji] = useState<string | null>("📖");
-  const [documentMeta, setDocumentMeta] = useState<{
-    type: string | null;
-    color: string;
-  } | null>(null);
+  const [document, setDocument] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpenEmoji, setIsOpenEmoji] = useState(false);
   const isMobile = useIsMobile();
   const theme = useTheme();
+
+  const reset = (e: boolean) => {
+    setIsOpen(e);
+    setTimeout(() => {
+      setCurrentType(null);
+      setEmoji("📖");
+      setDocument(null);
+      setIsLoading(false);
+      courseForm.reset();
+      documentForm.reset();
+    }, 100);
+  };
 
   const courseFormSchema = z.object({
     title: z.string().min(1, {
@@ -160,17 +169,14 @@ export function CreateNew() {
       const response = await processResponse(res);
 
       if (response.success) {
-        courseForm.reset();
         router.push(`/courses/${response.data._id}`);
       } else {
-        courseForm.reset();
         console.error("Error creating course:", response.error.details);
       }
     } catch (error) {
       console.error("Error creating course:", error);
     } finally {
-      setIsLoading(false);
-      setIsOpen(false);
+      reset(false);
     }
   };
 
@@ -192,17 +198,14 @@ export function CreateNew() {
       const response = await processResponse(res);
 
       if (response.success) {
-        documentForm.reset();
+        router.push("/library");
       } else {
-        documentForm.reset();
         console.error("Error creating document:", response.error.details);
       }
     } catch (error) {
       console.error("Error creating document:", error);
     } finally {
-      setIsLoading(false);
-      router.push("/library");
-      setIsOpen(false);
+      reset(false);
     }
   };
 
@@ -236,9 +239,7 @@ export function CreateNew() {
       <Dialog
         open={isOpen}
         onOpenChange={(e) => {
-          setIsOpen(e);
-          courseForm.reset();
-          documentForm.reset();
+          reset(e);
         }}
       >
         <DialogContent aria-describedby="create-dialog-description">
@@ -338,9 +339,7 @@ export function CreateNew() {
                     type="button"
                     variant={"outline"}
                     onClick={() => {
-                      setIsOpen(false);
-                      courseForm.reset();
-                      documentForm.reset();
+                      reset(false);
                     }}
                   >
                     Cancel
@@ -383,8 +382,11 @@ export function CreateNew() {
                       <FormItem className="grid gap-3">
                         <FormLabel>
                           Document file
-                          {documentMeta?.type && (
-                            <Badge>{documentMeta.type}</Badge>
+                          {document && (
+                            <Badge>
+                              {" "}
+                              {getDocumentMeta(document?.name ?? null)?.type}
+                            </Badge>
                           )}
                         </FormLabel>
                         <FormControl>
@@ -392,15 +394,21 @@ export function CreateNew() {
                             type="file"
                             onChange={(e) => {
                               const file = e.target.files?.[0];
-                              setDocumentMeta(
-                                getDocumentMeta(file?.name ?? null)
-                              );
+                              if (!file) return;
+                              setDocument(file);
 
                               field.onChange(file);
                             }}
                           />
                         </FormControl>
-
+                        {document && (
+                          <div className="flex w-full items-center justify-end">
+                            <p className="text-sm text-muted-foreground">{`${(
+                              document.size /
+                              (1024 * 1024)
+                            ).toFixed(2)} MB`}</p>
+                          </div>
+                        )}
                         <FormMessage />
                       </FormItem>
                     )}
@@ -412,9 +420,7 @@ export function CreateNew() {
                     type="button"
                     variant={"outline"}
                     onClick={() => {
-                      setIsOpen(false);
-                      courseForm.reset();
-                      documentForm.reset();
+                      reset(false);
                     }}
                   >
                     Cancel

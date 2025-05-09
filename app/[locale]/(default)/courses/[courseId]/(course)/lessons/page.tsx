@@ -57,7 +57,7 @@ function Lessons() {
       </div>
       <div className="w-full flex grid grid-cols-1 sm:px-2 md:grid-cols-2 2xl:grid-cols-3 gap-4">
         {isLoading ? (
-          Array.from({ length: 3 }).map((_, index: number) => (
+          Array.from({ length: 4 }).map((_, index: number) => (
             <LessonCardRecentSkeleton key={index} className="col-span-1" />
           ))
         ) : lessons.length == 0 ? (
