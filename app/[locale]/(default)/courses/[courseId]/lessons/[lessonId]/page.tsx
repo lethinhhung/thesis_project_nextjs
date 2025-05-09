@@ -14,6 +14,7 @@ import {
 
 import {
   ArrowUpRight,
+  ChevronDown,
   Copy,
   Loader,
   MoreHorizontal,
@@ -51,6 +52,11 @@ import {
 import { CreateNewSmall } from "@/components/create-new-small";
 import { DocumentCardSkeleton } from "@/components/skeleton/document-skeleton";
 import { DocumentCard } from "@/components/document-card";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 function Lesson() {
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -58,6 +64,7 @@ function Lesson() {
   const [isLoading, setIsLoading] = useState(true);
   const [openDelete, setOpenDelete] = useState(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [lesson, setLesson] = useState<LessonWithContent>();
   const params = useParams();
   const router = useRouter();
@@ -148,19 +155,19 @@ function Lesson() {
       >
         <div className="col-span-2 gap-4 columns-md space-y-4">
           <Card className="dark:border-dashed break-inside-avoid-column">
-            <div className="flex justify-between">
-              <CardHeader className="flex-1">
-                <CardTitle className="break-all">{lesson?.title}</CardTitle>
-                <CardDescription>
-                  {capitalizeFirstLetter(
-                    format(new Date(lesson?.createdAt), "PPPP", {
-                      locale: currentDateFnsLocale,
-                    })
-                  )}
-                </CardDescription>
-                <CardDescription>User&apos;s lesson note</CardDescription>
-              </CardHeader>
-              <div className="px-4">
+            <CardHeader className="flex-1">
+              <div className="flex w-full justify-between items-center">
+                <div className="flex flex-col gap-1">
+                  <CardTitle className="break-all">{lesson?.title}</CardTitle>
+                  <CardDescription>
+                    {capitalizeFirstLetter(
+                      format(new Date(lesson?.createdAt), "PPPP", {
+                        locale: currentDateFnsLocale,
+                      })
+                    )}
+                  </CardDescription>
+                </div>
+
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button size={"icon"} variant={"ghost"}>
@@ -216,47 +223,80 @@ function Lesson() {
                   </DialogContent>
                 </Dialog>
               </div>
-            </div>
+
+              <CardDescription>
+                User&apos;s lesson note User&apos;s lesson note User&apos;s
+                lesson note User&apos;s lesson note User&apos;s lesson note
+                User&apos;s lesson note User&apos;s lesson note User&apos;s
+                lesson note User&apos;s lesson note User&apos;s lesson note
+              </CardDescription>
+            </CardHeader>
           </Card>
           <Card className="dark:border-dashed break-inside-avoid-column">
             <CardHeader>
-              <CardTitle className="break-all">Reference documents</CardTitle>
-              <CardDescription></CardDescription>
+              <div className="flex justify-between items-center">
+                <div className="flex flex-col gap-1">
+                  <CardTitle className="break-all">
+                    Reference documents
+                  </CardTitle>
+                  <CardDescription>
+                    {lesson.refDocuments.length} reference documents
+                  </CardDescription>
+                </div>
+
+                <div className="flex items-center gap-1">
+                  <CreateNewSmall
+                    variant="ghost"
+                    size="sm"
+                    type="document"
+                    courseId={courseId}
+                    lessonId={lessonId}
+                  />
+                  <Button
+                    variant={"ghost"}
+                    size="sm"
+                    onClick={() => setIsCollapsed(!isCollapsed)}
+                  >
+                    {isCollapsed ? (
+                      <ChevronDown className="rotate-180" />
+                    ) : (
+                      <ChevronDown />
+                    )}
+                  </Button>
+                </div>
+              </div>
             </CardHeader>
-            <CardContent className="w-full columns-3xs">
-              {isLoading ? (
-                Array.from({ length: 3 }, (_, index) => (
-                  <DocumentCardSkeleton
-                    key={index}
-                    variant="sm"
-                    className="w-full break-inside-avoid-column"
-                  />
-                ))
-              ) : lesson.refDocuments.length > 0 ? (
-                lesson.refDocuments.map((document, index) => (
-                  <DocumentCard
-                    variant="sm"
-                    className="break-inside-avoid-column"
-                    key={index}
-                    document={document}
-                    onClick={() => {}}
-                  />
-                ))
-              ) : (
-                <p className="text-muted-foreground">
-                  No reference documents available
-                </p>
-              )}
-            </CardContent>
-            <CardFooter className="flex flex-wrap justify-end gap-2">
-              <CreateNewSmall
-                variant="ghost"
-                size="sm"
-                type="document"
-                courseId={courseId}
-                lessonId={lessonId}
-              />
-            </CardFooter>
+            {isCollapsed && (
+              <Collapsible open={isCollapsed} onOpenChange={setIsCollapsed}>
+                <CardContent className="w-full">
+                  <CollapsibleContent className="w-full columns-3xs space-y-2 gap-2">
+                    {isLoading ? (
+                      Array.from({ length: 3 }, (_, index) => (
+                        <DocumentCardSkeleton
+                          key={index}
+                          variant="sm"
+                          className="w-full break-inside-avoid-column"
+                        />
+                      ))
+                    ) : lesson.refDocuments.length > 0 ? (
+                      lesson.refDocuments.map((document, index) => (
+                        <DocumentCard
+                          variant="sm"
+                          className="break-inside-avoid-column"
+                          key={index}
+                          document={document}
+                          onClick={() => {}}
+                        />
+                      ))
+                    ) : (
+                      <p className="text-muted-foreground text-sm">
+                        No reference documents available
+                      </p>
+                    )}
+                  </CollapsibleContent>
+                </CardContent>
+              </Collapsible>
+            )}
           </Card>
           <Card
             className={
@@ -265,16 +305,18 @@ function Lesson() {
           >
             <div className="flex justify-between">
               <CardHeader className="flex-1">
-                <CardTitle>Summary</CardTitle>
-                <CardDescription id="summary" className="break-all">
-                  {markDown.slice(0, 300) || "No summary available"}
-                </CardDescription>
+                <div className="flex w-full justify-between items-center">
+                  <div className="flex flex-col gap-1">
+                    <CardTitle>Summary</CardTitle>
+                    <CardDescription id="summary" className="break-all">
+                      {markDown.slice(0, 300) || "No summary available"}
+                    </CardDescription>
+                  </div>
+                  <Button size={"sm"} variant={"ghost"} onClick={copyText}>
+                    <Copy />
+                  </Button>
+                </div>
               </CardHeader>
-              <div className="px-4">
-                <Button size={"sm"} variant={"ghost"} onClick={copyText}>
-                  <Copy />
-                </Button>
-              </div>
             </div>
             <CardFooter className="flex flex-wrap justify-end gap-2">
               <Button
