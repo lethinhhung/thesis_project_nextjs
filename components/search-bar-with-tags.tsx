@@ -18,6 +18,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -30,7 +31,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { Loader, Tag } from "lucide-react";
+import { Loader, RefreshCcw, Tag } from "lucide-react";
 import SortButton from "./sort-button";
 import { useContext, useEffect, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -160,10 +161,11 @@ function SearchBarWithTags({
     } else {
       setTags([]);
     }
+    setIsLoading(false);
   };
 
   useEffect(() => {
-    fetchTags().then(() => setIsLoading(false));
+    fetchTags();
   }, []);
 
   useEffect(() => {
@@ -250,6 +252,20 @@ function SearchBarWithTags({
                   </Badge>
                 ))}
               </div>
+              <DialogFooter>
+                <Button
+                  variant={"ghost"}
+                  size={"sm"}
+                  type="button"
+                  onClick={() => fetchTags()}
+                >
+                  {isLoading ? (
+                    <Loader className="animate-spin" />
+                  ) : (
+                    <RefreshCcw />
+                  )}
+                </Button>
+              </DialogFooter>
             </DialogContent>
           </Dialog>
         </TooltipProvider>

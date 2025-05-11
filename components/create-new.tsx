@@ -55,9 +55,11 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { SheetDescription } from "./ui/sheet";
 import { getDocumentMeta } from "@/lib/getDocumentMeta";
 import { Badge } from "./ui/badge";
+import { Tag } from "lucide-react";
 
 const createItems = [
   { title: "Course", type: "course", icon: <Briefcase /> },
+  { title: "Tag", type: "tag", icon: <Tag /> },
   { title: "Page", type: "page", icon: <Book /> },
   { title: "Document", type: "document", icon: <LibraryBig /> },
   { title: "Chat", type: "chat", icon: <Sparkles /> },
@@ -101,6 +103,19 @@ export function CreateNew() {
     defaultValues: {
       title: "",
       description: "",
+    },
+  });
+
+  const tagFormSchema = z.object({
+    title: z.string().min(1, {
+      message: "Title required",
+    }),
+  });
+
+  const tagForm = useForm<z.infer<typeof tagFormSchema>>({
+    resolver: zodResolver(tagFormSchema),
+    defaultValues: {
+      title: "",
     },
   });
 
@@ -154,7 +169,6 @@ export function CreateNew() {
   };
 
   const onCourseSubmit = async (values: z.infer<typeof courseFormSchema>) => {
-    console.log("Submitting...", values);
     setIsLoading(true);
     const submitting = {
       ...values,
@@ -181,10 +195,28 @@ export function CreateNew() {
     }
   };
 
+  const onTagSubmit = async (values: z.infer<typeof tagFormSchema>) => {
+    setIsLoading(true);
+    try {
+      const res = await fetch("/api/tag/create", {
+        method: "POST",
+        body: JSON.stringify(values),
+      });
+
+      await processResponse(res, {
+        success: true,
+        error: true,
+      });
+    } catch (error) {
+      console.error("Error creating course:", error);
+    } finally {
+      reset(false);
+    }
+  };
+
   const onDocumentSubmit = async (
     values: z.infer<typeof documentFormSchema>
   ) => {
-    console.log("Submitting...", values);
     setIsLoading(true);
     const submitting = new FormData();
     submitting.append("title", values.title);
@@ -325,6 +357,49 @@ export function CreateNew() {
                             spellCheck={false}
                             className="resize-none h-40 scrollbar"
                             placeholder="Discrete mathematics is the study of mathematical structures that are countable or otherwise distinct and separable. Examples of structures that are discrete are combinations, graphs, and logical statements. Discrete structures can be finite or infinite."
+                            {...field}
+                          />
+                        </FormControl>
+
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <DialogFooter>
+                  <Button
+                    type="button"
+                    variant={"outline"}
+                    onClick={() => {
+                      reset(false);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button className="min-w-20" type="submit">
+                    {isLoading ? <Loader className="animate-spin" /> : "Create"}
+                  </Button>
+                </DialogFooter>
+              </form>
+            </Form>
+          )}
+
+          {currentType == "tag" && (
+            <Form {...tagForm}>
+              <form onSubmit={tagForm.handleSubmit(onTagSubmit)}>
+                <div className="flex flex-col gap-8 py-4">
+                  <FormField
+                    control={tagForm.control}
+                    name="title"
+                    render={({ field }) => (
+                      <FormItem className="grid gap-3">
+                        <FormLabel>Title</FormLabel>
+
+                        <FormControl>
+                          <Input
+                            spellCheck={false}
+                            placeholder="React"
                             {...field}
                           />
                         </FormControl>
