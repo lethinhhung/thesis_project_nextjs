@@ -49,7 +49,7 @@ export function CountdownTimer() {
   }, [minutes, seconds]);
 
   return (
-    <Collapsible className="flex flex-col items-center justify-center gap-2">
+    <Collapsible className="flex flex-col items-center justify-center gap-2 pt-4">
       <p className="text-4xl font-bold">
         {String(Math.floor(timeLeft / 60)).padStart(2, "0")}:
         {String(timeLeft % 60).padStart(2, "0")}

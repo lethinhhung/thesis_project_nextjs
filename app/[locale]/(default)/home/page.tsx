@@ -16,7 +16,7 @@ function Home() {
   const t = useTranslations("common");
 
   return (
-    <div className="flex flex-col gap-4 items-center mx-auto h-2000 w-full max-w-7xl rounded-xl">
+    <div className="flex flex-col gap-4 items-center mx-auto w-full max-w-7xl rounded-xl">
       <div className="w-full flex">
         <Card className="w-full dark:border-dashed">
           <CardContent>

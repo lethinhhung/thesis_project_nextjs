@@ -28,7 +28,7 @@ import { LessonWithContent } from "@/interfaces/lesson";
 import { processResponse } from "@/lib/response-process";
 import { Skeleton } from "@/components/ui/skeleton";
 import { notFound, useParams, useRouter } from "next/navigation";
-import { format } from "date-fns";
+import { format, formatDistanceToNow } from "date-fns";
 import { enUS as en } from "date-fns/locale/en-US";
 import { vi } from "date-fns/locale/vi";
 import { capitalizeFirstLetter } from "@/lib/capitalize-first-letter";
@@ -172,6 +172,14 @@ function Lesson() {
                       })
                     )}
                   </CardDescription>
+                  <CardDescription>
+                    Updated {/* relative time */}
+                    {lesson?.updatedAt &&
+                      formatDistanceToNow(new Date(lesson?.updatedAt), {
+                        addSuffix: true,
+                        locale: currentDateFnsLocale,
+                      })}
+                  </CardDescription>
                 </div>
 
                 <DropdownMenu>
@@ -230,12 +238,12 @@ function Lesson() {
                 </Dialog>
               </div>
 
-              <CardDescription>
+              {/* <CardDescription>
                 User&apos;s lesson note User&apos;s lesson note User&apos;s
                 lesson note User&apos;s lesson note User&apos;s lesson note
                 User&apos;s lesson note User&apos;s lesson note User&apos;s
                 lesson note User&apos;s lesson note User&apos;s lesson note
-              </CardDescription>
+              </CardDescription> */}
             </CardHeader>
           </Card>
           <Card className="dark:border-dashed break-inside-avoid-column">

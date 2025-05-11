@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  Book,
+  // Book,
   Briefcase,
   LibraryBig,
   Loader,
@@ -60,7 +60,7 @@ import { Tag } from "lucide-react";
 const createItems = [
   { title: "Course", type: "course", icon: <Briefcase /> },
   { title: "Tag", type: "tag", icon: <Tag /> },
-  { title: "Page", type: "page", icon: <Book /> },
+  // { title: "Page", type: "page", icon: <Book /> },
   { title: "Document", type: "document", icon: <LibraryBig /> },
   { title: "Chat", type: "chat", icon: <Sparkles /> },
 ];
@@ -163,6 +163,10 @@ export function CreateNew() {
   });
 
   const handleOpen = (type: string) => {
+    if (type == "chat") {
+      router.push("/chat?new-chat=true");
+      return;
+    }
     setCurrentType(type);
     console.log(`Creating new ${type}`);
     setIsOpen(true);

@@ -6,7 +6,7 @@ import {
   LayoutDashboard,
   LibraryBig,
   Sparkles,
-  Book,
+  // Book,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -21,7 +21,7 @@ import {
 import { NavUser } from "./nav-user";
 import { NavControls } from "./nav-controls";
 import { NavCourses } from "./nav-courses";
-import { NavPinned } from "./nav-pinned";
+// import { NavPinned } from "./nav-pinned";
 import { usePathname } from "next/navigation";
 import { LessonCard as LessonInterface } from "@/interfaces/lesson";
 import { Course as CourseInterface } from "@/interfaces/course";
@@ -43,21 +43,21 @@ const data = {
       url: "/courses",
       icon: Briefcase,
     },
-    {
-      title: "Pages",
-      url: "/pages",
-      icon: Book,
-    },
+    // {
+    //   title: "Pages",
+    //   url: "/pages",
+    //   icon: Book,
+    // },
     {
       title: "Chat",
       url: "/chat",
       icon: Sparkles,
     },
-    {
-      title: "Dashboard",
-      url: "/dashboard",
-      icon: LayoutDashboard,
-    },
+    // {
+    //   title: "Dashboard",
+    //   url: "/dashboard",
+    //   icon: LayoutDashboard,
+    // },
     {
       title: "Library",
       url: "/library",
@@ -221,7 +221,7 @@ export function SidebarLeft({
             {isChatPage && (
               <NavConversations isChatPage conversations={data.conversations} />
             )}
-            <NavPinned conversations={data.conversations} />
+            {/* <NavPinned conversations={data.conversations} /> */}
             <NavLessons lessons={result?.lessons} />
             <NavCourses courses={result?.courses} />
             {!isChatPage && (

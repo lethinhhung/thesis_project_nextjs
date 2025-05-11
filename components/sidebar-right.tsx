@@ -2,8 +2,8 @@
 
 import {
   ChevronRight,
-  Cloud,
-  Inbox,
+  // Cloud,
+  // Inbox,
   ListTodo,
   Sparkles,
   StickyNote,
@@ -19,27 +19,27 @@ import {
   SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { CountdownTimer } from "./countdown-timer";
-import { Label } from "./ui/label";
+// import { Label } from "./ui/label";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "./ui/collapsible";
 import ChatSmall from "./chat-small";
-import ButtonWithBadge from "./button-with-badge";
-import { useRouter } from "next/navigation";
+// import ButtonWithBadge from "./button-with-badge";
+// import { useRouter } from "next/navigation";
 import { Textarea } from "./ui/textarea";
 import TodoList from "./todo-list";
 
 export function SidebarRight({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
-  const router = useRouter();
+  // const router = useRouter();
 
   return (
     <Sidebar collapsible="none" {...props}>
       <SidebarHeader className="border-sidebar-border">
-        <div className="flex items-center justify-between gap-2 w-full h-full">
+        {/* <div className="flex items-center justify-between gap-2 w-full h-full">
           <ButtonWithBadge
             onClick={() => router.push("/inbox")}
             isBadgeVisible={true}
@@ -51,20 +51,20 @@ export function SidebarRight({
           <Label>
             <Cloud />
           </Label>
-        </div>
+        </div> */}
         <CountdownTimer />
       </SidebarHeader>
       <SidebarContent className="scrollbar">
         <SidebarSeparator className="mx-0" />
         <DatePicker />
-        <SidebarGroupLabel
+        {/* <SidebarGroupLabel
           asChild
           className="group/label w-full text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
         >
           <SidebarGroupContent className="gap-2">
             <Sparkles /> Summerize your tasks
           </SidebarGroupContent>
-        </SidebarGroupLabel>
+        </SidebarGroupLabel> */}
         <Collapsible defaultOpen className="group/collapsible">
           <SidebarGroupLabel
             asChild

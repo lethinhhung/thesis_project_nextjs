@@ -15,7 +15,8 @@ import { Course as CourseInterface } from "@/interfaces/course";
 export function NavCourses({ courses }: { courses?: CourseInterface[] }) {
   const router = useRouter();
   return (
-    <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+    // <SidebarGroup className="group-data-[collapsible=icon]:hidden">
+    <SidebarGroup>
       <SidebarGroupLabel>Recent courses</SidebarGroupLabel>
       <SidebarMenu>
         {courses
