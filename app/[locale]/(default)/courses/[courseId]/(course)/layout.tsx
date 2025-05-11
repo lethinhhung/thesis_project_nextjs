@@ -234,12 +234,14 @@ function Course({ children }: { children: React.ReactNode }) {
                 </DropdownMenuContent>
               </DropdownMenu>
 
-              <EditCourse
-                openEdit={openEdit}
-                setOpenEdit={setOpenEdit}
-                course={course}
-                fetchCourse={fetchCourse}
-              />
+              {course && (
+                <EditCourse
+                  openEdit={openEdit}
+                  setOpenEdit={setOpenEdit}
+                  course={course}
+                  fetchCourse={fetchCourse}
+                />
+              )}
 
               <Dialog open={openDetails} onOpenChange={setOpenDetails}>
                 <DialogContent>
