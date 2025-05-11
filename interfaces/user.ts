@@ -1,6 +1,6 @@
 export interface User {
+  _id: string;
   username: string;
-  password: string;
   email: string;
   role: string;
   profile?: {
@@ -12,4 +12,6 @@ export interface User {
     avatar: string;
     bio: string;
   };
+  createdAt: Date;
+  updatedAt: Date;
 }

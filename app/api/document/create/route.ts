@@ -28,7 +28,6 @@ export async function POST(req: NextRequest) {
 
     // Call backend API to get profile
     const response = await createDocumentAPI(token?.accessToken || "", form);
-
     if (response.status === 201 || response.status === 200) {
       if (response.data.success) {
         return NextResponse.json(

@@ -120,19 +120,20 @@ export function CreateNew() {
         (document) =>
           [
             "application/pdf", // .pdf
-            "application/msword", // .doc
-            "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
-            "application/vnd.ms-excel", // .xls
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xlsx
-            "application/vnd.ms-powerpoint", // .ppt
-            "application/vnd.openxmlformats-officedocument.presentationml.presentation", // .pptx
-            "text/plain", // .txt
-            "text/markdown", // .md
-            "application/rtf", // .rtf
+            // "application/msword", // .doc
+            // "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
+            // "application/vnd.ms-excel", // .xls
+            // "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xlsx
+            // "application/vnd.ms-powerpoint", // .ppt
+            // "application/vnd.openxmlformats-officedocument.presentationml.presentation", // .pptx
+            // "text/plain", // .txt
+            // "text/markdown", // .md
+            // "application/rtf", // .rtf
           ].includes(document.type),
         {
           message:
-            "Only PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, MD, and RTF files are allowed",
+            // "Only PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, MD, and RTF files are allowed",
+            "Only PDF file is allowed",
         }
       ),
   });
