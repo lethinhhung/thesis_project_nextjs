@@ -55,6 +55,7 @@ import { DocumentCard } from "@/components/document-card";
 import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
 import DocumentPreview from "@/components/document-preview";
 import { Document as DocumentInterface } from "@/interfaces/document";
+import { EditLesson } from "@/components/edit-lesson";
 
 function Lesson() {
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -63,6 +64,7 @@ function Lesson() {
   const [openDelete, setOpenDelete] = useState(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
   const [lesson, setLesson] = useState<LessonWithContent>();
   const [selectedDocument, setSelectedDocument] =
     useState<DocumentInterface | null>(null);
@@ -94,16 +96,22 @@ function Lesson() {
   };
 
   const fetchLesson = async () => {
-    const res = await fetch(`/api/lesson/${lessonId}`, {
-      method: "GET",
-    });
-    const response = await processResponse(res, {
-      success: false,
-      error: true,
-    });
+    try {
+      const res = await fetch(`/api/lesson/${lessonId}`, {
+        method: "GET",
+      });
+      const response = await processResponse(res, {
+        success: false,
+        error: true,
+      });
 
-    if (response.success) {
-      setLesson(response.data);
+      if (response.success) {
+        setLesson(response.data);
+      }
+    } catch (error) {
+      console.error("Error fetching lesson:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -141,7 +149,7 @@ function Lesson() {
   };
 
   useEffect(() => {
-    fetchLesson().then(() => setIsLoading(false));
+    fetchLesson();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -192,7 +200,9 @@ function Lesson() {
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                     <DropdownMenuSeparator />
 
-                    <DropdownMenuItem>Edit</DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setOpenEdit(true)}>
+                      Edit
+                    </DropdownMenuItem>
 
                     <DropdownMenuItem
                       variant="destructive"
@@ -236,6 +246,13 @@ function Lesson() {
                     </DialogFooter>
                   </DialogContent>
                 </Dialog>
+
+                <EditLesson
+                  openEdit={openEdit}
+                  setOpenEdit={setOpenEdit}
+                  lesson={lesson}
+                  fetchLesson={fetchLesson}
+                />
               </div>
 
               {/* <CardDescription>
@@ -363,7 +380,6 @@ function Lesson() {
           setMarkDown={setMarkDown}
         />
       </div>
-
       <AnimatePresence initial={false}>
         {isChatOpen && (
           <motion.div

@@ -26,12 +26,17 @@ const updateLessonContentAPI = (
   content: string
 ) => {
   const URL_API = `/api/lesson/update-lesson-content/${lessonId}`;
-  return createAxiosInstance(token).put(URL_API, { content });
+  return createAxiosInstance(token).patch(URL_API, { content });
 };
 
 const deleteLessonAPI = (token: string, lessonId: string) => {
   const URL_API = `/api/lesson/delete-lesson/${lessonId}`;
   return createAxiosInstance(token).delete(URL_API);
+};
+
+const updateLessonAPI = (token: string, lessonId: string, title: string) => {
+  const URL_API = `/api/lesson/update-lesson/${lessonId}`;
+  return createAxiosInstance(token).patch(URL_API, { title });
 };
 
 export {
@@ -40,4 +45,5 @@ export {
   getAllLessonsAPI,
   updateLessonContentAPI,
   deleteLessonAPI,
+  updateLessonAPI,
 };

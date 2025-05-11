@@ -28,7 +28,7 @@ import {
   insertQuote,
   schema,
 } from "./blocknote";
-import { LessonContent } from "@/interfaces/lesson";
+import { LessonWithContent } from "@/interfaces/lesson";
 import { processResponse } from "@/lib/response-process";
 import { useDebounce } from "@/hooks/use-debounce";
 import { toast } from "sonner";
@@ -95,7 +95,7 @@ const Editor = ({
   markDown,
   setMarkDown,
 }: {
-  lesson?: LessonContent;
+  lesson?: LessonWithContent;
   isChatOpen: boolean;
   setIsChatOpen: (value: boolean) => void;
   markDown: string;
@@ -200,7 +200,7 @@ const Editor = ({
       };
 
       const res = await fetch(`/api/lesson/update-content/${lesson?._id}`, {
-        method: "PUT",
+        method: "PATCH",
         body: JSON.stringify(submitting),
       });
       const response = await processResponse(res, {

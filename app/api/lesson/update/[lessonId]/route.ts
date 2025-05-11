@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
-import { updateLessonContentAPI } from "@/lib/services/lesson.service";
+import { updateLessonAPI } from "@/lib/services/lesson.service";
 
 export async function PATCH(
   req: NextRequest,
@@ -42,9 +42,9 @@ export async function PATCH(
       );
     }
 
-    const lesson = await req.json();
+    const { title } = await req.json();
 
-    if (!lesson || !lesson.content) {
+    if (!title) {
       return NextResponse.json(
         {
           success: false,
@@ -58,10 +58,10 @@ export async function PATCH(
       );
     }
 
-    const response = await updateLessonContentAPI(
+    const response = await updateLessonAPI(
       token?.accessToken || "",
       lessonId,
-      lesson.content
+      title
     );
 
     if (response.status === 201 || response.status === 200) {

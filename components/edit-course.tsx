@@ -43,7 +43,7 @@ export function EditCourse({
 }: {
   openEdit: boolean;
   setOpenEdit: (open: boolean) => void;
-  course?: CourseInterface;
+  course: CourseInterface;
   fetchCourse: () => void;
 }) {
   const [emoji, setEmoji] = useState<string | null>(
