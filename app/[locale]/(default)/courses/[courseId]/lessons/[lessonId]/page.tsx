@@ -52,11 +52,9 @@ import {
 import { CreateNewSmall } from "@/components/create-new-small";
 import { DocumentCardSkeleton } from "@/components/skeleton/document-skeleton";
 import { DocumentCard } from "@/components/document-card";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
+import { Collapsible, CollapsibleContent } from "@/components/ui/collapsible";
+import DocumentPreview from "@/components/document-preview";
+import { Document as DocumentInterface } from "@/interfaces/document";
 
 function Lesson() {
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -66,6 +64,9 @@ function Lesson() {
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [lesson, setLesson] = useState<LessonWithContent>();
+  const [selectedDocument, setSelectedDocument] =
+    useState<DocumentInterface | null>(null);
+  const [openDocumentPreview, setOpenDocumentPreview] = useState(false);
   const params = useParams();
   const router = useRouter();
   const lessonId = params.lessonId as string;
@@ -92,7 +93,7 @@ function Lesson() {
       });
   };
 
-  const fetchLessons = async () => {
+  const fetchLesson = async () => {
     const res = await fetch(`/api/lesson/${lessonId}`, {
       method: "GET",
     });
@@ -134,8 +135,13 @@ function Lesson() {
     setIsDeleteLoading(false);
   };
 
+  const handleDocumentSelect = (document: DocumentInterface) => {
+    setSelectedDocument(document);
+    setOpenDocumentPreview(true);
+  };
+
   useEffect(() => {
-    fetchLessons().then(() => setIsLoading(false));
+    fetchLesson().then(() => setIsLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -285,7 +291,9 @@ function Lesson() {
                           className="break-inside-avoid-column"
                           key={index}
                           document={document}
-                          onClick={() => {}}
+                          onClick={() => {
+                            handleDocumentSelect(document);
+                          }}
                         />
                       ))
                     ) : (
@@ -361,6 +369,13 @@ function Lesson() {
           </motion.div>
         )}
       </AnimatePresence>
+      <DocumentPreview
+        open={openDocumentPreview}
+        onOpenChange={setOpenDocumentPreview}
+        document={selectedDocument}
+        fetchDocuments={fetchLesson}
+        responsive={false}
+      />
     </div>
   );
 }

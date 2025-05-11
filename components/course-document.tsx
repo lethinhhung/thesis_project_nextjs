@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import DocumentPreviewMobile from "./document-preview-mobile";
+import DocumentPreview from "./document-preview";
 import SortButton from "./sort-button";
 import { Button } from "./ui/button";
 import { DocumentCard } from "./document-card";
@@ -31,11 +31,12 @@ function CourseDocument({ documents }: { documents: Document[] }) {
         </div>
       </div>
 
-      <DocumentPreviewMobile
+      <DocumentPreview
         open={openDocumentPreview}
         onOpenChange={setOpenDocumentPreview}
         document={selectedDocument}
         fetchDocuments={fetchDocuments}
+        responsive={false}
       />
 
       <div className="w-full flex grid grid-cols-1 sm:px-2 md:grid-cols-2 2xl:grid-cols-3 gap-4">

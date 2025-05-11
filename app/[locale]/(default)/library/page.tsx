@@ -2,7 +2,6 @@
 
 import { DocumentCard } from "@/components/document-card";
 import DocumentPreview from "@/components/document-preview";
-import DocumentPreviewMobile from "@/components/document-preview-mobile";
 import SearchBarWithTags from "@/components/search-bar-with-tags";
 import { useEffect, useState } from "react";
 import { Document } from "@/interfaces/document";
@@ -101,19 +100,13 @@ function Library() {
           </div>
         )}
 
-        <div className="w-full h-full lg:hidden col-span-full">
-          <DocumentPreviewMobile
+        <div className="w-full h-full hidden lg:flex col-span-1">
+          <DocumentPreview
             open={openDocumentPreview}
             onOpenChange={setOpenDocumentPreview}
             document={selectedDocument}
             fetchDocuments={fetchDocuments}
-          />
-        </div>
-
-        <div className="w-full h-full hidden lg:flex col-span-1">
-          <DocumentPreview
-            fetchDocuments={fetchDocuments}
-            document={selectedDocument}
+            responsive={true}
           />
         </div>
       </div>

@@ -3,13 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import { Document as DocumentInterface } from "@/interfaces/document";
 import SortButton from "@/components/sort-button";
-import DocumentPreviewMobile from "@/components/document-preview-mobile";
 import { DocumentCard } from "@/components/document-card";
 import { scrollToTabTop } from "@/lib/scrollToTabTop";
 import { CreateNewSmall } from "@/components/create-new-small";
 import { useParams } from "next/navigation";
 import { processResponse } from "@/lib/response-process";
 import { DocumentCardSkeleton } from "@/components/skeleton/document-skeleton";
+import DocumentPreview from "@/components/document-preview";
 
 function Documents() {
   const [isLoading, setIsLoading] = useState(true);
@@ -66,11 +66,12 @@ function Documents() {
         </div>
       </div>
 
-      <DocumentPreviewMobile
+      <DocumentPreview
         open={openDocumentPreview}
         onOpenChange={setOpenDocumentPreview}
         document={selectedDocument}
         fetchDocuments={fetchDocuments}
+        responsive={false}
       />
 
       <div className="w-full flex grid grid-cols-1 sm:px-2 md:grid-cols-2 2xl:grid-cols-3 gap-4">
