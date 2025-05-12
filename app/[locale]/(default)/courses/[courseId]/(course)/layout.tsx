@@ -10,7 +10,7 @@ import {
   Loader,
   MoreHorizontal,
   Search,
-  Sparkles,
+  // Sparkles,
   SquareLibrary,
   TableOfContents,
 } from "lucide-react";
@@ -146,6 +146,20 @@ function Course({ children }: { children: React.ReactNode }) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    const currentTab = pathname.includes("/lessons")
+      ? "lessons"
+      : pathname.includes("/documents")
+      ? "documents"
+      : pathname.includes("/tests")
+      ? "tests"
+      : pathname.includes("/ask-ai")
+      ? "ask"
+      : "dashboard";
+
+    setTab(currentTab);
+  }, [pathname]);
 
   if (isLoading) return <CourseSkeleton />;
 
@@ -407,7 +421,7 @@ function Course({ children }: { children: React.ReactNode }) {
               <Folder />
               <div className="hidden lg:flex">Tests & Projects</div>
             </TabsTrigger>
-            <TabsTrigger
+            {/* <TabsTrigger
               onClick={() => {
                 router.push(`/courses/${courseId}/ask-ai`);
                 // scrollToTabTop();
@@ -416,7 +430,7 @@ function Course({ children }: { children: React.ReactNode }) {
             >
               <Sparkles />
               <div className="hidden lg:flex">Ask AI</div>
-            </TabsTrigger>
+            </TabsTrigger> */}
           </TabsList>
 
           <CollapsibleTrigger asChild>

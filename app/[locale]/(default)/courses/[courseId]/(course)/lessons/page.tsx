@@ -3,7 +3,7 @@
 import { CreateNewSmall } from "@/components/create-new-small";
 import { LessonCard } from "@/components/lesson-card";
 import { LessonCardRecentSkeleton } from "@/components/skeleton/lesson-card-recent-skeleton";
-import SortButton from "@/components/sort-button";
+// import SortButton from "@/components/sort-button";
 import { LessonCard as LessonCardInterface } from "@/interfaces/lesson";
 import { processResponse } from "@/lib/response-process";
 import { scrollToTabTop } from "@/lib/scrollToTabTop";
@@ -50,7 +50,7 @@ function Lessons() {
           Lessons ({lessons.length})
         </h4>
         <div className="flex gap-2 items-center">
-          <SortButton variant={"secondary"} />
+          {/* <SortButton variant={"secondary"} /> */}
 
           <CreateNewSmall type="lesson" courseId={courseId} />
         </div>

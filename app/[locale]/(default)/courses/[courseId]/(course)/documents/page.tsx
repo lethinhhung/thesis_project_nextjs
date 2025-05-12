@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Document as DocumentInterface } from "@/interfaces/document";
-import SortButton from "@/components/sort-button";
+// import SortButton from "@/components/sort-button";
 import { DocumentCard } from "@/components/document-card";
 import { scrollToTabTop } from "@/lib/scrollToTabTop";
 import { CreateNewSmall } from "@/components/create-new-small";
@@ -56,7 +56,7 @@ function Documents() {
           Documents ({documents?.length})
         </h4>
         <div className="flex gap-2 items-center">
-          <SortButton variant={"secondary"} />
+          {/* <SortButton variant={"secondary"} /> */}
 
           <CreateNewSmall
             type="document"

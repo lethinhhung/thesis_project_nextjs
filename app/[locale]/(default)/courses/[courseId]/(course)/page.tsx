@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
-import { notFound, useParams } from "next/navigation";
+import { notFound, useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Course as CourseInterface } from "@/interfaces/course";
 import { processResponse } from "@/lib/response-process";
@@ -21,6 +21,7 @@ function CourseDashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const [course, setCourse] = useState<CourseInterface>();
   const tabTop = useRef<HTMLDivElement>(null);
+  const router = useRouter();
 
   const fetchCourse = async () => {
     const res = await fetch(`/api/course/${courseId}`, {
@@ -76,7 +77,11 @@ function CourseDashboard() {
                 <CardDescription>Description</CardDescription>
               </CardHeader>
               <div className="hidden sm:flex pr-6">
-                <Button size={"icon"} variant={"ghost"}>
+                <Button
+                  size={"icon"}
+                  variant={"ghost"}
+                  onClick={() => router.push(`/courses/${courseId}/lessons`)}
+                >
                   <ArrowUpRight />
                 </Button>
               </div>
@@ -101,7 +106,11 @@ function CourseDashboard() {
                 <CardDescription>Description</CardDescription>
               </CardHeader>
               <div className="hidden sm:flex pr-6">
-                <Button size={"icon"} variant={"ghost"}>
+                <Button
+                  size={"icon"}
+                  variant={"ghost"}
+                  onClick={() => router.push(`/courses/${courseId}/documents`)}
+                >
                   <ArrowUpRight />
                 </Button>
               </div>
@@ -126,7 +135,14 @@ function CourseDashboard() {
                 <CardDescription>Description</CardDescription>
               </CardHeader>
               <div className="hidden sm:flex pr-6">
-                <Button size={"icon"} variant={"ghost"}>
+                <Button
+                  size={"icon"}
+                  variant={"ghost"}
+                  onClick={() => {
+                    router.push(`/courses/${courseId}/tests`);
+                    // scrollToTabTop();
+                  }}
+                >
                   <ArrowUpRight />
                 </Button>
               </div>
@@ -151,7 +167,14 @@ function CourseDashboard() {
                 <CardDescription>Description</CardDescription>
               </CardHeader>
               <div className="hidden sm:flex pr-6">
-                <Button size={"icon"} variant={"ghost"}>
+                <Button
+                  size={"icon"}
+                  variant={"ghost"}
+                  onClick={() => {
+                    router.push(`/courses/${courseId}/tests`);
+                    // scrollToTabTop();
+                  }}
+                >
                   <ArrowUpRight />
                 </Button>
               </div>
@@ -168,7 +191,7 @@ function CourseDashboard() {
             </CardContent>
           </Card>
         </div>
-        <div className="w-full flex justify-center col-span-2 lg:col-span-3 xl:col-span-4">
+        {/* <div className="w-full flex justify-center col-span-2 lg:col-span-3 xl:col-span-4">
           <Card className="w-full">
             <div className="flex justify-between items-center">
               <div className="flex">
@@ -214,7 +237,7 @@ function CourseDashboard() {
               </Card>
             </CardContent>
           </Card>
-        </div>
+        </div> */}
       </div>
     </div>
   );
