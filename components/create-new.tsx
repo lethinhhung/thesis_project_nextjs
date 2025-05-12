@@ -6,6 +6,7 @@ import {
   LibraryBig,
   Loader,
   Plus,
+  RefreshCcw,
   Sparkles,
 } from "lucide-react";
 import { Button } from "./ui/button";
@@ -26,12 +27,13 @@ import {
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "./ui/dialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { processResponse } from "@/lib/response-process";
@@ -56,6 +58,8 @@ import { SheetDescription } from "./ui/sheet";
 import { getDocumentMeta } from "@/lib/getDocumentMeta";
 import { Badge } from "./ui/badge";
 import { Tag } from "lucide-react";
+import { TagWithTotalCourse } from "@/interfaces/tag";
+import { cn } from "@/lib/utils";
 
 const createItems = [
   { title: "Course", type: "course", icon: <Briefcase /> },
@@ -73,6 +77,12 @@ export function CreateNew() {
   const [document, setDocument] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isOpenEmoji, setIsOpenEmoji] = useState(false);
+
+  const [tagsOpen, setTagsOpen] = useState(false);
+  const [isTagsLoading, setIsTagsLoading] = useState(false);
+  const [tags, setTags] = useState<TagWithTotalCourse[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
   const isMobile = useIsMobile();
   const theme = useTheme();
 
@@ -83,9 +93,34 @@ export function CreateNew() {
       setEmoji("📖");
       setDocument(null);
       setIsLoading(false);
+      setSelectedTags([]);
+      setTagsOpen(false);
+
       courseForm.reset();
       documentForm.reset();
     }, 100);
+  };
+
+  const handleTagsChange = (tagTitle: string) => {
+    const newSelectedTags = selectedTags.includes(tagTitle)
+      ? selectedTags.filter((t) => t !== tagTitle)
+      : [...selectedTags, tagTitle];
+
+    setSelectedTags(newSelectedTags);
+
+    console.log("Selected tags:", newSelectedTags);
+
+    // const params = new URLSearchParams(searchParams);
+    // if (newSelectedTags.length > 0) {
+    //   params.set("tags", newSelectedTags.join(","));
+    // } else {
+    //   params.delete("tags");
+    // }
+    // params.set("page", "1");
+    // params.set("limit", "12");
+    // if (!params.get("sortBy")) params.set("sortBy", "title");
+    // if (!params.get("order")) params.set("order", "asc");
+    // router.push(`/courses/search?${params.toString()}`);
   };
 
   const courseFormSchema = z.object({
@@ -176,6 +211,7 @@ export function CreateNew() {
     setIsLoading(true);
     const submitting = {
       ...values,
+      tags: selectedTags,
       aiGenerated: false,
       emoji: emoji,
     };
@@ -245,6 +281,28 @@ export function CreateNew() {
       reset(false);
     }
   };
+
+  const fetchTags = async () => {
+    setIsTagsLoading(true);
+    const res = await fetch(`/api/tag/get-all`, {
+      method: "GET",
+    });
+    const response = await processResponse(res, {
+      success: false,
+      error: true,
+    });
+
+    if (response.success) {
+      setTags(response.data);
+    } else {
+      setTags([]);
+    }
+    setIsTagsLoading(false);
+  };
+
+  useEffect(() => {
+    fetchTags();
+  }, []);
 
   return (
     <TooltipProvider>
@@ -344,6 +402,77 @@ export function CreateNew() {
                               {...field}
                             />
                           </FormControl>
+
+                          <Dialog open={tagsOpen} onOpenChange={setTagsOpen}>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <DialogTrigger asChild>
+                                  <Button
+                                    size={"icon"}
+                                    variant={"ghost"}
+                                    className="border border-dashed relative"
+                                  >
+                                    {isLoading ? (
+                                      <Loader className="animate-spin" />
+                                    ) : (
+                                      <>
+                                        <Tag />
+                                        {selectedTags.length > 0 && (
+                                          <div className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center">
+                                            {selectedTags.length}
+                                          </div>
+                                        )}
+                                      </>
+                                    )}
+                                  </Button>
+                                </DialogTrigger>
+                              </TooltipTrigger>
+                              <TooltipContent>Tags</TooltipContent>
+                            </Tooltip>
+                            <DialogContent>
+                              <DialogHeader>
+                                <DialogTitle>Tags</DialogTitle>
+                                <DialogDescription>
+                                  Filter by tags
+                                </DialogDescription>
+                              </DialogHeader>
+                              <div className="w-full flex flex-wrap gap-2">
+                                {tags.map((tag) => (
+                                  <Badge
+                                    onClick={() => handleTagsChange(tag._id)}
+                                    variant={
+                                      selectedTags.includes(tag._id)
+                                        ? "default"
+                                        : "secondary"
+                                    }
+                                    className={cn(
+                                      "cursor-pointer transition-colors break-all line-clamp-1 max-w-60",
+                                      selectedTags.includes(tag._id)
+                                        ? "hover:bg-primary/80"
+                                        : "hover:bg-secondary/80"
+                                    )}
+                                    key={tag._id}
+                                  >
+                                    {tag.title} ({tag.totalCourses})
+                                  </Badge>
+                                ))}
+                              </div>
+                              <DialogFooter>
+                                <Button
+                                  variant={"ghost"}
+                                  size={"sm"}
+                                  type="button"
+                                  onClick={() => fetchTags()}
+                                >
+                                  {isTagsLoading ? (
+                                    <Loader className="animate-spin" />
+                                  ) : (
+                                    <RefreshCcw />
+                                  )}
+                                </Button>
+                              </DialogFooter>
+                            </DialogContent>
+                          </Dialog>
                         </div>
                         <FormMessage />
                       </FormItem>
