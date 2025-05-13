@@ -29,7 +29,7 @@ function CourseDashboard() {
     });
     const response = await processResponse(res, {
       success: false,
-      error: true,
+      error: false,
     });
 
     if (response.success) {

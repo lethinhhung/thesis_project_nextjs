@@ -11,7 +11,8 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const session = await getServerSession(authOptions);
   const accessToken = session?.accessToken || "";
-  const response = await getCourseAPI(accessToken, params.courseId);
+  const { courseId } = await params;
+  const response = await getCourseAPI(accessToken, courseId);
 
   const emoji = response?.data?.data?.customization.emoji || "📘";
   const svgFavicon = `
