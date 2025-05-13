@@ -45,8 +45,20 @@ cp .env.example .env.local
 ```
 
 4. Update environment variables in `.env.local`
+Create a `.env` file in the root directory with the following variables:
 
-5. Start development server
+```env
+# Authentication
+NEXTAUTH_SECRET=your_nextauth_secret_key
+
+# Backend API
+BACKEND_URL=your_backend_url (default: http://localhost:8080)
+
+# Optional: Service URLs
+(Under development)
+```
+
+6. Start development server
 ```bash
 npm run dev
 # or
