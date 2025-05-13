@@ -75,7 +75,6 @@ export function EditCourse({
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("Submitting...", values);
     setIsLoading(true);
     const submitting = {
       ...values,

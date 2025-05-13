@@ -74,7 +74,6 @@ export default function Breadcrumbs() {
         success: false,
         error: true,
       });
-      console.log("Course data:", response);
 
       if (response.success) {
         setCourse(response.data);
@@ -89,7 +88,6 @@ export default function Breadcrumbs() {
         success: false,
         error: true,
       });
-      console.log("Lesson data:", response);
 
       if (response.success) {
         setLesson(response.data);

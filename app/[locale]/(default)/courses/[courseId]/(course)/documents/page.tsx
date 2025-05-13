@@ -38,7 +38,6 @@ function Documents() {
     if (response.success) {
       setDocuments(response.data);
     }
-    console.log("Documents data:", response.data);
   };
 
   useEffect(() => {

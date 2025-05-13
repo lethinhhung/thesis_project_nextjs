@@ -41,7 +41,6 @@ export async function GET(req: NextRequest) {
     };
 
     const response = await searchCoursesAPI(token?.accessToken || "", params);
-    console.log("Search response", response.data);
 
     if (response.status === 200) {
       if (response.data.success) {

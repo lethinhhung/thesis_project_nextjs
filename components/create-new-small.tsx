@@ -123,7 +123,6 @@ export function CreateNewSmall({
   });
 
   const onLessonSubmit = async (values: z.infer<typeof lessonSchema>) => {
-    console.log("Submitting...", values);
     setIsLoading(true);
     const submitting = {
       ...values,
@@ -150,7 +149,6 @@ export function CreateNewSmall({
   };
 
   const onDocumentSubmit = async (values: z.infer<typeof documentSchema>) => {
-    console.log("Submitting...", values);
     setIsLoading(true);
     const submitting = new FormData();
     submitting.append("title", values.title);

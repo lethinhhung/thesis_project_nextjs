@@ -26,7 +26,6 @@ function Lessons() {
       success: false,
       error: false,
     });
-    console.log("Course data:", response);
 
     if (response.success) {
       setLessons(response.data);

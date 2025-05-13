@@ -108,8 +108,6 @@ export function CreateNew() {
 
     setSelectedTags(newSelectedTags);
 
-    console.log("Selected tags:", newSelectedTags);
-
     // const params = new URLSearchParams(searchParams);
     // if (newSelectedTags.length > 0) {
     //   params.set("tags", newSelectedTags.join(","));

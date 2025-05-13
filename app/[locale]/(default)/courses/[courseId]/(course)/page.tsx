@@ -31,7 +31,6 @@ function CourseDashboard() {
       success: false,
       error: true,
     });
-    console.log("Course data:", response);
 
     if (response.success) {
       setCourse(response.data);

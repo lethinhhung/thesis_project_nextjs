@@ -35,7 +35,6 @@ function Library() {
       success: false,
       error: false,
     });
-    console.log("Documents data:", response);
 
     if (response.success) {
       setDocuments(response.data);
