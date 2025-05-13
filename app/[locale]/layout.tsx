@@ -32,6 +32,9 @@ export default async function RootLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning className="scrollbar">
+      <head>
+        <meta name="apple-mobile-web-app-title" content="Notebok" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased ${
           locale == "en" && "font-[Geist]"
