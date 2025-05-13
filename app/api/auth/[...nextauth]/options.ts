@@ -54,25 +54,37 @@ export const authOptions: AuthOptions = {
   },
   callbacks: {
     async jwt({ token, user }) {
-      if (user) {
-        token = {
-          ...token,
-          accessToken: user.accessToken,
-          image: user.image,
-        };
-      }
+      // if (user) {
+      //   token = {
+      //     ...token,
+      //     accessToken: user.accessToken,
+      //     image: user.image,
+      //   };
+      // }
 
+      // return token;
+      if (user) {
+        token.accessToken = user.accessToken;
+      }
       return token;
     },
     async session({ session, token }) {
-      const updatedUser = await getProfileAPI(token.accessToken as string); // Giả sử accessToken có sẵn trong token
-      if (updatedUser?.status === 200 && updatedUser.data) {
-        session.user = {
-          ...session.user,
-          image: updatedUser.data.data.profile.avatar,
-        }; // Cập nhật thông tin user trong session
-      }
+      // const updatedUser = await getProfileAPI(token.accessToken as string); // Giả sử accessToken có sẵn trong token
+      // if (updatedUser?.status === 200 && updatedUser.data) {
+      //   session.user = {
+      //     ...session.user,
+      //     image: updatedUser.data.data.profile.avatar,
+      //   };
+      // }
+      // return session;
 
+      const updatedUser = await getProfileAPI(token.accessToken as string);
+      if (updatedUser?.status === 200 && updatedUser.data) {
+        if (session.user) {
+          session.user.image = updatedUser.data.data.profile.avatar;
+        }
+      }
+      session.accessToken = token.accessToken;
       return session;
     },
   },

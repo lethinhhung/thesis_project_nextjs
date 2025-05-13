@@ -54,7 +54,7 @@ export function CourseCard({
       />
       <CardHeader>
         <CardTitle className="line-clamp-2 break-words inline flex items-center gap-2 leading-[1.3]">
-          {/* {course.emoji}  */}
+          {course.customization.emoji}
           {course.title}
           {course.status && <CompletedMark size={18} />}
         </CardTitle>

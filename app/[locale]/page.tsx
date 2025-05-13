@@ -1,6 +1,11 @@
 import Nav from "@/components/landing-page-nav";
 import Image from "next/image";
 
+export const metadata = {
+  title: "Notebok",
+  description: "Landing page",
+};
+
 export default function Landing() {
   return (
     <div className="w-full h-full">
