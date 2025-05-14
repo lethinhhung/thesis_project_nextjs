@@ -13,18 +13,71 @@ import {
 import CourseTestsChart from "@/components/course-tests-chart";
 import { CreateNewTestProject } from "@/components/create-new-test-project";
 import { useParams } from "next/navigation";
-
-const testsData = [
-  { test: "Essay", score: 9, date: "1/1/2021" },
-  { test: "Mid-term", score: 8, date: "1/3/2021" },
-  { test: "End-term", score: 10, date: "1/5/2021" },
-];
+import { Test as TestInterface } from "@/interfaces/test";
+import { useEffect, useRef, useState } from "react";
+import { scrollToTabTop } from "@/lib/scrollToTabTop";
+import { processResponse } from "@/lib/response-process";
+import { enUS as en } from "date-fns/locale/en-US";
+import { vi } from "date-fns/locale/vi";
+import { useLocale } from "next-intl";
+import { format } from "date-fns";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function Tests() {
+  const [isLoading, setIsLoading] = useState(true);
+  const [tests, setTests] = useState<TestInterface[]>([]);
   const params = useParams();
   const courseId = params.courseId as string;
+  const tabTop = useRef<HTMLDivElement>(null);
+  const locale = useLocale();
+  const dateFnsLocales = {
+    vi,
+    en,
+  };
+
+  const currentDateFnsLocale = dateFnsLocales[locale as "vi" | "en"] || vi;
+
+  const fetchLessons = async () => {
+    setIsLoading(true);
+    const res = await fetch(`/api/test/get-all/${courseId}`, {
+      method: "GET",
+    });
+    const response = await processResponse(res, {
+      success: false,
+      error: false,
+    });
+
+    if (response.success) {
+      setTests(response.data);
+    } else {
+      setTests([]);
+    }
+    setIsLoading(false);
+  };
+
+  useEffect(() => {
+    fetchLessons().then(() => scrollToTabTop(tabTop, 116));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (isLoading) {
+    return (
+      <div className="w-full flex p-2 md:p-4 flex-col gap-4">
+        <div className="w-full flex justify-between items-center sticky top-16">
+          <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
+            Tests & Projects
+          </h4>
+        </div>
+        <div className="w-full flex grid grid-cols-1 sm:px-2 lg:grid-cols-2 gap-4">
+          <Skeleton className="w-full h-[300px]" />
+          <Skeleton className="w-full h-[300px]" />
+        </div>
+      </div>
+    );
+  }
   return (
-    <div className="w-full flex p-2 md:p-4 flex-col gap-4">
+    <div className="w-full flex p-2 md:p-4 flex-col gap-4" ref={tabTop}>
       <div className="w-full flex justify-between items-center sticky top-16">
         <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
           Tests & Projects
@@ -32,7 +85,10 @@ function Tests() {
         <div className="flex gap-2 items-center">
           {/* <SortButton variant={"secondary"} /> */}
 
-          <CreateNewTestProject courseId={courseId} />
+          <CreateNewTestProject
+            courseId={courseId}
+            refetchData={fetchLessons}
+          />
         </div>
       </div>
       <div className="w-full flex grid grid-cols-1 sm:px-2 lg:grid-cols-2 gap-4">
@@ -46,15 +102,19 @@ function Tests() {
             </div>
           </CardHeader>
           <CardContent>
-            <CourseTestsChart data={testsData} />
+            <CourseTestsChart data={tests} />
           </CardContent>
           <CardContent className="space-y-4">
-            {testsData.map((test, index) => (
+            {tests.map((test, index) => (
               <Card key={index} className="p-4">
                 <div className="flex flex-row items-center justify-between">
                   <CardHeader className="px-2">
-                    <CardTitle>{test.test}</CardTitle>
-                    <CardDescription>{test.date}</CardDescription>
+                    <CardTitle>{test.title}</CardTitle>
+                    <CardDescription>
+                      {format(new Date(test?.date), "P", {
+                        locale: currentDateFnsLocale,
+                      })}
+                    </CardDescription>
                   </CardHeader>
                   <div className="px-2">
                     <h2 className="scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0">

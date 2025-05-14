@@ -7,6 +7,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
+import { Test as TestInterface } from "@/interfaces/test";
 
 const chartConfig = {
   score: {
@@ -15,17 +16,13 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-function CourseTestsChart({
-  data,
-}: {
-  data: { test: string; score: number }[];
-}) {
+function CourseTestsChart({ data }: { data: TestInterface[] }) {
   return (
     <ChartContainer config={chartConfig} className="min-h-30 max-h-50 w-full">
       <LineChart className="p-1" accessibilityLayer data={data}>
-        <CartesianGrid vertical={false} />
+        <CartesianGrid vertical />
         <XAxis
-          dataKey="test"
+          dataKey="title"
           tickLine={false}
           axisLine={false}
           tickFormatter={(value) => value.slice(0, 10)}

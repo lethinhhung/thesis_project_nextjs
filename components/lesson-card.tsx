@@ -12,7 +12,6 @@ import { useRouter } from "next/navigation";
 import { format } from "date-fns";
 import { enUS as en } from "date-fns/locale/en-US";
 import { vi } from "date-fns/locale/vi";
-import { capitalizeFirstLetter } from "@/lib/capitalize-first-letter";
 import { useLocale } from "next-intl";
 
 export function LessonCard({
@@ -51,11 +50,9 @@ export function LessonCard({
         </CardDescription>
         <CardDescription className="line-clamp-1">
           {/* {lesson?.updatedAt?.toString()} */}
-          {capitalizeFirstLetter(
-            format(new Date(lesson?.createdAt), "P", {
-              locale: currentDateFnsLocale,
-            })
-          )}
+          {format(new Date(lesson?.createdAt), "P", {
+            locale: currentDateFnsLocale,
+          })}
         </CardDescription>
       </CardHeader>
     </Card>
