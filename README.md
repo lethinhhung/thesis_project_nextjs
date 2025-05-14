@@ -77,7 +77,6 @@ NextJS/
 ├── interfaces/         # TypeScript interfaces
 ├── lib/               # Utility functions
 ├── public/           # Static files
-└── styles/          # Global styles
 ```
 
 ## API Documentation 
