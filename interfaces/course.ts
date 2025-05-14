@@ -1,3 +1,6 @@
+import { Project } from "./project";
+import { Test } from "./test";
+
 export interface CreateCourse {
   title: string;
   description: string;
@@ -13,6 +16,10 @@ export interface Course {
     emoji: string;
     color: string;
     cover: string;
+  };
+  progress: {
+    tests: Test[];
+    projects: Project[];
   };
   tags: [
     {

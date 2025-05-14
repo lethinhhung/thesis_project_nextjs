@@ -90,7 +90,11 @@ function CourseDashboard() {
                 {course?.lessons.length}
               </h2>
               <div className="flex sm:hidden">
-                <Button size={"icon"} variant={"ghost"}>
+                <Button
+                  size={"icon"}
+                  variant={"ghost"}
+                  onClick={() => router.push(`/courses/${courseId}/lessons`)}
+                >
                   <ArrowRight />
                 </Button>
               </div>
@@ -119,7 +123,11 @@ function CourseDashboard() {
                 {course?.refDocuments.length}
               </h2>
               <div className="flex sm:hidden">
-                <Button size={"icon"} variant={"ghost"}>
+                <Button
+                  size={"icon"}
+                  variant={"ghost"}
+                  onClick={() => router.push(`/courses/${courseId}/documents`)}
+                >
                   <ArrowRight />
                 </Button>
               </div>
@@ -148,10 +156,14 @@ function CourseDashboard() {
             </div>
             <CardContent className="flex items-center justify-between">
               <h2 className="scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0">
-                3
+                {course?.progress.tests.length}
               </h2>
               <div className="flex sm:hidden">
-                <Button size={"icon"} variant={"ghost"}>
+                <Button
+                  size={"icon"}
+                  variant={"ghost"}
+                  onClick={() => router.push(`/courses/${courseId}/tests`)}
+                >
                   <ArrowRight />
                 </Button>
               </div>
@@ -180,10 +192,14 @@ function CourseDashboard() {
             </div>
             <CardContent className="flex items-center justify-between">
               <h2 className="scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0">
-                2
+                {course?.progress.projects.length}
               </h2>
               <div className="flex sm:hidden">
-                <Button size={"icon"} variant={"ghost"}>
+                <Button
+                  size={"icon"}
+                  variant={"ghost"}
+                  onClick={() => router.push(`/courses/${courseId}/tests`)}
+                >
                   <ArrowRight />
                 </Button>
               </div>
