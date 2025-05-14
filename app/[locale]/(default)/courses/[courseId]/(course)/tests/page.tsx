@@ -1,6 +1,6 @@
 "use client";
 
-import { Settings } from "lucide-react";
+import { Edit, Loader, Settings, Trash } from "lucide-react";
 // import SortButton from "@/components/sort-button";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,9 +22,21 @@ import { vi } from "date-fns/locale/vi";
 import { useLocale } from "next-intl";
 import { format } from "date-fns";
 import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 function Tests() {
   const [isLoading, setIsLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [test, setTest] = useState<TestInterface>();
+  const [isActionsLoading, setIsActionsLoading] = useState(false);
   const [tests, setTests] = useState<TestInterface[]>([]);
   const params = useParams();
   const courseId = params.courseId as string;
@@ -37,26 +49,50 @@ function Tests() {
 
   const currentDateFnsLocale = dateFnsLocales[locale as "vi" | "en"] || vi;
 
-  const fetchLessons = async () => {
-    setIsLoading(true);
-    const res = await fetch(`/api/test/get-all/${courseId}`, {
-      method: "GET",
-    });
-    const response = await processResponse(res, {
-      success: false,
-      error: false,
-    });
+  const fecthTests = async () => {
+    try {
+      setIsLoading(true);
+      const res = await fetch(`/api/test/get-all/${courseId}`, {
+        method: "GET",
+      });
+      const response = await processResponse(res, {
+        success: false,
+        error: false,
+      });
 
-    if (response.success) {
-      setTests(response.data);
-    } else {
-      setTests([]);
+      if (response.success) {
+        setTests(response.data);
+      } else {
+        setTests([]);
+      }
+    } catch (error) {
+      console.error("Error fetching tests:", error);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
+  };
+
+  const deleteTest = async (testId: string) => {
+    try {
+      setIsActionsLoading(true);
+      const res = await fetch(`/api/test/delete/${testId}`, {
+        method: "DELETE",
+      });
+      const response = await processResponse(res);
+
+      if (response.success) {
+        fecthTests();
+      }
+    } catch (error) {
+      console.error("Error deleting test:", error);
+    } finally {
+      setOpenDelete(false);
+      setIsActionsLoading(false);
+    }
   };
 
   useEffect(() => {
-    fetchLessons().then(() => scrollToTabTop(tabTop, 116));
+    fecthTests().then(() => scrollToTabTop(tabTop, 116));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -85,10 +121,7 @@ function Tests() {
         <div className="flex gap-2 items-center">
           {/* <SortButton variant={"secondary"} /> */}
 
-          <CreateNewTestProject
-            courseId={courseId}
-            refetchData={fetchLessons}
-          />
+          <CreateNewTestProject courseId={courseId} refetchData={fecthTests} />
         </div>
       </div>
       <div className="w-full flex grid grid-cols-1 sm:px-2 lg:grid-cols-2 gap-4">
@@ -96,8 +129,17 @@ function Tests() {
           <CardHeader>
             <div className="flex flex-row items-center justify-between">
               <CardTitle>Tests</CardTitle>
-              <Button size={"sm"} variant={"ghost"}>
-                <Settings />
+              <Button
+                className={`${isEditing && "bg-secondary"}`}
+                size={"sm"}
+                variant={"ghost"}
+                onClick={() => setIsEditing(!isEditing)}
+              >
+                <Settings
+                  className={`transition-all duration-300 ${
+                    isEditing && "rotate-180"
+                  }`}
+                />
               </Button>
             </div>
           </CardHeader>
@@ -105,6 +147,39 @@ function Tests() {
             <CourseTestsChart data={tests} />
           </CardContent>
           <CardContent className="space-y-4">
+            <Dialog open={openDelete} onOpenChange={setOpenDelete}>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Delete this test?</DialogTitle>
+                  <DialogDescription>
+                    This action cannot be undone. This will permanently remove
+                    this test and all of its data from our servers.
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                  <Button
+                    type="button"
+                    variant={"outline"}
+                    onClick={() => setOpenDelete(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    type="submit"
+                    variant={"destructive"}
+                    onClick={() => deleteTest(test?._id || "")}
+                    className="min-w-20"
+                    disabled={isActionsLoading}
+                  >
+                    {isActionsLoading ? (
+                      <Loader className="animate-spin" />
+                    ) : (
+                      "Delete"
+                    )}
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
             {tests.map((test, index) => (
               <Card key={index} className="p-4">
                 <div className="flex flex-row items-center justify-between">
@@ -116,11 +191,29 @@ function Tests() {
                       })}
                     </CardDescription>
                   </CardHeader>
-                  <div className="px-2">
-                    <h2 className="scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0">
+
+                  {isEditing ? (
+                    <div className="px-2 flex gap-1 items-center">
+                      <Button variant={"ghost"} size={"sm"}>
+                        <Edit />
+                      </Button>
+
+                      <Button
+                        variant={"ghost"}
+                        size={"sm"}
+                        onClick={() => {
+                          setTest(test);
+                          setOpenDelete(true);
+                        }}
+                      >
+                        <Trash />
+                      </Button>
+                    </div>
+                  ) : (
+                    <h2 className="scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0 px-2">
                       {test.score}
                     </h2>
-                  </div>
+                  )}
                 </div>
               </Card>
             ))}
@@ -130,8 +223,16 @@ function Tests() {
           <CardHeader>
             <div className="flex flex-row items-center justify-between">
               <CardTitle>Projects</CardTitle>
-              <Button size={"sm"} variant={"ghost"}>
-                <Settings />
+              <Button
+                size={"sm"}
+                variant={"ghost"}
+                onClick={() => setIsEditing(!isEditing)}
+              >
+                <Settings
+                  className={`transition-all duration-300 ${
+                    isEditing && "rotate-180"
+                  }`}
+                />
               </Button>
             </div>
           </CardHeader>
