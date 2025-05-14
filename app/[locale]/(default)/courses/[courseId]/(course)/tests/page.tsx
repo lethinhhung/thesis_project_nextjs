@@ -148,122 +148,138 @@ function Tests() {
               </Button>
             </div>
           </CardHeader>
-          <CardContent>
-            <CourseTestsChart data={tests} />
-          </CardContent>
-          <CardContent className="space-y-4">
-            <Dialog open={openDelete} onOpenChange={setOpenDelete}>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Delete this test?</DialogTitle>
-                  <DialogDescription>
-                    This action cannot be undone. This will permanently remove
-                    this test and all of its data from our servers.
-                  </DialogDescription>
-                </DialogHeader>
-                <DialogFooter>
-                  <Button
-                    type="button"
-                    variant={"outline"}
-                    onClick={() => setOpenDelete(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    type="submit"
-                    variant={"destructive"}
-                    onClick={() => deleteTest(test?._id || "")}
-                    className="min-w-20"
-                    disabled={isActionsLoading}
-                  >
-                    {isActionsLoading ? (
-                      <Loader className="animate-spin" />
-                    ) : (
-                      "Delete"
-                    )}
-                  </Button>
-                </DialogFooter>
-              </DialogContent>
-            </Dialog>
-            {tests.map((test, index) => (
-              <HoverCard key={index}>
-                <HoverCardTrigger asChild>
-                  <Card key={index} className="p-4">
-                    <div className="flex flex-row items-center justify-between">
-                      <CardHeader className="px-2">
-                        <CardTitle>{test.title}</CardTitle>
-                        <CardDescription>
-                          {format(new Date(test?.date), "P", {
-                            locale: currentDateFnsLocale,
-                          })}
-                        </CardDescription>
-                      </CardHeader>
+          {tests.length == 0 ? (
+            <div className="col-span-full min-h-50 flex justify-center items-center flex-col gap-2">
+              <small className="text-sm font-medium leading-none">
+                No tests found
+              </small>
+            </div>
+          ) : (
+            <>
+              <CardContent>
+                <CourseTestsChart data={tests} />
+              </CardContent>
+              <CardContent className="space-y-4">
+                <Dialog open={openDelete} onOpenChange={setOpenDelete}>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Delete this test?</DialogTitle>
+                      <DialogDescription>
+                        This action cannot be undone. This will permanently
+                        remove this test and all of its data from our servers.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                      <Button
+                        type="button"
+                        variant={"outline"}
+                        onClick={() => setOpenDelete(false)}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        type="submit"
+                        variant={"destructive"}
+                        onClick={() => deleteTest(test?._id || "")}
+                        className="min-w-20"
+                        disabled={isActionsLoading}
+                      >
+                        {isActionsLoading ? (
+                          <Loader className="animate-spin" />
+                        ) : (
+                          "Delete"
+                        )}
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+                {tests.map((test, index) => (
+                  <HoverCard key={index}>
+                    <HoverCardTrigger asChild>
+                      <Card key={index} className="p-4">
+                        <div className="flex flex-row items-center justify-between">
+                          <CardHeader className="px-2">
+                            <CardTitle>{test.title}</CardTitle>
+                            <CardDescription>
+                              {format(new Date(test?.date), "P", {
+                                locale: currentDateFnsLocale,
+                              })}
+                            </CardDescription>
+                          </CardHeader>
 
-                      {isEditing ? (
-                        <div className="px-2 flex gap-1 items-center">
-                          <Button variant={"ghost"} size={"sm"}>
-                            <Edit />
-                          </Button>
+                          {isEditing ? (
+                            <div className="px-2 flex gap-1 items-center">
+                              <Button variant={"ghost"} size={"sm"}>
+                                <Edit />
+                              </Button>
 
-                          <Button
-                            variant={"ghost"}
-                            size={"sm"}
-                            onClick={() => {
-                              setTest(test);
-                              setOpenDelete(true);
-                            }}
-                          >
-                            <Trash />
-                          </Button>
+                              <Button
+                                variant={"ghost"}
+                                size={"sm"}
+                                onClick={() => {
+                                  setTest(test);
+                                  setOpenDelete(true);
+                                }}
+                              >
+                                <Trash />
+                              </Button>
+                            </div>
+                          ) : (
+                            <h2 className="scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0 px-2">
+                              {test.score}
+                            </h2>
+                          )}
                         </div>
-                      ) : (
-                        <h2 className="scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0 px-2">
-                          {test.score}
-                        </h2>
-                      )}
-                    </div>
-                  </Card>
-                </HoverCardTrigger>
-                <HoverCardContent>
-                  {" "}
-                  <div className="flex flex-col gap-4">
-                    <div className="space-y-1">
-                      <h4 className="font-medium leading-none">Description</h4>
-                      <p className="text-sm text-muted-foreground break-all">
-                        {test?.description}
-                      </p>
-                    </div>
-                    <div className="space-y-1">
-                      <h4 className="font-medium leading-none">Created At</h4>
-                      <p className="text-sm text-muted-foreground">
-                        {test?.createdAt
-                          ? format(new Date(test.createdAt), "PPPP", {
-                              locale: currentDateFnsLocale,
-                            })
-                          : "No date"}
-                      </p>
-                    </div>
-                    <div className="space-y-1">
-                      <h4 className="font-medium leading-none">Last updated</h4>
-                      <p className="text-sm text-muted-foreground">
-                        {test?.updatedAt
-                          ? format(new Date(test.updatedAt), "PPPP", {
-                              locale: currentDateFnsLocale,
-                            })
-                          : "No date"}
-                      </p>
-                    </div>
-                  </div>
-                </HoverCardContent>
-              </HoverCard>
-            ))}
-          </CardContent>
+                      </Card>
+                    </HoverCardTrigger>
+                    <HoverCardContent>
+                      <div className="flex flex-col gap-4">
+                        <div className="space-y-1">
+                          <h4 className="font-medium leading-none">
+                            Description
+                          </h4>
+                          <p className="text-sm text-muted-foreground break-all">
+                            {test?.description}
+                          </p>
+                        </div>
+                        <div className="space-y-1">
+                          <h4 className="font-medium leading-none">
+                            Created At
+                          </h4>
+                          <p className="text-sm text-muted-foreground">
+                            {test?.createdAt
+                              ? format(new Date(test.createdAt), "PPPP", {
+                                  locale: currentDateFnsLocale,
+                                })
+                              : "No date"}
+                          </p>
+                        </div>
+                        <div className="space-y-1">
+                          <h4 className="font-medium leading-none">
+                            Last updated
+                          </h4>
+                          <p className="text-sm text-muted-foreground">
+                            {test?.updatedAt
+                              ? format(new Date(test.updatedAt), "PPPP", {
+                                  locale: currentDateFnsLocale,
+                                })
+                              : "No date"}
+                          </p>
+                        </div>
+                      </div>
+                    </HoverCardContent>
+                  </HoverCard>
+                ))}
+              </CardContent>
+            </>
+          )}
         </Card>
         <Card>
           <CardHeader>
             <div className="flex flex-row items-center justify-between">
               <CardTitle>Projects</CardTitle>
               <Button
+                className={`${isEditing && "bg-secondary"}`}
                 size={"sm"}
                 variant={"ghost"}
                 onClick={() => setIsEditing(!isEditing)}

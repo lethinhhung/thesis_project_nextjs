@@ -12,12 +12,6 @@ import {
 } from "@/components/ui/card";
 
 import { BookOpen, Sparkles } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "./ui/tooltip";
 import { Document } from "@/interfaces/document";
 import Image from "next/image";
 import { format } from "date-fns";
@@ -99,16 +93,6 @@ function DocumentPreview({
               </div>
             </DrawerHeader>
             <div className="p-2 flex flex-col sm:flex-row items-center gap-1 sm:gap-2">
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button size={"icon"} variant={"ghost"}>
-                      <Sparkles />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Ask AI</TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
               <DeleteDocumentButton
                 variant="ghost"
                 documentId={document?._id}
@@ -213,21 +197,6 @@ function DocumentPreview({
             </CardContent>
             <CardFooter>
               <div className="w-full flex gap-2 justify-end">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        // disabled={!document?.status}
-                        size={"icon"}
-                        variant={"ghost"}
-                      >
-                        <Sparkles />
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>Ask AI</TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-
                 <DeleteDocumentButton
                   variant="ghost"
                   documentId={document._id}
