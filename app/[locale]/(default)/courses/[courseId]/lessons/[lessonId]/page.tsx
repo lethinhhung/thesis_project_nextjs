@@ -96,6 +96,7 @@ function Lesson() {
   };
 
   const fetchLesson = async () => {
+    setIsLoading(true);
     try {
       const res = await fetch(`/api/lesson/${lessonId}`, {
         method: "GET",
@@ -282,6 +283,7 @@ function Lesson() {
                     type="document"
                     courseId={courseId}
                     lessonId={lessonId}
+                    refetchData={fetchLesson}
                   />
                   <Button
                     variant={"ghost"}

@@ -17,6 +17,7 @@ import {
   Sun,
   Moon,
   SunMoon,
+  NotebookText,
 } from "lucide-react";
 
 import {
@@ -158,12 +159,8 @@ export default function SearchBarDialog({
   };
 
   const handleSearch = (searchValue: string) => {
-    // Reset result if input is empty
+    setIsLoading(true);
     if (searchValue === "") {
-      // setResult({
-      //   courses: [],
-      //   lessons: [],
-      // });
       setIsLoading(false);
       return;
     }
@@ -179,32 +176,25 @@ export default function SearchBarDialog({
         });
 
         if (response.success) {
-          setResult(response.data);
+          setResult({
+            courses: response.data?.courses ?? [],
+            lessons: response.data?.lessons ?? [],
+            documents: response.data?.documents ?? [],
+          });
         } else {
           console.error("Search failed:", response.error);
-          setResult({
-            courses: [],
-            lessons: [],
-            documents: [],
-          });
+          setResult({ courses: [], lessons: [], documents: [] });
         }
       } catch (error) {
         console.error("Search error:", error);
-        setResult({
-          courses: [],
-          lessons: [],
-          documents: [],
-        });
+        setResult({ courses: [], lessons: [], documents: [] });
       }
     };
 
-    fetchSearch().finally(() => {
-      setIsLoading(false);
-    });
+    fetchSearch().finally(() => setIsLoading(false));
   };
 
   useEffect(() => {
-    setIsLoading(true);
     const delayDebounce = setTimeout(() => {
       handleSearch(searchValue);
     }, 300);
@@ -214,8 +204,27 @@ export default function SearchBarDialog({
 
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
+      {/* <CommandInput
+        value={searchValue}
+        onValueChange={(v) => {
+          // Thay đổi logic xử lý input để loại bỏ khoảng trắng dư thừa
+          const trimmedValue = v.replace(/\s+/g, " ").trim();
+          setSearchValue(trimmedValue);
+          if (trimmedValue === "") {
+            setResult({ courses: [], lessons: [], documents: [] });
+            return;
+          }
+          handleSearch(trimmedValue);
+        }}
+        placeholder="Search for everything..."
+      /> */}
+
       <CommandInput
-        onValueChange={setSearchValue}
+        value={searchValue}
+        onValueChange={(v) => {
+          const trimmedValue = v.trimStart();
+          setSearchValue(trimmedValue);
+        }}
         placeholder="Search for everything..."
       />
 
@@ -228,7 +237,7 @@ export default function SearchBarDialog({
           <>
             <CommandEmpty>No results found.</CommandEmpty>
 
-            {result.courses.length > 0 && (
+            {result?.courses && result.courses.length > 0 && (
               <>
                 <CommandGroup
                   heading={searchValue ? "Courses" : "Recent course results"}
@@ -255,7 +264,7 @@ export default function SearchBarDialog({
               </>
             )}
 
-            {result.lessons.length > 0 && (
+            {result?.lessons && result.lessons.length > 0 && (
               <>
                 <CommandGroup
                   heading={searchValue ? "Lessons" : "Recent lesson results"}
@@ -270,6 +279,7 @@ export default function SearchBarDialog({
                       }
                       key={lesson._id}
                     >
+                      <NotebookText />
                       <span className="break-all line-clamp-1">
                         {lesson.title}
                       </span>
@@ -284,7 +294,7 @@ export default function SearchBarDialog({
               </>
             )}
 
-            {result.documents.length > 0 && (
+            {result?.documents && result.documents.length > 0 && (
               <>
                 <CommandGroup
                   heading={
