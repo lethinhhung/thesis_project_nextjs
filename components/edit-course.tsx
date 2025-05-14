@@ -163,6 +163,9 @@ export function EditCourse({
       <DialogContent aria-describedby="create-dialog-description">
         <DialogHeader>
           <DialogTitle>{`Edit course`}</DialogTitle>
+          <SheetDescription className="sr-only">
+            {`Edit course`}
+          </SheetDescription>
         </DialogHeader>
         <Tabs defaultValue="details">
           <TabsList className="grid w-full grid-cols-2">

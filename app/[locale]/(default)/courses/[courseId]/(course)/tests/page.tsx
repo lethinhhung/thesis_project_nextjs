@@ -1,7 +1,7 @@
 "use client";
 
 import { Settings } from "lucide-react";
-import SortButton from "@/components/sort-button";
+// import SortButton from "@/components/sort-button";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,6 +11,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import CourseTestsChart from "@/components/course-tests-chart";
+import { CreateNewTestProject } from "@/components/create-new-test-project";
+import { useParams } from "next/navigation";
 
 const testsData = [
   { test: "Essay", score: 9, date: "1/1/2021" },
@@ -19,6 +21,8 @@ const testsData = [
 ];
 
 function Tests() {
+  const params = useParams();
+  const courseId = params.courseId as string;
   return (
     <div className="w-full flex p-2 md:p-4 flex-col gap-4">
       <div className="w-full flex justify-between items-center sticky top-16">
@@ -26,9 +30,9 @@ function Tests() {
           Tests & Projects
         </h4>
         <div className="flex gap-2 items-center">
-          <SortButton variant={"secondary"} />
+          {/* <SortButton variant={"secondary"} /> */}
 
-          <Button>new</Button>
+          <CreateNewTestProject courseId={courseId} />
         </div>
       </div>
       <div className="w-full flex grid grid-cols-1 sm:px-2 lg:grid-cols-2 gap-4">
