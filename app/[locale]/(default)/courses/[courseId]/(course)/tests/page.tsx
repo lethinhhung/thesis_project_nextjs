@@ -30,6 +30,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 
 function Tests() {
   const [isLoading, setIsLoading] = useState(true);
@@ -181,41 +186,76 @@ function Tests() {
               </DialogContent>
             </Dialog>
             {tests.map((test, index) => (
-              <Card key={index} className="p-4">
-                <div className="flex flex-row items-center justify-between">
-                  <CardHeader className="px-2">
-                    <CardTitle>{test.title}</CardTitle>
-                    <CardDescription>
-                      {format(new Date(test?.date), "P", {
-                        locale: currentDateFnsLocale,
-                      })}
-                    </CardDescription>
-                  </CardHeader>
+              <HoverCard key={index}>
+                <HoverCardTrigger asChild>
+                  <Card key={index} className="p-4">
+                    <div className="flex flex-row items-center justify-between">
+                      <CardHeader className="px-2">
+                        <CardTitle>{test.title}</CardTitle>
+                        <CardDescription>
+                          {format(new Date(test?.date), "P", {
+                            locale: currentDateFnsLocale,
+                          })}
+                        </CardDescription>
+                      </CardHeader>
 
-                  {isEditing ? (
-                    <div className="px-2 flex gap-1 items-center">
-                      <Button variant={"ghost"} size={"sm"}>
-                        <Edit />
-                      </Button>
+                      {isEditing ? (
+                        <div className="px-2 flex gap-1 items-center">
+                          <Button variant={"ghost"} size={"sm"}>
+                            <Edit />
+                          </Button>
 
-                      <Button
-                        variant={"ghost"}
-                        size={"sm"}
-                        onClick={() => {
-                          setTest(test);
-                          setOpenDelete(true);
-                        }}
-                      >
-                        <Trash />
-                      </Button>
+                          <Button
+                            variant={"ghost"}
+                            size={"sm"}
+                            onClick={() => {
+                              setTest(test);
+                              setOpenDelete(true);
+                            }}
+                          >
+                            <Trash />
+                          </Button>
+                        </div>
+                      ) : (
+                        <h2 className="scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0 px-2">
+                          {test.score}
+                        </h2>
+                      )}
                     </div>
-                  ) : (
-                    <h2 className="scroll-m-20 text-3xl font-semibold tracking-tight first:mt-0 px-2">
-                      {test.score}
-                    </h2>
-                  )}
-                </div>
-              </Card>
+                  </Card>
+                </HoverCardTrigger>
+                <HoverCardContent>
+                  {" "}
+                  <div className="flex flex-col gap-4">
+                    <div className="space-y-1">
+                      <h4 className="font-medium leading-none">Description</h4>
+                      <p className="text-sm text-muted-foreground break-all">
+                        {test?.description}
+                      </p>
+                    </div>
+                    <div className="space-y-1">
+                      <h4 className="font-medium leading-none">Created At</h4>
+                      <p className="text-sm text-muted-foreground">
+                        {test?.createdAt
+                          ? format(new Date(test.createdAt), "PPPP", {
+                              locale: currentDateFnsLocale,
+                            })
+                          : "No date"}
+                      </p>
+                    </div>
+                    <div className="space-y-1">
+                      <h4 className="font-medium leading-none">Last updated</h4>
+                      <p className="text-sm text-muted-foreground">
+                        {test?.updatedAt
+                          ? format(new Date(test.updatedAt), "PPPP", {
+                              locale: currentDateFnsLocale,
+                            })
+                          : "No date"}
+                      </p>
+                    </div>
+                  </div>
+                </HoverCardContent>
+              </HoverCard>
             ))}
           </CardContent>
         </Card>
