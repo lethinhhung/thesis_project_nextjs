@@ -1,11 +1,11 @@
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
-import { deleteTestAPI } from "@/lib/services/test.service";
+import { createProjectAPI } from "@/lib/services/project.service";
 
-export async function DELETE(
+export async function POST(
   req: NextRequest,
-  { params }: { params: Promise<{ testId: string }> }
+  { params }: { params: Promise<{ courseId: string }> }
 ) {
   try {
     // Check if user is authenticated
@@ -27,22 +27,28 @@ export async function DELETE(
       );
     }
 
-    const testId = (await params).testId;
-    if (!testId) {
+    const courseId = (await params).courseId;
+    if (!courseId) {
       return NextResponse.json(
         {
           success: false,
-          message: "Lesson ID is required",
+          message: "Course ID is required",
           error: {
-            code: "INVALID_LESSON_ID",
-            details: "Lesson ID is required",
+            code: "INVALID_COURSE_ID",
+            details: "Course ID is required",
           },
         },
         { status: 400 }
       );
     }
 
-    const response = await deleteTestAPI(token?.accessToken || "", testId);
+    const project = await req.json();
+
+    const response = await createProjectAPI(
+      token?.accessToken || "",
+      courseId,
+      project
+    );
 
     if (response.status === 201 || response.status === 200) {
       if (response.data.success) {
@@ -72,7 +78,7 @@ export async function DELETE(
     return NextResponse.json(
       {
         success: false,
-        message: "Unexpected response from test API",
+        message: "Unexpected response from project API",
         error: {
           code: "UNEXPECTED_RESPONSE",
           details: `Status code: ${response.status}`,
@@ -81,7 +87,7 @@ export async function DELETE(
       { status: 500 }
     );
   } catch (error) {
-    console.error("Error fetching test:", error);
+    console.error("Error fetching project:", error);
     return NextResponse.json(
       {
         success: false,

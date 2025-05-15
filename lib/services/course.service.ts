@@ -94,6 +94,11 @@ const getCourseDocumentsAPI = (token: string, courseId: string) => {
   return createAxiosInstance(token).get(URL_API);
 };
 
+const getCourseTestsAndProjectsAPI = (token: string, courseId: string) => {
+  const URL_API = `/api/course/get-course-tests-and-projects/${courseId}`;
+  return createAxiosInstance(token).get(URL_API);
+};
+
 export {
   createCourseAPI,
   getCourseAPI,
@@ -106,4 +111,5 @@ export {
   updateCourseDetailsAPI,
   updateCourseCoverAPI,
   getCourseDocumentsAPI,
+  getCourseTestsAndProjectsAPI,
 };

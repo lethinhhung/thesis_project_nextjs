@@ -28,6 +28,7 @@ import { SheetDescription } from "./ui/sheet";
 import { Textarea } from "./ui/textarea";
 import { DatePickerPopover } from "./date-picker-popover";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { Switch } from "./ui/switch";
 
 export function CreateNewTestProject({
   courseId,
@@ -87,34 +88,10 @@ export function CreateNewTestProject({
     title: z.string().min(1, {
       message: "Title required",
     }),
-    document: z
-      .instanceof(File)
-      .refine((document) => !!document && document.size > 0, {
-        message: "File is required",
-      })
-      .refine((document) => document.size <= 50 * 1024 * 1024, {
-        message: "File size must be less than 50MB",
-      })
-      .refine(
-        (document) =>
-          [
-            "application/pdf", // .pdf
-            // "application/msword", // .doc
-            // "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
-            // "application/vnd.ms-excel", // .xls
-            // "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xlsx
-            // "application/vnd.ms-powerpoint", // .ppt
-            // "application/vnd.openxmlformats-officedocument.presentationml.presentation", // .pptx
-            // "text/plain", // .txt
-            // "text/markdown", // .md
-            // "application/rtf", // .rtf
-          ].includes(document.type),
-        {
-          message:
-            // "Only PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, MD, and RTF files are allowed",
-            "Only PDF file is allowed",
-        }
-      ),
+    description: z.string().min(1, {
+      message: "Description required",
+    }),
+    status: z.boolean(),
   });
 
   // 1. Define your form.
@@ -122,12 +99,12 @@ export function CreateNewTestProject({
     resolver: zodResolver(projectSchema),
     defaultValues: {
       title: "",
-      document: undefined,
+      description: "",
+      status: false,
     },
   });
 
   const onTestSubmit = async (values: z.infer<typeof testSchema>) => {
-    console.log("test values", values);
     setIsLoading(true);
     const submitting = {
       ...values,
@@ -148,28 +125,18 @@ export function CreateNewTestProject({
     }
   };
 
-  const onDocumentSubmit = async (values: z.infer<typeof projectSchema>) => {
+  const onProjectSubmit = async (values: z.infer<typeof projectSchema>) => {
     setIsLoading(true);
-    const submitting = new FormData();
-    submitting.append("title", values.title);
-    submitting.append("document", values.document);
-    if (courseId) {
-      submitting.append("courseId", courseId);
-    }
+
     try {
-      const res = await fetch("/api/document/create", {
+      const res = await fetch(`/api/project/create/${courseId}`, {
         method: "POST",
-        body: submitting,
+        body: JSON.stringify(values),
       });
 
-      const response = await processResponse(res);
-
-      if (response.success) {
-      } else {
-        console.error("Error creating document:", response.error.details);
-      }
+      await processResponse(res);
     } catch (error) {
-      console.error("Error creating document:", error);
+      console.error("Error creating lesson:", error);
     } finally {
       if (refetchData) refetchData();
       reset(false);
@@ -304,7 +271,87 @@ export function CreateNewTestProject({
               </form>
             </Form>
           </TabsContent>
-          <TabsContent value="project">Change your password here.</TabsContent>
+          <TabsContent value="project">
+            <Form {...projectForm}>
+              <form onSubmit={projectForm.handleSubmit(onProjectSubmit)}>
+                <div className="flex flex-col gap-8 py-4">
+                  <FormField
+                    control={projectForm.control}
+                    name="title"
+                    render={({ field }) => (
+                      <FormItem className="grid gap-3">
+                        <FormLabel>Title</FormLabel>
+
+                        <FormControl>
+                          <Input placeholder="Project" {...field} />
+                        </FormControl>
+
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={projectForm.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem className="grid gap-3">
+                        <FormLabel>Description</FormLabel>
+
+                        <FormControl>
+                          <Textarea
+                            spellCheck={false}
+                            placeholder="Project description"
+                            {...field}
+                            className="col-span-3 resize-none h-18 scrollbar"
+                          />
+                        </FormControl>
+
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={projectForm.control}
+                    name="status"
+                    render={({ field }) => (
+                      <FormItem className="grid gap-3">
+                        <FormLabel>
+                          Completed{" "}
+                          <p className="text-sm text-muted-foreground">No</p>
+                        </FormLabel>
+
+                        <FormControl>
+                          <Switch
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <DialogFooter>
+                  <Button
+                    type="button"
+                    variant={"outline"}
+                    onClick={() => {
+                      reset(false);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button className="min-w-20" type="submit">
+                    {isLoading ? <Loader className="animate-spin" /> : "Create"}
+                  </Button>
+                </DialogFooter>
+              </form>
+            </Form>
+          </TabsContent>
         </Tabs>
 
         {/* <Form {...projectForm}>

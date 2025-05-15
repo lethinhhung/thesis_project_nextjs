@@ -1,11 +1,11 @@
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
-import { deleteTestAPI } from "@/lib/services/test.service";
+import { deleteProjectAPI } from "@/lib/services/project.service";
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: Promise<{ testId: string }> }
+  { params }: { params: Promise<{ projectId: string }> }
 ) {
   try {
     // Check if user is authenticated
@@ -27,8 +27,8 @@ export async function DELETE(
       );
     }
 
-    const testId = (await params).testId;
-    if (!testId) {
+    const projectId = (await params).projectId;
+    if (!projectId) {
       return NextResponse.json(
         {
           success: false,
@@ -42,7 +42,10 @@ export async function DELETE(
       );
     }
 
-    const response = await deleteTestAPI(token?.accessToken || "", testId);
+    const response = await deleteProjectAPI(
+      token?.accessToken || "",
+      projectId
+    );
 
     if (response.status === 201 || response.status === 200) {
       if (response.data.success) {
@@ -72,7 +75,7 @@ export async function DELETE(
     return NextResponse.json(
       {
         success: false,
-        message: "Unexpected response from test API",
+        message: "Unexpected response from project API",
         error: {
           code: "UNEXPECTED_RESPONSE",
           details: `Status code: ${response.status}`,
@@ -81,7 +84,7 @@ export async function DELETE(
       { status: 500 }
     );
   } catch (error) {
-    console.error("Error fetching test:", error);
+    console.error("Error fetching project:", error);
     return NextResponse.json(
       {
         success: false,

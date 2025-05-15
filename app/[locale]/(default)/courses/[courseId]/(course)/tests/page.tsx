@@ -7,6 +7,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -35,6 +36,9 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
+import { Project as ProjectInterface } from "@/interfaces/project";
+import { CompletedMark } from "@/components/completed-mark";
+import { CourseProjectsChart } from "@/components/course-projects-chart";
 
 function Tests() {
   const [isLoading, setIsLoading] = useState(true);
@@ -42,7 +46,13 @@ function Tests() {
   const [openDelete, setOpenDelete] = useState(false);
   const [test, setTest] = useState<TestInterface>();
   const [isActionsLoading, setIsActionsLoading] = useState(false);
-  const [tests, setTests] = useState<TestInterface[]>([]);
+  const [data, setData] = useState<{
+    tests: TestInterface[];
+    projects: ProjectInterface[];
+  }>({
+    tests: [],
+    projects: [],
+  });
   const params = useParams();
   const courseId = params.courseId as string;
   const tabTop = useRef<HTMLDivElement>(null);
@@ -54,21 +64,27 @@ function Tests() {
 
   const currentDateFnsLocale = dateFnsLocales[locale as "vi" | "en"] || vi;
 
-  const fecthTests = async () => {
+  const fecthData = async () => {
     try {
       setIsLoading(true);
-      const res = await fetch(`/api/test/get-all/${courseId}`, {
-        method: "GET",
-      });
+      const res = await fetch(
+        `/api/course/get-tests-and-projects/${courseId}`,
+        {
+          method: "GET",
+        }
+      );
       const response = await processResponse(res, {
         success: false,
         error: false,
       });
 
       if (response.success) {
-        setTests(response.data);
+        setData(response.data);
       } else {
-        setTests([]);
+        setData({
+          tests: [],
+          projects: [],
+        });
       }
     } catch (error) {
       console.error("Error fetching tests:", error);
@@ -86,7 +102,7 @@ function Tests() {
       const response = await processResponse(res);
 
       if (response.success) {
-        fecthTests();
+        fecthData();
       }
     } catch (error) {
       console.error("Error deleting test:", error);
@@ -97,7 +113,7 @@ function Tests() {
   };
 
   useEffect(() => {
-    fecthTests().then(() => scrollToTabTop(tabTop, 116));
+    fecthData().then(() => scrollToTabTop(tabTop, 116));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -126,11 +142,12 @@ function Tests() {
         <div className="flex gap-2 items-center">
           {/* <SortButton variant={"secondary"} /> */}
 
-          <CreateNewTestProject courseId={courseId} refetchData={fecthTests} />
+          <CreateNewTestProject courseId={courseId} refetchData={fecthData} />
         </div>
       </div>
-      <div className="w-full flex grid grid-cols-1 sm:px-2 lg:grid-cols-2 gap-4">
-        <Card>
+      {/* <div className="w-full flex grid grid-cols-1 sm:px-2 lg:grid-cols-2 gap-4"> */}
+      <div className="w-full columns-lg gap-4 space-y-4">
+        <Card className="break-inside-avoid-column">
           <CardHeader>
             <div className="flex flex-row items-center justify-between">
               <CardTitle>Tests</CardTitle>
@@ -148,7 +165,7 @@ function Tests() {
               </Button>
             </div>
           </CardHeader>
-          {tests.length == 0 ? (
+          {data.tests.length == 0 ? (
             <div className="col-span-full min-h-50 flex justify-center items-center flex-col gap-2">
               <small className="text-sm font-medium leading-none">
                 No tests found
@@ -157,7 +174,7 @@ function Tests() {
           ) : (
             <>
               <CardContent>
-                <CourseTestsChart data={tests} />
+                <CourseTestsChart data={data.tests} />
               </CardContent>
               <CardContent className="space-y-4">
                 <Dialog open={openDelete} onOpenChange={setOpenDelete}>
@@ -193,7 +210,7 @@ function Tests() {
                     </DialogFooter>
                   </DialogContent>
                 </Dialog>
-                {tests.map((test, index) => (
+                {data.tests.map((test, index) => (
                   <HoverCard key={index}>
                     <HoverCardTrigger asChild>
                       <Card key={index} className="p-4">
@@ -274,7 +291,7 @@ function Tests() {
             </>
           )}
         </Card>
-        <Card>
+        <Card className="break-inside-avoid-column">
           <CardHeader>
             <div className="flex flex-row items-center justify-between">
               <CardTitle>Projects</CardTitle>
@@ -292,7 +309,61 @@ function Tests() {
               </Button>
             </div>
           </CardHeader>
-          <CardContent className="space-y-4"></CardContent>
+          {data.projects.length === 0 ? (
+            <div className="col-span-full min-h-50 flex justify-center items-center flex-col gap-2">
+              <small className="text-sm font-medium leading-none">
+                No projects found
+              </small>
+            </div>
+          ) : (
+            <>
+              <CardContent>
+                <CourseProjectsChart projects={data.projects} />
+              </CardContent>
+              <CardContent className="space-y-4">
+                {data.projects.map((project, index) => (
+                  <Card key={index} className="p-4">
+                    <CardHeader className="px-2 flex flex-row items-center justify-between">
+                      <div className="flex flex-col gap-1 flex-1">
+                        <CardTitle className="break-all">
+                          {project.title}
+                        </CardTitle>
+                        <CardDescription>
+                          {`Created at ${format(
+                            new Date(project?.createdAt),
+                            "P",
+                            {
+                              locale: currentDateFnsLocale,
+                            }
+                          )}`}
+                        </CardDescription>
+                      </div>
+                      {project.status && <CompletedMark size={18} />}
+                    </CardHeader>
+                    <CardContent>
+                      <p className="break-all">{project.description}</p>
+                    </CardContent>
+                    <CardFooter className="flex justify-end gap-1 items-center px-0">
+                      <Button variant={"ghost"} size={"sm"}>
+                        <Edit />
+                      </Button>
+
+                      <Button
+                        variant={"ghost"}
+                        size={"sm"}
+                        onClick={() => {
+                          setTest(test);
+                          setOpenDelete(true);
+                        }}
+                      >
+                        <Trash />
+                      </Button>
+                    </CardFooter>
+                  </Card>
+                ))}
+              </CardContent>
+            </>
+          )}
         </Card>
       </div>
     </div>
