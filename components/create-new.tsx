@@ -508,7 +508,11 @@ export function CreateNew() {
                   >
                     Cancel
                   </Button>
-                  <Button className="min-w-20" type="submit">
+                  <Button
+                    className="min-w-20"
+                    type="submit"
+                    disabled={isLoading}
+                  >
                     {isLoading ? <Loader className="animate-spin" /> : "Create"}
                   </Button>
                 </DialogFooter>
@@ -551,7 +555,11 @@ export function CreateNew() {
                   >
                     Cancel
                   </Button>
-                  <Button className="min-w-20" type="submit">
+                  <Button
+                    className="min-w-20"
+                    type="submit"
+                    disabled={isLoading}
+                  >
                     {isLoading ? <Loader className="animate-spin" /> : "Create"}
                   </Button>
                 </DialogFooter>
@@ -632,7 +640,11 @@ export function CreateNew() {
                   >
                     Cancel
                   </Button>
-                  <Button className="min-w-20" type="submit">
+                  <Button
+                    className="min-w-20"
+                    type="submit"
+                    disabled={isLoading}
+                  >
                     {isLoading ? <Loader className="animate-spin" /> : "Create"}
                   </Button>
                 </DialogFooter>

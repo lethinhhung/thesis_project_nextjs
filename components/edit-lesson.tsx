@@ -113,7 +113,7 @@ export function EditLesson({
               >
                 Cancel
               </Button>
-              <Button className="min-w-32" type="submit">
+              <Button className="min-w-32" type="submit" disabled={isLoading}>
                 {isLoading ? <Loader className="animate-spin" /> : "Update"}
               </Button>
             </DialogFooter>

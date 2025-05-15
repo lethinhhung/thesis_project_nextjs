@@ -292,22 +292,8 @@ function Tests() {
           )}
         </Card>
         <Card className="break-inside-avoid-column">
-          <CardHeader>
-            <div className="flex flex-row items-center justify-between">
-              <CardTitle>Projects</CardTitle>
-              <Button
-                className={`${isEditing && "bg-secondary"}`}
-                size={"sm"}
-                variant={"ghost"}
-                onClick={() => setIsEditing(!isEditing)}
-              >
-                <Settings
-                  className={`transition-all duration-300 ${
-                    isEditing && "rotate-180"
-                  }`}
-                />
-              </Button>
-            </div>
+          <CardHeader className="py-2">
+            <CardTitle>Projects</CardTitle>
           </CardHeader>
           {data.projects.length === 0 ? (
             <div className="col-span-full min-h-50 flex justify-center items-center flex-col gap-2">
