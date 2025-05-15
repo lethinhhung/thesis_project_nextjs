@@ -21,7 +21,7 @@ import { processResponse } from "@/lib/response-process";
 import { enUS as en } from "date-fns/locale/en-US";
 import { vi } from "date-fns/locale/vi";
 import { useLocale } from "next-intl";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Dialog,
@@ -43,8 +43,10 @@ import { CourseProjectsChart } from "@/components/course-projects-chart";
 function Tests() {
   const [isLoading, setIsLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
-  const [openDelete, setOpenDelete] = useState(false);
+  const [openDeleteTest, setOpenDeleteTest] = useState(false);
+  const [openDeleteProject, setOpenDeleteProject] = useState(false);
   const [test, setTest] = useState<TestInterface>();
+  const [project, setProject] = useState<ProjectInterface>();
   const [isActionsLoading, setIsActionsLoading] = useState(false);
   const [data, setData] = useState<{
     tests: TestInterface[];
@@ -107,7 +109,26 @@ function Tests() {
     } catch (error) {
       console.error("Error deleting test:", error);
     } finally {
-      setOpenDelete(false);
+      setOpenDeleteTest(false);
+      setIsActionsLoading(false);
+    }
+  };
+
+  const deleteProject = async (projectId: string) => {
+    try {
+      setIsActionsLoading(true);
+      const res = await fetch(`/api/project/delete/${projectId}`, {
+        method: "DELETE",
+      });
+      const response = await processResponse(res);
+
+      if (response.success) {
+        fecthData();
+      }
+    } catch (error) {
+      console.error("Error deleting project:", error);
+    } finally {
+      setOpenDeleteProject(false);
       setIsActionsLoading(false);
     }
   };
@@ -177,7 +198,7 @@ function Tests() {
                 <CourseTestsChart data={data.tests} />
               </CardContent>
               <CardContent className="space-y-4">
-                <Dialog open={openDelete} onOpenChange={setOpenDelete}>
+                <Dialog open={openDeleteTest} onOpenChange={setOpenDeleteTest}>
                   <DialogContent>
                     <DialogHeader>
                       <DialogTitle>Delete this test?</DialogTitle>
@@ -190,7 +211,7 @@ function Tests() {
                       <Button
                         type="button"
                         variant={"outline"}
-                        onClick={() => setOpenDelete(false)}
+                        onClick={() => setOpenDeleteTest(false)}
                       >
                         Cancel
                       </Button>
@@ -235,7 +256,7 @@ function Tests() {
                                 size={"sm"}
                                 onClick={() => {
                                   setTest(test);
-                                  setOpenDelete(true);
+                                  setOpenDeleteTest(true);
                                 }}
                               >
                                 <Trash />
@@ -307,6 +328,43 @@ function Tests() {
                 <CourseProjectsChart projects={data.projects} />
               </CardContent>
               <CardContent className="space-y-4">
+                <Dialog
+                  open={openDeleteProject}
+                  onOpenChange={setOpenDeleteProject}
+                >
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Delete this project?</DialogTitle>
+                      <DialogDescription>
+                        This action cannot be undone. This will permanently
+                        remove this project and all of its data from our
+                        servers.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                      <Button
+                        type="button"
+                        variant={"outline"}
+                        onClick={() => setOpenDeleteProject(false)}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        type="submit"
+                        variant={"destructive"}
+                        onClick={() => deleteProject(project?._id || "")}
+                        className="min-w-20"
+                        disabled={isActionsLoading}
+                      >
+                        {isActionsLoading ? (
+                          <Loader className="animate-spin" />
+                        ) : (
+                          "Delete"
+                        )}
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
                 {data.projects.map((project, index) => (
                   <Card key={index} className="p-4">
                     <CardHeader className="px-2 flex flex-row items-center justify-between">
@@ -338,8 +396,8 @@ function Tests() {
                         variant={"ghost"}
                         size={"sm"}
                         onClick={() => {
-                          setTest(test);
-                          setOpenDelete(true);
+                          setProject(project);
+                          setOpenDeleteProject(true);
                         }}
                       >
                         <Trash />
