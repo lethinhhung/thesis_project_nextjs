@@ -55,7 +55,7 @@ export function NavUser() {
     fetchData().then(() => setIsLoading(false));
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session]);
+  }, []);
 
   return (
     <SidebarMenu>
