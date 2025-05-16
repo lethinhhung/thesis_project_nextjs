@@ -28,8 +28,8 @@ Frontend for personalized learning support platform with AI integration that hel
 
 1. Clone repository
 ```bash
-git clone <repository-url>
-cd NextJS
+git clone https://github.com/lethinhhung/thesis_project_nextjs.git
+cd thesis_project_nextjs
 ```
 
 2. Install dependencies
@@ -40,13 +40,9 @@ yarn install
 ```
 
 3. Create environment file
-```bash
-cp .env.example .env.local
-```
+Create a `.env` file in the root directory with the following variables
 
-4. Update environment variables in `.env.local`
-Create a `.env` file in the root directory with the following variables:
-
+4. Update environment variables in `.env`
 ```env
 # Authentication
 NEXTAUTH_SECRET=your_nextauth_secret_key
