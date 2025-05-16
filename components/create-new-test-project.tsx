@@ -323,7 +323,9 @@ export function CreateNewTestProject({
                       <FormItem className="grid gap-3">
                         <FormLabel>
                           Completed{" "}
-                          <p className="text-sm text-muted-foreground">No</p>
+                          <p className="text-sm text-muted-foreground">
+                            {field.value ? "Yes" : "No"}
+                          </p>
                         </FormLabel>
 
                         <FormControl>

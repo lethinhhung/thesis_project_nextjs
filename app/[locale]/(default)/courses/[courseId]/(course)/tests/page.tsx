@@ -160,7 +160,7 @@ function Tests() {
         <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
           Tests & Projects
         </h4>
-        <div className="flex gap-2 items-center">
+        <div className="flex gap-2 items-center z-10">
           {/* <SortButton variant={"secondary"} /> */}
 
           <CreateNewTestProject courseId={courseId} refetchData={fecthData} />
