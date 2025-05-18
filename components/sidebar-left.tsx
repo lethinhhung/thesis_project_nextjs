@@ -193,7 +193,7 @@ export function SidebarLeft({
     });
     const response = await processResponse(res, {
       success: false,
-      error: true,
+      error: false,
     });
 
     if (response.success) {
@@ -222,8 +222,12 @@ export function SidebarLeft({
               <NavConversations isChatPage conversations={data.conversations} />
             )}
             {/* <NavPinned conversations={data.conversations} /> */}
-            <NavLessons lessons={result?.lessons} />
-            <NavCourses courses={result?.courses} />
+            {result?.lessons && result?.lessons.length > 0 && (
+              <NavLessons lessons={result?.lessons} />
+            )}
+            {result?.courses && result?.courses.length > 0 && (
+              <NavCourses courses={result?.courses} />
+            )}
             {!isChatPage && (
               <NavConversations conversations={data.conversations} />
             )}

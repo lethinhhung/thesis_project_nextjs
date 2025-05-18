@@ -103,7 +103,7 @@ function CourseLayout({ children }: { children: React.ReactNode }) {
     });
     const response = await processResponse(res, {
       success: false,
-      error: true,
+      error: false,
     });
 
     if (response.success) {

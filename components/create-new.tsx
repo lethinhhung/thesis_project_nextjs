@@ -287,7 +287,7 @@ export function CreateNew() {
     });
     const response = await processResponse(res, {
       success: false,
-      error: true,
+      error: false,
     });
 
     if (response.success) {
@@ -435,25 +435,33 @@ export function CreateNew() {
                                 </DialogDescription>
                               </DialogHeader>
                               <div className="w-full flex flex-wrap gap-2">
-                                {tags.map((tag) => (
-                                  <Badge
-                                    onClick={() => handleTagsChange(tag._id)}
-                                    variant={
-                                      selectedTags.includes(tag._id)
-                                        ? "default"
-                                        : "secondary"
-                                    }
-                                    className={cn(
-                                      "cursor-pointer transition-colors break-all line-clamp-1 max-w-60",
-                                      selectedTags.includes(tag._id)
-                                        ? "hover:bg-primary/80"
-                                        : "hover:bg-secondary/80"
-                                    )}
-                                    key={tag._id}
-                                  >
-                                    {tag.title} ({tag.totalCourses})
-                                  </Badge>
-                                ))}
+                                {tags.length > 0 ? (
+                                  tags.map((tag) => (
+                                    <Badge
+                                      onClick={() => handleTagsChange(tag._id)}
+                                      variant={
+                                        selectedTags.includes(tag._id)
+                                          ? "default"
+                                          : "secondary"
+                                      }
+                                      className={cn(
+                                        "cursor-pointer transition-colors break-all line-clamp-1 max-w-60",
+                                        selectedTags.includes(tag._id)
+                                          ? "hover:bg-primary/80"
+                                          : "hover:bg-secondary/80"
+                                      )}
+                                      key={tag._id}
+                                    >
+                                      {tag.title} ({tag.totalCourses})
+                                    </Badge>
+                                  ))
+                                ) : (
+                                  <div className="col-span-full w-full flex justify-center items-center flex-col gap-2">
+                                    <small className="text-sm font-medium leading-none">
+                                      No tags available
+                                    </small>
+                                  </div>
+                                )}
                               </div>
                               <DialogFooter>
                                 <Button

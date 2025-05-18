@@ -10,6 +10,7 @@ import { useParams } from "next/navigation";
 import { processResponse } from "@/lib/response-process";
 import { DocumentCardSkeleton } from "@/components/skeleton/document-skeleton";
 import DocumentPreview from "@/components/document-preview";
+import { Skeleton } from "@/components/ui/skeleton";
 
 function Documents() {
   const [isLoading, setIsLoading] = useState(true);
@@ -51,9 +52,13 @@ function Documents() {
   return (
     <div className="w-full flex p-2 md:p-4 flex-col gap-4" ref={tabTop}>
       <div className="w-full flex justify-between items-center sticky top-16">
-        <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
-          Documents ({documents?.length})
-        </h4>
+        {isLoading ? (
+          <Skeleton className="w-30 h-8" />
+        ) : (
+          <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
+            Documents ({documents?.length})
+          </h4>
+        )}
         <div className="flex gap-2 items-center">
           {/* <SortButton variant={"secondary"} /> */}
 

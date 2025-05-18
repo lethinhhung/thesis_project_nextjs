@@ -28,7 +28,7 @@ function AllCourses() {
     });
     const response = await processResponse(res, {
       success: false,
-      error: true,
+      error: false,
     });
 
     if (response.success) {
@@ -53,27 +53,35 @@ function AllCourses() {
             Recent lessons
           </h4>
         </div>
-        {isLoading
-          ? Array.from({ length: 6 }).map((_, index: number) => (
-              <LessonCardRecentSkeleton
-                key={index}
+        {isLoading ? (
+          Array.from({ length: 6 }).map((_, index: number) => (
+            <LessonCardRecentSkeleton
+              key={index}
+              className="col-span-12 md:col-span-6 2xl:col-span-4"
+            />
+          ))
+        ) : result?.lessons && result?.lessons?.length > 0 ? (
+          result?.lessons
+            ?.sort(
+              (a, b) =>
+                new Date(b.updatedAt).getTime() -
+                new Date(a.updatedAt).getTime()
+            )
+
+            .map((lesson) => (
+              <LessonCardRecent
+                key={lesson._id}
+                lesson={lesson}
                 className="col-span-12 md:col-span-6 2xl:col-span-4"
               />
             ))
-          : result?.lessons
-              ?.sort(
-                (a, b) =>
-                  new Date(b.updatedAt).getTime() -
-                  new Date(a.updatedAt).getTime()
-              )
-
-              .map((lesson) => (
-                <LessonCardRecent
-                  key={lesson._id}
-                  lesson={lesson}
-                  className="col-span-12 md:col-span-6 2xl:col-span-4"
-                />
-              ))}
+        ) : (
+          <div className="col-span-full min-h-50 flex justify-center items-center flex-col gap-2">
+            <small className="text-sm font-medium leading-none">
+              No lessons available yet
+            </small>
+          </div>
+        )}
       </div>
 
       <div className="col-span-12 grid grid-cols-12 gap-6">

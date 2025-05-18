@@ -3,6 +3,7 @@
 import { CreateNewSmall } from "@/components/create-new-small";
 import { LessonCard } from "@/components/lesson-card";
 import { LessonCardRecentSkeleton } from "@/components/skeleton/lesson-card-recent-skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 // import SortButton from "@/components/sort-button";
 import { LessonCard as LessonCardInterface } from "@/interfaces/lesson";
 import { processResponse } from "@/lib/response-process";
@@ -45,9 +46,13 @@ function Lessons() {
   return (
     <div className="w-full flex p-2 md:p-4 flex-col gap-4" ref={tabTop}>
       <div className="w-full flex justify-between items-center sticky top-16">
-        <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
-          Lessons ({lessons.length})
-        </h4>
+        {isLoading ? (
+          <Skeleton className="w-30 h-8" />
+        ) : (
+          <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
+            Lessons ({lessons.length})
+          </h4>
+        )}
         <div className="flex gap-2 items-center">
           {/* <SortButton variant={"secondary"} /> */}
 
