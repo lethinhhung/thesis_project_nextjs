@@ -13,8 +13,8 @@ import { notFound, useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Course as CourseInterface } from "@/interfaces/course";
 import { processResponse } from "@/lib/response-process";
-import { Skeleton } from "@/components/ui/skeleton";
 import { scrollToTabTop } from "@/lib/scrollToTabTop";
+import CourseDashboardSkeleton from "@/components/skeleton/course-dashboard-skelenton";
 
 function CourseDashboard() {
   const { courseId } = useParams();
@@ -46,7 +46,7 @@ function CourseDashboard() {
   }, []);
 
   if (isLoading) {
-    return <Skeleton className="w-full h-full min-h-80" />;
+    return <CourseDashboardSkeleton />;
   }
 
   if (!course) {
