@@ -247,7 +247,9 @@ function Settings() {
               <CardTitle>Settings</CardTitle>
               <CardDescription></CardDescription>
             </CardHeader>
-            <CardContent></CardContent>
+            <CardContent className="flex items-center justify-center p-4">
+              <p className="text-sm text-muted-foreground">No settings found</p>
+            </CardContent>
           </Card>
         </>
       )}
