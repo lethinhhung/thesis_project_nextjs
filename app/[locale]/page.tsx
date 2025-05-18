@@ -1,7 +1,5 @@
 import Nav from "@/components/landing-page-nav";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Github } from "lucide-react";
 
 export const metadata = {
   title: "Notebok",
