@@ -60,17 +60,11 @@ import { Badge } from "./ui/badge";
 import { Tag } from "lucide-react";
 import { TagWithTotalCourse } from "@/interfaces/tag";
 import { cn } from "@/lib/utils";
-
-const createItems = [
-  { title: "Course", type: "course", icon: <Briefcase /> },
-  { title: "Tag", type: "tag", icon: <Tag /> },
-  // { title: "Page", type: "page", icon: <Book /> },
-  { title: "Document", type: "document", icon: <LibraryBig /> },
-  { title: "Chat", type: "chat", icon: <Sparkles /> },
-];
+import { useTranslations } from "next-intl";
 
 export function CreateNew() {
   const router = useRouter();
+  const t = useTranslations("common");
   const [isOpen, setIsOpen] = useState(false);
   const [currentType, setCurrentType] = useState<string | null>(null);
   const [emoji, setEmoji] = useState<string | null>("📖");
@@ -85,6 +79,14 @@ export function CreateNew() {
 
   const isMobile = useIsMobile();
   const theme = useTheme();
+
+  const createItems = [
+    { title: t("course"), type: "course", icon: <Briefcase /> },
+    { title: t("tag"), type: "tag", icon: <Tag /> },
+    // { title: "Page", type: "page", icon: <Book /> },
+    { title: t("document"), type: "document", icon: <LibraryBig /> },
+    { title: t("chat"), type: "chat", icon: <Sparkles /> },
+  ];
 
   const reset = (e: boolean) => {
     setIsOpen(e);
@@ -313,10 +315,10 @@ export function CreateNew() {
               </Button>
             </DropdownMenuTrigger>
           </TooltipTrigger>
-          <TooltipContent>Create</TooltipContent>
+          <TooltipContent>{t("create")}</TooltipContent>
         </Tooltip>
         <DropdownMenuContent>
-          <DropdownMenuLabel>Create new</DropdownMenuLabel>
+          <DropdownMenuLabel>{t("create_new")}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           {createItems.map((item) => (
             <DropdownMenuItem
@@ -337,7 +339,9 @@ export function CreateNew() {
       >
         <DialogContent aria-describedby="create-dialog-description">
           <DialogHeader>
-            <DialogTitle>{`Create new ${currentType}`}</DialogTitle>
+            <DialogTitle>{`${t("create_new")} ${t(
+              currentType || "course"
+            )}`}</DialogTitle>
 
             <SheetDescription className="sr-only">
               {`Create a new ${currentType} and start building your content!`}

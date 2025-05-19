@@ -21,6 +21,7 @@ import Breadcrumbs from "@/components/breadcrumbs";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { CreateNew } from "@/components/create-new";
+import { useTranslations } from "next-intl";
 
 export default function DefaultLayout({
   children,
@@ -28,7 +29,7 @@ export default function DefaultLayout({
   children: React.ReactNode;
 }>) {
   const [isOpen, setIsOpen] = useState(false);
-  // useAutoSignOut();
+  const t = useTranslations("common");
   return (
     <SidebarProvider className="">
       <SidebarLeft />
@@ -58,7 +59,7 @@ export default function DefaultLayout({
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
-                  {isOpen ? "Hide sidebar" : "Show sidebar"}
+                  {isOpen ? t("hide_sidebar") : t("show_sidebar")}
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
