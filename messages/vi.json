@@ -5,6 +5,7 @@
     "languages": "Ngôn ngữ",
 
     "home": "Trang chủ",
+    "settings": "Cài đặt",
     "login": "Đăng nhập",
     "register": "Đăng ký"
   },
@@ -48,5 +49,14 @@
   "landing": {
     "description": "Hệ thống học tập cá nhân hóa tích hợp AI",
     "development": "Hiện đang phát triển"
+  },
+  "home": {
+    "welcome": "Chào mừng trở lại",
+    "courses": "Đi đến tất cả các khóa học",
+    "view_courses": "Để xem tất cả các khóa học",
+    "chat": "Đi đến trò chuyện",
+    "view_chat": "Để bắt đầu một cuộc trò chuyện mới",
+    "library": "Đi đến thư viện",
+    "view_library": "Để xem tất cả tài liệu"
   }
 }

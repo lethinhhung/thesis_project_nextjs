@@ -49,5 +49,14 @@
   "landing": {
     "description": "A personalized learning system intergrated with AI",
     "development": "Currently in development"
+  },
+  "home": {
+    "welcome": "Welcome back",
+    "courses": "Go to all courses",
+    "view_courses": "To view all courses",
+    "chat": "Go to chat",
+    "view_chat": "To start a new chat",
+    "library": "Go to library",
+    "view_library": "To view all ducments"
   }
 }

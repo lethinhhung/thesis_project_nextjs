@@ -12,11 +12,13 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowRight } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 
 function Home() {
   const { data: session, status } = useSession();
   const router = useRouter();
+  const t = useTranslations("home");
 
   if (status === "loading") {
     return (
@@ -28,7 +30,7 @@ function Home() {
     <div className="flex flex-col gap-4 p-4 items-center mx-auto w-full max-w-7xl rounded-xl">
       <div className="flex w-full justify-start">
         <h3 className="scroll-m-20 text-2xl font-semibold tracking-tight">
-          {`Welcome back ${session?.user?.name}`}
+          {`${t("welcome")} ${session?.user?.name}`}
         </h3>
       </div>
 
