@@ -1,5 +1,6 @@
 import Nav from "@/components/landing-page-nav";
 import { Badge } from "@/components/ui/badge";
+import { useTranslations } from "next-intl";
 
 export const metadata = {
   title: "Notebok",
@@ -7,6 +8,7 @@ export const metadata = {
 };
 
 export default function Landing() {
+  const t = useTranslations("landing");
   return (
     <div className="w-full h-full">
       <Nav />
@@ -19,9 +21,9 @@ export default function Landing() {
                   Notebok
                 </h1>
                 <p className="mx-auto max-w-175 text-muted-foreground md:text-xl">
-                  A personalized learning system intergrated with AI
+                  {t("description")}
                 </p>
-                <Badge variant={"destructive"}> Currently in development</Badge>
+                <Badge variant={"destructive"}>{t("development")}</Badge>
               </div>
             </div>
           </div>

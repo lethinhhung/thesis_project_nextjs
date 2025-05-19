@@ -9,13 +9,20 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowRight } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 function Home() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
+
+  if (status === "loading") {
+    return (
+      <Skeleton className="flex flex-col gap-4 p-4 items-center mx-auto w-full max-w-7xl rounded-xl" />
+    );
+  }
 
   return (
     <div className="flex flex-col gap-4 p-4 items-center mx-auto w-full max-w-7xl rounded-xl">

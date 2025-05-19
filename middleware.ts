@@ -19,7 +19,7 @@ const authMiddlewares = withAuth(
       authorized: ({ token }) => token != null,
     },
     pages: {
-      signIn: "/en/login",
+      signIn: "/login",
     },
   }
 );

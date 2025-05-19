@@ -2,7 +2,12 @@
   "common": {
     "english": "English",
     "vietnamese": "Vietnamese",
-    "languages": "Languages"
+    "languages": "Languages",
+
+    "home": "Home",
+    "settings": "Settings",
+    "login": "Login",
+    "register": "Register"
   },
   "login": {
     "welcome": "Welcome back",
@@ -40,5 +45,9 @@
     "already_have_account": "Already have an account?",
     "sign_in": "Sign in",
     "password": "Password"
+  },
+  "landing": {
+    "description": "A personalized learning system intergrated with AI",
+    "development": "Currently in development"
   }
 }

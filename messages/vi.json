@@ -2,7 +2,11 @@
   "common": {
     "english": "Tiếng Anh",
     "vietnamese": "Tiếng Việt",
-    "languages": "Ngôn ngữ"
+    "languages": "Ngôn ngữ",
+
+    "home": "Trang chủ",
+    "login": "Đăng nhập",
+    "register": "Đăng ký"
   },
   "login": {
     "welcome": "Chào mừng trở lại",
@@ -40,5 +44,9 @@
     "already_have_account": "Đã có tài khoản?",
     "sign_in": "Đăng nhập",
     "password": "Mật khẩu"
+  },
+  "landing": {
+    "description": "Hệ thống học tập cá nhân hóa tích hợp AI",
+    "development": "Hiện đang phát triển"
   }
 }
