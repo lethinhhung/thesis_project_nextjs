@@ -40,8 +40,8 @@ function Home() {
 
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>Go to all courses</CardTitle>
-          <CardDescription>To view all courses</CardDescription>
+          <CardTitle>{t("courses")}</CardTitle>
+          <CardDescription>{t("view_courses")}</CardDescription>
         </CardHeader>
         <CardFooter className="justify-end">
           <Button size={"sm"} onClick={() => router.push("/courses")}>
@@ -52,8 +52,8 @@ function Home() {
 
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>Go to chat</CardTitle>
-          <CardDescription>To start a new chat</CardDescription>
+          <CardTitle>{t("chat")}</CardTitle>
+          <CardDescription>{t("view_chat")}</CardDescription>
         </CardHeader>
         <CardFooter className="justify-end">
           <Button size={"sm"} onClick={() => router.push("/chat")}>
@@ -64,8 +64,8 @@ function Home() {
 
       <Card className="w-full">
         <CardHeader>
-          <CardTitle>Go to library</CardTitle>
-          <CardDescription>To view all ducments</CardDescription>
+          <CardTitle>{t("library")}</CardTitle>
+          <CardDescription>{t("view_library")}</CardDescription>
         </CardHeader>
         <CardFooter className="justify-end">
           <Button size={"sm"} onClick={() => router.push("/library")}>

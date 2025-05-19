@@ -9,12 +9,14 @@ import {
 } from "@/components/ui/sidebar";
 import { useRouter } from "next/navigation";
 import { LessonCard as LessonInterface } from "@/interfaces/lesson";
+import { useTranslations } from "next-intl";
 
 export function NavLessons({ lessons }: { lessons?: LessonInterface[] }) {
   const router = useRouter();
+  const t = useTranslations("common");
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Recent lessons</SidebarGroupLabel>
+      <SidebarGroupLabel>{t("recent_lessons")}</SidebarGroupLabel>
       <SidebarMenu>
         {lessons
           ?.sort(

@@ -11,13 +11,15 @@ import {
 } from "@/components/ui/sidebar";
 import { useRouter } from "next/navigation";
 import { Course as CourseInterface } from "@/interfaces/course";
+import { useTranslations } from "next-intl";
 
 export function NavCourses({ courses }: { courses?: CourseInterface[] }) {
   const router = useRouter();
+  const t = useTranslations("common");
   return (
     // <SidebarGroup className="group-data-[collapsible=icon]:hidden">
     <SidebarGroup>
-      <SidebarGroupLabel>Recent courses</SidebarGroupLabel>
+      <SidebarGroupLabel>{t("recent_courses")}</SidebarGroupLabel>
       <SidebarMenu>
         {courses
           ?.sort(
@@ -41,7 +43,7 @@ export function NavCourses({ courses }: { courses?: CourseInterface[] }) {
             className="text-sidebar-foreground/70"
           >
             <MoreHorizontal />
-            <span>More</span>
+            <span>{t("more")}</span>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>

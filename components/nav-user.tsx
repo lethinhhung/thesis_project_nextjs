@@ -22,10 +22,12 @@ import { NavControls } from "./nav-controls";
 import { useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { Skeleton } from "./ui/skeleton";
+import { useTranslations } from "next-intl";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const router = useRouter();
+  const t = useTranslations("common");
   const { data: session, status } = useSession();
 
   if (status === "loading") {
@@ -99,7 +101,7 @@ export function NavUser() {
             <DropdownMenuGroup>
               <DropdownMenuItem onClick={() => router.push("/settings")}>
                 <Settings />
-                Settings
+                {t("settings")}
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="flex justify-between items-center"
@@ -107,7 +109,7 @@ export function NavUser() {
               >
                 <div className="flex items-center gap-2">
                   <Inbox />
-                  Inbox
+                  {t("inbox")}
                 </div>
                 <Dot className="text-sky-500" />
               </DropdownMenuItem>
@@ -115,7 +117,7 @@ export function NavUser() {
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => signOut()}>
               <LogOut />
-              Log out
+              {t("sign_out")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

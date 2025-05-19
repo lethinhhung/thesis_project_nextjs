@@ -10,6 +10,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useTranslations } from "next-intl";
 
 export function NavConversations({
   conversations,
@@ -26,6 +27,7 @@ export function NavConversations({
   isChatPage?: boolean;
 }) {
   const router = useRouter();
+  const t = useTranslations("common");
 
   return (
     <SidebarGroup
@@ -34,7 +36,7 @@ export function NavConversations({
         (isChatPage ? " border-2 border-dashed" : "")
       }
     >
-      <SidebarGroupLabel>Recent conversations</SidebarGroupLabel>
+      <SidebarGroupLabel>{t("recent_chats")}</SidebarGroupLabel>
       <SidebarGroupContent>
         <SidebarMenu>
           {conversations.map((conversation) => (
@@ -51,7 +53,7 @@ export function NavConversations({
               className="text-sidebar-foreground/70"
             >
               <MoreHorizontal />
-              More
+              {t("more")}
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

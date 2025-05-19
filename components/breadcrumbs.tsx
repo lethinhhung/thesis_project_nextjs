@@ -23,35 +23,11 @@ import { Course as CourseInterface } from "@/interfaces/course";
 import { processResponse } from "@/lib/response-process";
 import { Skeleton } from "./ui/skeleton";
 import { LessonName } from "@/interfaces/lesson";
-
-const breadcrumbMap: Record<string, string> = {
-  dashboard: "Dashboard",
-  home: "Home",
-  courses: "Courses",
-  all: "All",
-  completed: "Completed",
-  ongoing: "Ongoing",
-  search: "Search",
-  pages: "Pages",
-  chat: "Chat",
-  library: "Library",
-  settings: "Settings",
-  inbox: "Inbox",
-  calendar: "Calendar",
-  course: "Course Details",
-  lessons: "Lessons",
-  page: "Page Details",
-  folders: "Folders",
-  tests: "Tests",
-  projects: "Projects",
-  documents: "Documents",
-  "ask-ai": "Ask AI",
-  en: "English",
-  vi: "Tiếng Việt",
-};
+import { useTranslations } from "next-intl";
 
 export default function Breadcrumbs() {
   const [isLoading, setIsLoading] = useState(true);
+  const t = useTranslations("common");
   const pathname = usePathname();
   const params = useParams();
   const pathSegments = pathname.split("/").filter(Boolean).slice(1);
@@ -64,6 +40,32 @@ export default function Breadcrumbs() {
 
   const [course, setCourse] = useState<CourseInterface>();
   const [lesson, setLesson] = useState<LessonName>();
+
+  const breadcrumbMap: Record<string, string> = {
+    dashboard: t("dashboard"),
+    home: t("home"),
+    courses: t("courses"),
+    all: t("all"),
+    completed: t("completed"),
+    ongoing: t("ongoing"),
+    search: t("search"),
+    pages: t("pages"),
+    chat: t("chat"),
+    library: t("library"),
+    settings: t("settings"),
+    inbox: t("inbox"),
+    calendar: t("calendar"),
+    course: t("course_details"),
+    lessons: t("lessons"),
+    page: t("page_details"),
+    folders: t("folders"),
+    tests: t("tests_and_projects"),
+    projects: t("projects"),
+    documents: t("documents"),
+    "ask-ai": t("ask_ai"),
+    en: t("english"),
+    vi: t("vietnamese"),
+  };
 
   const fetchData = async () => {
     if (courseId) {
@@ -126,7 +128,7 @@ export default function Breadcrumbs() {
           <BreadcrumbItem>
             <Link href="/home" className="text-primary">
               <Home size={18} className="sm:hidden" />
-              <div className="hidden sm:flex">Notebook</div>
+              <div className="hidden sm:flex">Notebok</div>
             </Link>
           </BreadcrumbItem>
 
