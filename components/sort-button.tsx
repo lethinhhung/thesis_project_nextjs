@@ -23,6 +23,7 @@ import { CalendarClock, SortAsc, Tag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 // ...existing code...
 export function SortButton({
@@ -41,6 +42,7 @@ export function SortButton({
   className?: string;
 }) {
   const searchParams = useSearchParams();
+  const t = useTranslations("common");
   const params = new URLSearchParams(searchParams);
   const router = useRouter();
   const [sortField, setSortField] = useState<string>(
@@ -109,11 +111,13 @@ export function SortButton({
               </Button>
             </DropdownMenuTrigger>
           </TooltipTrigger>
-          <TooltipContent side="top">Sorting & Filtering</TooltipContent>
+          <TooltipContent side="top">
+            {t("sorting_and_filtering")}
+          </TooltipContent>
         </Tooltip>
         <DropdownMenuContent className="space-y-1">
-          <DropdownMenuLabel className="flex items-center justify-between">
-            Sort by
+          <DropdownMenuLabel className="flex items-center gap-2 justify-between">
+            {t("sort_by")}
             <Button
               onClick={handleSortOrderChange}
               size={"icon"}
@@ -127,26 +131,26 @@ export function SortButton({
             <DropdownMenuSubTrigger
               className={cn(sortField === "status" && "bg-accent")}
             >
-              Status
+              {t("status")}
             </DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
               <DropdownMenuItem
                 onClick={() => handleStatusFilter(null)}
                 className={cn(filterStatus === null && "bg-accent")}
               >
-                All
+                {t("all")}
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => handleStatusFilter("true")}
                 className={cn(filterStatus === "true" && "bg-accent")}
               >
-                Completed
+                {t("completed")}
               </DropdownMenuItem>
               <DropdownMenuItem
                 onClick={() => handleStatusFilter("false")}
                 className={cn(filterStatus === "false" && "bg-accent")}
               >
-                In Progress
+                {t("ongoing")}
               </DropdownMenuItem>
             </DropdownMenuSubContent>
           </DropdownMenuSub>
@@ -154,7 +158,7 @@ export function SortButton({
             onClick={() => handleSortFieldChange("title")}
             className={cn(sortField === "title" && "bg-accent")}
           >
-            Title
+            {t("title")}
             <DropdownMenuShortcut>
               <Tag />
             </DropdownMenuShortcut>
@@ -163,7 +167,7 @@ export function SortButton({
             onClick={() => handleSortFieldChange("date")}
             className={cn(sortField === "date" && "bg-accent")}
           >
-            Date
+            {t("date")}
             <DropdownMenuShortcut>
               <CalendarClock />
             </DropdownMenuShortcut>

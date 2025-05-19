@@ -40,6 +40,7 @@ import { Skeleton } from "./ui/skeleton";
 import { useDebounce } from "@/hooks/use-debounce";
 import { processResponse } from "@/lib/response-process";
 import { TagWithTotalCourse } from "@/interfaces/tag";
+import { useTranslations } from "next-intl";
 
 function getPageNumbers(current: number, total: number) {
   const delta = 1;
@@ -76,6 +77,7 @@ function SearchBarWithTags({
   const [tags, setTags] = useState<TagWithTotalCourse[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
+  const t = useTranslations("common");
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -226,12 +228,12 @@ function SearchBarWithTags({
                   </Button>
                 </DialogTrigger>
               </TooltipTrigger>
-              <TooltipContent>Tags</TooltipContent>
+              <TooltipContent>{t("tags")}</TooltipContent>
             </Tooltip>
             <DialogContent>
               <DialogHeader>
-                <DialogTitle>Tags</DialogTitle>
-                <DialogDescription>Filter by tags</DialogDescription>
+                <DialogTitle>{t("tags")}</DialogTitle>
+                <DialogDescription>{t("filter_by_tags")}</DialogDescription>
               </DialogHeader>
               <div className="w-full flex flex-wrap gap-2">
                 {tags.map((tag) => (
