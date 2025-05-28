@@ -28,6 +28,17 @@ export async function processResponse(
   const details = data.error?.details || "Có lỗi xảy ra";
 
   switch (data.error?.code) {
+    case "UNAUTHORIZED":
+      signOut({
+        redirect: true,
+        callbackUrl: `/login?error=SessionExpired&callbackUrl=${window.location.pathname}`,
+      });
+
+      audio.play();
+      toast.error(message || "Chưa xác thực", {
+        description: details,
+      });
+      break;
     case 401:
       signOut({
         redirect: true,
@@ -39,6 +50,7 @@ export async function processResponse(
         description: details,
       });
       break;
+
     case 403:
       audio.play();
       toast.error(message || "Không có quyền truy cập", {
