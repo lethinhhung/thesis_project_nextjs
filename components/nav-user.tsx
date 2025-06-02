@@ -23,12 +23,30 @@ import { useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { Skeleton } from "./ui/skeleton";
 import { useTranslations } from "next-intl";
+import { useState } from "react";
+import { processResponse } from "@/lib/response-process";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const router = useRouter();
   const t = useTranslations("common");
   const { data: session, status } = useSession();
+  const [user, setUser] = useState(session?.user || null);
+
+  if (!session?.user) {
+    const fetchUserData = async () => {
+      const res = await fetch("/api/user/profile");
+      const response = await processResponse(res, {
+        success: false,
+        error: true,
+      });
+
+      if (response.success) {
+        setUser(response.data);
+      }
+    };
+    fetchUserData();
+  }
 
   if (status === "loading") {
     return (
@@ -49,18 +67,18 @@ export function NavUser() {
             >
               <Avatar className="h-8 w-8 rounded-lg">
                 <AvatarImage
-                  src={session?.user?.image || "/placeholder.svg"}
-                  alt={session?.user?.name || "Guest"}
+                  src={user?.image || "/placeholder.svg"}
+                  alt={user?.name || "Guest"}
                 />
                 <AvatarFallback className="rounded-lg">
-                  {session?.user?.name?.charAt(0).toUpperCase() || "G"}
+                  {user?.name?.charAt(0).toUpperCase() || "G"}
                 </AvatarFallback>
               </Avatar>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-semibold">
-                  {session?.user?.name || "Guest"}
+                  {user?.name || "Guest"}
                 </span>
-                <span className="truncate text-xs">{session?.user?.email}</span>
+                <span className="truncate text-xs">{user?.email}</span>
               </div>
               <ChevronsUpDown className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -75,20 +93,18 @@ export function NavUser() {
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage
-                    src={session?.user?.image || "/placeholder.svg"}
-                    alt={session?.user?.name || "Guest"}
+                    src={user?.image || "/placeholder.svg"}
+                    alt={user?.name || "Guest"}
                   />
                   <AvatarFallback className="rounded-lg">
-                    {session?.user?.name?.charAt(0).toUpperCase() || "G"}
+                    {user?.name?.charAt(0).toUpperCase() || "G"}
                   </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">
-                    {session?.user?.name || "Guest"}
+                    {user?.name || "Guest"}
                   </span>
-                  <span className="truncate text-xs">
-                    {session?.user?.email}
-                  </span>
+                  <span className="truncate text-xs">{user?.email}</span>
                 </div>
               </div>
 

@@ -27,16 +27,16 @@ import { useEffect, useState } from "react";
 import { CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { motion } from "framer-motion";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
-import { chatCompletions } from "@/lib/services/ai.service";
 import ThinkingText from "./thinking-text";
 import { toast } from "sonner";
+import { processResponse } from "@/lib/response-process";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 function ChatBox({
-  attachContent,
   title,
   extraOptions = false,
 }: {
-  attachContent?: string;
   title?: string;
   extraOptions?: boolean;
 }) {
@@ -57,13 +57,22 @@ function ChatBox({
   const getChatCompletions = async (updatedMessages: Message[]) => {
     setLoading(true);
     try {
-      const res = await chatCompletions(updatedMessages);
-      if (res?.status == 200) {
+      const res = await fetch(`/api/chat/question`, {
+        method: "POST",
+        body: JSON.stringify({
+          question: updatedMessages[updatedMessages.length - 1].content,
+        }),
+      });
+      const response = await processResponse(res, {
+        success: false,
+        error: false,
+      });
+      if (response.success) {
         setMessages((prevMessages) => [
           ...prevMessages,
           {
             role: "assistant",
-            content: res?.data.choices[0]?.message?.content,
+            content: response?.data.choices[0]?.message?.content,
           },
         ]);
       } else {
@@ -81,18 +90,12 @@ function ChatBox({
     }
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!input.trim()) return;
 
     const newMessage: Message = {
       role: "user",
-      content:
-        attachContent && messages.length == 0
-          ? "Cho nội dung:\n" +
-            attachContent +
-            "\n Trả lời câu hỏi: " +
-            input.trim()
-          : input.trim(),
+      content: input.trim(),
     };
     const updatedMessages = [...messages, newMessage];
 
@@ -100,7 +103,7 @@ function ChatBox({
     setInput("");
 
     // Gọi API sau khi `messages` cập nhật
-    getChatCompletions(updatedMessages);
+    await getChatCompletions(updatedMessages);
     // getChatCompletions();
   };
 
@@ -129,7 +132,7 @@ function ChatBox({
                 transition={{ duration: 0.3, ease: "easeOut" }}
               >
                 <div key={index} className="flex justify-end mb-5 pl-16">
-                  <div className="p-4 rounded-md border border-dashed">
+                  <div className="p-4 rounded-md border border-dashed whitespace-pre-line">
                     {message?.content}
                   </div>
                 </div>
@@ -141,10 +144,13 @@ function ChatBox({
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
               >
-                <div key={index} className="flex">
-                  <div className="flex flex-col max-w-full p-4 mb-5 bg-secondary rounded-md">
+                <div
+                  id="llm"
+                  className="flex flex-col max-w-none p-4 mb-5 bg-secondary rounded-md whitespace-pre-line break-words"
+                >
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
                     {message?.content}
-                  </div>
+                  </ReactMarkdown>
                 </div>
               </motion.div>
             )
