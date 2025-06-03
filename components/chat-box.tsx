@@ -32,6 +32,9 @@ import { toast } from "sonner";
 import { processResponse } from "@/lib/response-process";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { DocumentCard } from "./document-card";
+import { Document } from "@/interfaces/document";
+import DocumentPreview from "./document-preview";
 
 function ChatBox({
   title,
@@ -43,6 +46,10 @@ function ChatBox({
   const [input, setInput] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [selectedDocument, setSelectedDocument] = useState<Document | null>(
+    null
+  );
+  const [openDocumentPreview, setOpenDocumentPreview] = useState(false);
 
   const scrollToBottom = () => {
     const chatContainer = document.getElementById("scroll");
@@ -73,6 +80,7 @@ function ChatBox({
           {
             role: "assistant",
             content: response?.data.choices[0]?.message?.content,
+            documents: response?.data.choices[0]?.message?.documents,
           },
         ]);
       } else {
@@ -105,6 +113,11 @@ function ChatBox({
     // Gọi API sau khi `messages` cập nhật
     await getChatCompletions(updatedMessages);
     // getChatCompletions();
+  };
+
+  const handleDocumentSelect = (document: Document) => {
+    setSelectedDocument(document);
+    setOpenDocumentPreview(true);
   };
 
   useEffect(() => {
@@ -151,6 +164,20 @@ function ChatBox({
                   <ReactMarkdown remarkPlugins={[remarkGfm]}>
                     {message?.content}
                   </ReactMarkdown>
+                  <p className="text-sm text-muted-foreground mt-8">
+                    Documents used for this answer
+                  </p>
+                  <div className="columns-xs space-y-2 gap-2 mt-2 p-2">
+                    {message?.documents?.map((document, index) => (
+                      <DocumentCard
+                        variant="sm"
+                        className="break-inside-avoid-column"
+                        key={index}
+                        document={document}
+                        onClick={() => handleDocumentSelect(document)}
+                      />
+                    ))}
+                  </div>
                 </div>
               </motion.div>
             )
@@ -176,6 +203,13 @@ function ChatBox({
           <MessageCircleMoreIcon /> Ask for anything...
         </h4>
       )}
+      <DocumentPreview
+        open={openDocumentPreview}
+        onOpenChange={setOpenDocumentPreview}
+        document={selectedDocument}
+        fetchDocuments={() => {}}
+        responsive={false}
+      />
       <div className="flex flex-col items-center w-full rounded-2xl md:px-4 bg-background">
         <Textarea
           onChange={(e) => setInput(e.target.value)}

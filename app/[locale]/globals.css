@@ -316,7 +316,9 @@
 #llm h2,
 #llm h3 {
   font-weight: bold;
-  line-height: 3;
+  line-height: 1.3;
+  margin-bottom: 1rem;
+  margin-top: 1.5rem;
 }
 
 #llm h1 {
@@ -333,12 +335,12 @@
 #llm ul {
   margin-left: 1.5rem;
   list-style-type: disc;
-  line-height: 1;
+  line-height: 1.3;
 }
 #llm ol {
   margin-left: 1.5rem;
   list-style-type: decimal;
-  line-height: 1;
+  line-height: 1.3;
 }
 
 /* Mã lệnh / code */
