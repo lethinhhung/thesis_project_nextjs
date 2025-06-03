@@ -17,7 +17,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Message } from "@/interfaces/message";
 // import { chatCompletions } from "@/utils/api";
 import {
-  Book,
   ChevronDown,
   MessageCircleMoreIcon,
   Paperclip,
