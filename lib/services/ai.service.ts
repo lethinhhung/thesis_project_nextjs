@@ -21,6 +21,7 @@
 
 // export { getModelsList, chatCompletions };
 
+import { ChatMessage } from "@/interfaces/message";
 import { createAxiosInstance } from "../axios.customize-server";
 
 const questionAPI = (token: string, question: string) => {
@@ -28,4 +29,13 @@ const questionAPI = (token: string, question: string) => {
   return createAxiosInstance(token).post(URL_API, { question });
 };
 
-export { questionAPI };
+const createChatCompletionAPI = (
+  token: string,
+  messages: ChatMessage[],
+  model?: string
+) => {
+  const URL_API = "/api/chat/completions";
+  return createAxiosInstance(token).post(URL_API, { messages, model });
+};
+
+export { questionAPI, createChatCompletionAPI };

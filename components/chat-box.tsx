@@ -48,12 +48,19 @@ function ChatBox({ title }: { title?: string }) {
   const getChatCompletions = async (updatedMessages: Message[]) => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/chat/question`, {
+      // const res = await fetch(`/api/chat/question`, {
+      //   method: "POST",
+      //   body: JSON.stringify({
+      //     question: updatedMessages[updatedMessages.length - 1].content,
+      //   }),
+      // });
+      const res = await fetch(`/api/chat/completions`, {
         method: "POST",
         body: JSON.stringify({
-          question: updatedMessages[updatedMessages.length - 1].content,
+          messages: updatedMessages,
         }),
       });
+
       const response = await processResponse(res, {
         success: false,
         error: false,
@@ -153,31 +160,38 @@ function ChatBox({ title }: { title?: string }) {
                     </ReactMarkdown>
                   </div>
                 )}
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm]} // Cho phép sử dụng markdown GFM
-                  rehypePlugins={[rehypeRaw]}
-                >
-                  {message?.content.replace(
-                    /<think[^>]*>[\s\S]*?<\/think>/gi,
-                    ""
-                  )}
-                </ReactMarkdown>
-                <div className="flex flex-col">
-                  <p className="text-sm text-muted-foreground mt-8">
-                    Documents used for this answer
-                  </p>
-                  <div className="columns-xs space-y-2 gap-2 p-2">
-                    {message?.documents?.map((document, index) => (
-                      <DocumentCard
-                        variant="sm"
-                        className="break-inside-avoid-column"
-                        key={index}
-                        document={document}
-                        onClick={() => handleDocumentSelect(document)}
-                      />
-                    ))}
+                {message?.content.replace(
+                  /<think[^>]*>[\s\S]*?<\/think>/gi,
+                  ""
+                ) && (
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]} // Cho phép sử dụng markdown GFM
+                    rehypePlugins={[rehypeRaw]}
+                  >
+                    {message?.content.replace(
+                      /<think[^>]*>[\s\S]*?<\/think>/gi,
+                      ""
+                    )}
+                  </ReactMarkdown>
+                )}
+                {message?.documents && (
+                  <div className="flex flex-col">
+                    <p className="text-sm text-muted-foreground mt-8">
+                      Documents used for this answer
+                    </p>
+                    <div className="columns-xs space-y-2 gap-2 p-2">
+                      {message?.documents?.map((document, index) => (
+                        <DocumentCard
+                          variant="sm"
+                          className="break-inside-avoid-column"
+                          key={index}
+                          document={document}
+                          onClick={() => handleDocumentSelect(document)}
+                        />
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
               </motion.div>
             )
           )}
