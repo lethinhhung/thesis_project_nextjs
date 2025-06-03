@@ -1,28 +1,11 @@
 "use client";
 
-import ButtonWithBadge from "@/components/button-with-badge";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
-
 import { Textarea } from "@/components/ui/textarea";
 import { Message } from "@/interfaces/message";
 // import { chatCompletions } from "@/utils/api";
-import {
-  ChevronDown,
-  MessageCircleMoreIcon,
-  Paperclip,
-  Plus,
-  Send,
-} from "lucide-react";
+import { ChevronDown, MessageCircleMoreIcon, Plus, Send } from "lucide-react";
 import { useEffect, useState } from "react";
 import { CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { motion } from "framer-motion";
@@ -36,13 +19,7 @@ import { DocumentCard } from "./document-card";
 import { Document } from "@/interfaces/document";
 import DocumentPreview from "./document-preview";
 
-function ChatBox({
-  title,
-  extraOptions = false,
-}: {
-  title?: string;
-  extraOptions?: boolean;
-}) {
+function ChatBox({ title }: { title?: string }) {
   const [input, setInput] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -217,36 +194,6 @@ function ChatBox({
           className="resize-none max-h-[17rem] border-dashed scrollbar"
         ></Textarea>
         <div className="w-full pt-1 md:pt-2 flex gap-1 md:gap-2 items-center justify-end">
-          {extraOptions && (
-            <div className="flex items-center gap-2">
-              <Badge variant="outline">2 content attched</Badge>
-              <Tooltip>
-                <DropdownMenu>
-                  <TooltipTrigger asChild>
-                    <DropdownMenuTrigger asChild>
-                      <ButtonWithBadge
-                        variant={"ghost"}
-                        size={"icon"}
-                        isBadgeVisible={true}
-                        badgeColor="bg-sky-500"
-                      >
-                        <Paperclip />
-                      </ButtonWithBadge>
-                    </DropdownMenuTrigger>
-                  </TooltipTrigger>
-                  <TooltipContent>Attach files</TooltipContent>
-                  <DropdownMenuContent>
-                    <DropdownMenuLabel>Attach content</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem>Profile</DropdownMenuItem>
-                    <DropdownMenuItem>Billing</DropdownMenuItem>
-                    <DropdownMenuItem>Team</DropdownMenuItem>
-                    <DropdownMenuItem>Subscription</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </Tooltip>
-            </div>
-          )}
           <Tooltip>
             <TooltipTrigger asChild>
               <Button
