@@ -364,6 +364,10 @@
   font-size: 0.9rem;
 }
 
+#llm code:not(pre code) {
+  background-color: var(--input);
+}
+
 /* Liên kết */
 #llm a {
   color: #0070f3;

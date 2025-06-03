@@ -251,7 +251,7 @@ function ChatBox({ title }: { title?: string }) {
         fetchDocuments={() => {}}
         responsive={false}
       />
-      <div className="flex flex-col items-center w-full rounded-2xl md:px-4 bg-background">
+      <div className="flex flex-col gap-1 items-center w-full rounded-2xl md:px-4 bg-background">
         <Textarea
           onChange={(e) => setInput(e.target.value)}
           value={input}
