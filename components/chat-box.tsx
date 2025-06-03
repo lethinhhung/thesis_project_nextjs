@@ -18,6 +18,13 @@ import remarkGfm from "remark-gfm";
 import { DocumentCard } from "./document-card";
 import { Document } from "@/interfaces/document";
 import DocumentPreview from "./document-preview";
+import rehypeRaw from "rehype-raw";
+
+function extractThinkBlocks(markdown: string): string | null {
+  const regex = /<think[^>]*>([\s\S]*?)<\/think>/i;
+  const match = regex.exec(markdown);
+  return match ? match[1] : null;
+}
 
 function ChatBox({ title }: { title?: string }) {
   const [input, setInput] = useState<string>("");
@@ -135,8 +142,25 @@ function ChatBox({ title }: { title?: string }) {
                 id="llm"
                 className="flex flex-col gap-4 max-w-none p-4 mb-5 bg-secondary rounded-md break-words"
               >
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                  {message?.content}
+                {extractThinkBlocks(message?.content) && (
+                  <div className="flex flex-col gap-4 border-l-2 pl-4 my-2">
+                    <p className="text-sm text-muted-foreground">Thinking...</p>
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]} // Cho phép sử dụng markdown GFM
+                      rehypePlugins={[rehypeRaw]}
+                    >
+                      {extractThinkBlocks(message?.content) || "Thinking..."}
+                    </ReactMarkdown>
+                  </div>
+                )}
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]} // Cho phép sử dụng markdown GFM
+                  rehypePlugins={[rehypeRaw]}
+                >
+                  {message?.content.replace(
+                    /<think[^>]*>[\s\S]*?<\/think>/gi,
+                    ""
+                  )}
                 </ReactMarkdown>
                 <div className="flex flex-col">
                   <p className="text-sm text-muted-foreground mt-8">
