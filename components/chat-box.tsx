@@ -5,7 +5,14 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { Message } from "@/interfaces/message";
 // import { chatCompletions } from "@/utils/api";
-import { ChevronDown, MessageCircleMoreIcon, Plus, Send } from "lucide-react";
+import {
+  Book,
+  BrainCircuit,
+  ChevronDown,
+  MessageCircleMoreIcon,
+  Plus,
+  Send,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { motion } from "framer-motion";
@@ -20,6 +27,21 @@ import { Document } from "@/interfaces/document";
 import DocumentPreview from "./document-preview";
 import rehypeRaw from "rehype-raw";
 import { Switch } from "./ui/switch";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+const models = [
+  "llama-3.3-70b-versatile",
+  "deepseek-r1-distill-llama-70b",
+  "gemma2-9b-it",
+  "llama-3.1-8b-instant",
+];
 
 function extractThinkBlocks(markdown: string): string | null {
   const regex = /<think[^>]*>([\s\S]*?)<\/think>/i;
@@ -36,6 +58,7 @@ function ChatBox({ title }: { title?: string }) {
   );
   const [openDocumentPreview, setOpenDocumentPreview] = useState(false);
   const [isKnowledgeEnabled, setIsKnowledgeEnabled] = useState(false);
+  const [model, setModel] = useState<string>("llama-3.3-70b-versatile");
 
   const scrollToBottom = () => {
     const chatContainer = document.getElementById("scroll");
@@ -61,6 +84,7 @@ function ChatBox({ title }: { title?: string }) {
         body: JSON.stringify({
           messages: updatedMessages,
           isUseKnowledge: isKnowledgeEnabled,
+          model: model,
         }),
       });
 
@@ -257,8 +281,31 @@ function ChatBox({ title }: { title?: string }) {
             <TooltipContent>Scroll to bottom</TooltipContent>
           </Tooltip>
 
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant={"secondary"}>
+                <BrainCircuit />
+                <p className="truncate max-w-30 sm:max-w-50">{model}</p>
+              </Button>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent>
+              <DropdownMenuLabel>Select model</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              {models.map((modelName) => (
+                <DropdownMenuItem
+                  key={modelName}
+                  onClick={() => setModel(modelName)}
+                >
+                  {modelName}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
           <div className="w-auto h-9 flex gap-2 p-2 bg-secondary rounded-md items-center justify-center">
-            <p className="text-sm">Use knowledge</p>
+            <Book className="sm:hidden" size={18} />
+            <p className="text-sm hidden sm:flex">Use knowledge</p>
             <Switch
               checked={isKnowledgeEnabled}
               onCheckedChange={setIsKnowledgeEnabled}
