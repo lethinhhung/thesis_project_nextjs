@@ -17,6 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Message } from "@/interfaces/message";
 // import { chatCompletions } from "@/utils/api";
 import {
+  Book,
   ChevronDown,
   MessageCircleMoreIcon,
   Paperclip,
@@ -143,11 +144,10 @@ function ChatBox({
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
+                className="flex justify-end mb-5 pl-16"
               >
-                <div key={index} className="flex justify-end mb-5 pl-16">
-                  <div className="p-4 rounded-md border border-dashed whitespace-pre-line">
-                    {message?.content}
-                  </div>
+                <div className="p-4 rounded-md border border-dashed whitespace-pre-line">
+                  {message?.content}
                 </div>
               </motion.div>
             ) : (
@@ -156,18 +156,17 @@ function ChatBox({
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
+                id="llm"
+                className="flex flex-col gap-4 max-w-none p-4 mb-5 bg-secondary rounded-md break-words"
               >
-                <div
-                  id="llm"
-                  className="flex flex-col max-w-none p-4 mb-5 bg-secondary rounded-md whitespace-pre-line break-words"
-                >
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                    {message?.content}
-                  </ReactMarkdown>
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {message?.content}
+                </ReactMarkdown>
+                <div className="flex flex-col">
                   <p className="text-sm text-muted-foreground mt-8">
                     Documents used for this answer
                   </p>
-                  <div className="columns-xs space-y-2 gap-2 mt-2 p-2">
+                  <div className="columns-xs space-y-2 gap-2 p-2">
                     {message?.documents?.map((document, index) => (
                       <DocumentCard
                         variant="sm"
