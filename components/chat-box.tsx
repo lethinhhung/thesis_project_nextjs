@@ -19,6 +19,7 @@ import { DocumentCard } from "./document-card";
 import { Document } from "@/interfaces/document";
 import DocumentPreview from "./document-preview";
 import rehypeRaw from "rehype-raw";
+import { Switch } from "./ui/switch";
 
 function extractThinkBlocks(markdown: string): string | null {
   const regex = /<think[^>]*>([\s\S]*?)<\/think>/i;
@@ -34,6 +35,7 @@ function ChatBox({ title }: { title?: string }) {
     null
   );
   const [openDocumentPreview, setOpenDocumentPreview] = useState(false);
+  const [isKnowledgeEnabled, setIsKnowledgeEnabled] = useState(false);
 
   const scrollToBottom = () => {
     const chatContainer = document.getElementById("scroll");
@@ -58,6 +60,7 @@ function ChatBox({ title }: { title?: string }) {
         method: "POST",
         body: JSON.stringify({
           messages: updatedMessages,
+          isUseKnowledge: isKnowledgeEnabled,
         }),
       });
 
@@ -65,6 +68,7 @@ function ChatBox({ title }: { title?: string }) {
         success: false,
         error: false,
       });
+      console.log("Response from chat completions:", response);
       if (response.success) {
         setMessages((prevMessages) => [
           ...prevMessages,
@@ -252,6 +256,14 @@ function ChatBox({ title }: { title?: string }) {
             </TooltipTrigger>
             <TooltipContent>Scroll to bottom</TooltipContent>
           </Tooltip>
+
+          <div className="w-auto h-9 flex gap-2 p-2 bg-secondary rounded-md items-center justify-center">
+            <p className="text-sm">Use knowledge</p>
+            <Switch
+              checked={isKnowledgeEnabled}
+              onCheckedChange={setIsKnowledgeEnabled}
+            />
+          </div>
           <Button
             disabled={!input.trim()}
             onClick={() => {

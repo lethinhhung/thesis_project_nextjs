@@ -32,10 +32,15 @@ const questionAPI = (token: string, question: string) => {
 const createChatCompletionAPI = (
   token: string,
   messages: ChatMessage[],
+  isUseKnowledge: boolean = false,
   model?: string
 ) => {
   const URL_API = "/api/chat/completions";
-  return createAxiosInstance(token).post(URL_API, { messages, model });
+  return createAxiosInstance(token).post(URL_API, {
+    messages,
+    isUseKnowledge,
+    model,
+  });
 };
 
 export { questionAPI, createChatCompletionAPI };

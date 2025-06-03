@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { messages } = await req.json();
+    const { messages, isUseKnowledge } = await req.json();
 
     if (!messages) {
       return NextResponse.json(
@@ -42,7 +42,8 @@ export async function POST(req: NextRequest) {
 
     const response = await createChatCompletionAPI(
       token?.accessToken || "",
-      messages
+      messages,
+      isUseKnowledge || false
     );
 
     if (response.status === 201 || response.status === 200) {

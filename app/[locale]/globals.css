@@ -354,6 +354,7 @@
   border-radius: 8px;
   font-family: monospace;
   font-size: 0.9rem;
+  background-color: var(--background);
 }
 
 #llm code {
@@ -390,17 +391,9 @@
 #llm th,
 #llm td {
   padding: 0.5rem;
-  border: 1px solid #eaeaea;
+  border: 1px solid var(--border);
   text-align: left;
 }
 #llm th {
   text-align: center;
-}
-
-think {
-  display: block;
-  margin: 1rem 0;
-  padding: 1rem;
-  border-left: 4px solid #0070f3;
-  font-style: italic;
 }
