@@ -163,19 +163,19 @@ export function CreateNew() {
       .refine((document) => !!document && document.size > 0, {
         message: "File is required",
       })
-      .refine((document) => document.size <= 50 * 1024 * 1024, {
-        message: "File size must be less than 50MB",
+      .refine((document) => document.size <= 5 * 1024 * 1024, {
+        message: "File size must be less than 5MB",
       })
       .refine(
         (document) =>
           [
             "application/pdf", // .pdf
             // "application/msword", // .doc
-            // "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
             // "application/vnd.ms-excel", // .xls
-            // "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xlsx
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xlsx
             // "application/vnd.ms-powerpoint", // .ppt
-            // "application/vnd.openxmlformats-officedocument.presentationml.presentation", // .pptx
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation", // .pptx
             // "text/plain", // .txt
             // "text/markdown", // .md
             // "application/rtf", // .rtf
@@ -183,7 +183,7 @@ export function CreateNew() {
         {
           message:
             // "Only PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, MD, and RTF files are allowed",
-            "Only PDF file is allowed",
+            "Only PDF, DOCX, XLSX, and PPTX files are allowed",
         }
       ),
   });
@@ -268,13 +268,7 @@ export function CreateNew() {
         body: submitting,
       });
 
-      const response = await processResponse(res);
-
-      if (response.success) {
-        router.push("/library");
-      } else {
-        console.error("Error creating document:", response.error.details);
-      }
+      await processResponse(res);
     } catch (error) {
       console.error("Error creating document:", error);
     } finally {

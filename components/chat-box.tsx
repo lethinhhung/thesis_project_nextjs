@@ -37,10 +37,51 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 const models = [
-  "llama-3.3-70b-versatile",
-  "deepseek-r1-distill-llama-70b",
-  "gemma2-9b-it",
-  "llama-3.1-8b-instant",
+  {
+    type: "qa",
+    name: "llama-3.3-70b-versatile",
+    description: "Tổng hợp nội dung, tạo câu hỏi, tóm tắt",
+  },
+  {
+    type: "qa",
+    name: "meta-llama/llama-4-maverick-17b-128e-instruct",
+    description: "Phản hồi nhanh, hiểu lệnh tốt",
+  },
+  {
+    type: "qa",
+    name: "llama3-70b-8192",
+    description: "LLM mạnh mẽ, phản hồi chính xác",
+  },
+  {
+    type: "instant",
+    name: "llama-3.1-8b-instant",
+    description: "Assistant nhẹ, phản hồi nhanh",
+  },
+  {
+    type: "instant",
+    name: "llama3-8b-8192",
+    description: "Xử lý ngữ cảnh dài với tốc độ cao",
+  },
+  {
+    type: "instant",
+    name: "gemma2-9b-it",
+    description: "Instruct-tuned, gọn nhẹ",
+  },
+  // {
+  //   type: "reasoning",
+  //   name: "mistral-saba-24b",
+  //   description: "Chatbot / Q&A học tập",
+  // },
+  {
+    type: "reasoning",
+    name: "deepseek-r1-distill-llama-70b",
+    description: "Hướng tới ứng dụng kỹ thuật suy luận + học tập",
+  },
+  {
+    type: "reasoning",
+    name: "qwen-qwq-32b",
+    description: "Một trong các model Trung Quốc mạnh về lập luận đa bước",
+  },
 ];
 
 function extractThinkBlocks(markdown: string): string | null {
@@ -143,7 +184,7 @@ function ChatBox({ title }: { title?: string }) {
     scrollToBottom();
   }, [messages]);
   return (
-    <div className="flex flex-col w-full h-full space-y-4 items-center min-w-100">
+    <div className="flex flex-col w-full h-full space-y-4 items-center 2xl:min-w-100">
       {title && (
         <CardHeader className="w-full">
           <CardTitle>Ask AI</CardTitle>
@@ -164,7 +205,7 @@ function ChatBox({ title }: { title?: string }) {
                 transition={{ duration: 0.3, ease: "easeOut" }}
                 className="flex justify-end mb-5 pl-16"
               >
-                <div className="p-4 rounded-md border border-dashed whitespace-pre-line">
+                <div className="bg-secondary p-4 rounded-md border border-dashed whitespace-pre-line">
                   {message?.content}
                 </div>
               </motion.div>
@@ -284,21 +325,39 @@ function ChatBox({ title }: { title?: string }) {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant={"secondary"}>
-                <BrainCircuit />
-                <p className="truncate max-w-30 sm:max-w-50">{model}</p>
+                <BrainCircuit className="hidden sm:flex" />
+                <p className="truncate max-w-16 sm:max-w-50">{model}</p>
               </Button>
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
               <DropdownMenuLabel>Select model</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              {models.map((modelName) => (
-                <DropdownMenuItem
-                  key={modelName}
-                  onClick={() => setModel(modelName)}
-                >
-                  {modelName}
-                </DropdownMenuItem>
+              {models.map((model) => (
+                <Tooltip key={model.name} delayDuration={0}>
+                  <TooltipTrigger asChild>
+                    <DropdownMenuItem
+                      key={model.name}
+                      onClick={() => setModel(model.name)}
+                    >
+                      {model.type === "qa" ? (
+                        <span className="text-yellow-500">Q&A</span>
+                      ) : model.type === "instant" ? (
+                        <span className="text-green-500">Instant</span>
+                      ) : model.type === "reasoning" ? (
+                        <span className="text-blue-500">Reasoning</span>
+                      ) : (
+                        <span className="text-gray-500">Other</span>
+                      )}
+                      <p className="truncate max-w-30 sm:max-w-100">
+                        {model.name}
+                      </p>
+                    </DropdownMenuItem>
+                  </TooltipTrigger>
+                  <TooltipContent side="left">
+                    <p className="text-xs">{model.description}</p>
+                  </TooltipContent>
+                </Tooltip>
               ))}
             </DropdownMenuContent>
           </DropdownMenu>

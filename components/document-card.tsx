@@ -51,11 +51,11 @@ export function DocumentCard({
             {/* {document.status && <CheckCircle2 size={"1rem"} />} */}
           </div>
         </CardTitle>
-        {variant == "default" && (
+        {/* {variant == "default" && (
           <CardDescription className="line-clamp-3 min-h-[4rem]">
             Ai dwa dwa dwa da dwa dwa daw daw dawd wad ad aw d a
           </CardDescription>
-        )}
+        )} */}
         <CardDescription>
           {format(new Date(document?.createdAt), "P", {
             locale: currentDateFnsLocale,
