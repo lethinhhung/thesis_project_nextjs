@@ -7,8 +7,10 @@ import { Message } from "@/interfaces/message";
 // import { chatCompletions } from "@/utils/api";
 import {
   Book,
+  BookOpen,
   BrainCircuit,
   ChevronDown,
+  LibraryBig,
   MessageCircleMoreIcon,
   Plus,
   Send,
@@ -277,7 +279,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
                 <small className="text-sm font-medium leading-none">
                   <ThinkingText />
                 </small>
-                <Skeleton className="w-100 p-4 mb-5 bg-secondary rounded-md h-15" />
+                <Skeleton className="w-80 p-4 mb-5 bg-secondary rounded-md h-15" />
               </div>
             </motion.div>
           )}
@@ -304,32 +306,11 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
           className="resize-none max-h-[17rem] border-dashed scrollbar"
         ></Textarea>
         <div className="w-full pt-1 md:pt-2 flex gap-1 md:gap-2 items-center justify-end">
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                onClick={() => setMessages([])}
-                size={"icon"}
-                variant={"ghost"}
-              >
-                <Plus />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>New chat</TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button size={"icon"} onClick={scrollToBottom} variant={"ghost"}>
-                <ChevronDown />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Scroll to bottom</TooltipContent>
-          </Tooltip>
-
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant={"secondary"}>
                 <BrainCircuit className="hidden sm:flex" />
-                <p className="truncate max-w-16 sm:max-w-50">{model}</p>
+                <p className="truncate max-w-12 xl:max-w-50">{model}</p>
               </Button>
             </DropdownMenuTrigger>
 
@@ -365,10 +346,26 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
             </DropdownMenuContent>
           </DropdownMenu>
 
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant={"secondary"}>
+                <Book className="hidden sm:flex" />
+                <p className="truncate max-w-12 xl:max-w-50">
+                  Getting started with Next.js
+                </p>
+              </Button>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent>
+              <DropdownMenuLabel>Select course</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+            </DropdownMenuContent>
+          </DropdownMenu>
+
           {context && messages.length === 0 && (
             <div className="w-auto h-9 flex gap-2 p-2 bg-secondary rounded-md items-center justify-center">
-              <Book className="sm:hidden" size={18} />
-              <p className="text-sm font-semibold hidden sm:flex">Content</p>
+              <BookOpen className="sm:hidden" size={18} />
+              <p className="text-sm font-semibold hidden xl:flex">Content</p>
               <Switch
                 checked={isContextEnabled}
                 onCheckedChange={setIsContextEnabled}
@@ -376,13 +373,37 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
             </div>
           )}
           <div className="w-auto h-9 flex gap-2 p-2 bg-secondary rounded-md items-center justify-center">
-            <Book className="sm:hidden" size={18} />
-            <p className="text-sm font-semibold hidden sm:flex">Knowledge</p>
+            <LibraryBig className="" size={18} />
+            <p className="text-sm font-semibold hidden xl:flex">Knowledge</p>
             <Switch
               checked={isKnowledgeEnabled}
               onCheckedChange={setIsKnowledgeEnabled}
             />
           </div>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                onClick={() => setMessages([])}
+                size={"icon"}
+                variant={"secondary"}
+              >
+                <Plus />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>New chat</TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size={"icon"}
+                onClick={scrollToBottom}
+                variant={"secondary"}
+              >
+                <ChevronDown />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>Scroll to bottom</TooltipContent>
+          </Tooltip>
           <Button
             disabled={!input.trim()}
             onClick={() => {
