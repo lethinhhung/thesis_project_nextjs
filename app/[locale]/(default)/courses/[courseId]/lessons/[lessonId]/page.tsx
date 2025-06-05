@@ -391,7 +391,7 @@ function Lesson() {
             transition={{ duration: 0.3 }}
             className="hidden 2xl:flex sticky border py-4 dark:border-dashed rounded-xl shadow-md h-[calc(100svh-92px)] top-18"
           >
-            <ChatBox title="lesson" />
+            <ChatBox title="lesson" context={markDown} />
           </motion.div>
         )}
       </AnimatePresence>

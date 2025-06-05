@@ -90,7 +90,7 @@ function extractThinkBlocks(markdown: string): string | null {
   return match ? match[1] : null;
 }
 
-function ChatBox({ title }: { title?: string }) {
+function ChatBox({ title, context }: { title?: string; context?: string }) {
   const [input, setInput] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -99,6 +99,7 @@ function ChatBox({ title }: { title?: string }) {
   );
   const [openDocumentPreview, setOpenDocumentPreview] = useState(false);
   const [isKnowledgeEnabled, setIsKnowledgeEnabled] = useState(false);
+  const [isContextEnabled, setIsContextEnabled] = useState(false);
   const [model, setModel] = useState<string>("llama-3.3-70b-versatile");
 
   const scrollToBottom = () => {
@@ -133,7 +134,6 @@ function ChatBox({ title }: { title?: string }) {
         success: false,
         error: false,
       });
-      console.log("Response from chat completions:", response);
       if (response.success) {
         setMessages((prevMessages) => [
           ...prevMessages,
@@ -155,15 +155,21 @@ function ChatBox({ title }: { title?: string }) {
       console.error("Error fetching chat completions:", error);
     } finally {
       setLoading(false);
+      scrollToBottom();
     }
   };
 
   const handleSendMessage = async () => {
     if (!input.trim()) return;
 
+    scrollToBottom();
+
     const newMessage: Message = {
       role: "user",
-      content: input.trim(),
+      content:
+        context && context != "" && isContextEnabled && messages.length === 0
+          ? `Dựa vào nội dung:\n"${context}".\n Hãy trả lời: ${input.trim()}`
+          : input.trim(),
     };
     const updatedMessages = [...messages, newMessage];
 
@@ -180,9 +186,6 @@ function ChatBox({ title }: { title?: string }) {
     setOpenDocumentPreview(true);
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
   return (
     <div className="flex flex-col w-full h-full space-y-4 items-center 2xl:min-w-100">
       {title && (
@@ -362,9 +365,19 @@ function ChatBox({ title }: { title?: string }) {
             </DropdownMenuContent>
           </DropdownMenu>
 
+          {context && messages.length === 0 && (
+            <div className="w-auto h-9 flex gap-2 p-2 bg-secondary rounded-md items-center justify-center">
+              <Book className="sm:hidden" size={18} />
+              <p className="text-sm font-semibold hidden sm:flex">Content</p>
+              <Switch
+                checked={isContextEnabled}
+                onCheckedChange={setIsContextEnabled}
+              />
+            </div>
+          )}
           <div className="w-auto h-9 flex gap-2 p-2 bg-secondary rounded-md items-center justify-center">
             <Book className="sm:hidden" size={18} />
-            <p className="text-sm hidden sm:flex">Use knowledge</p>
+            <p className="text-sm font-semibold hidden sm:flex">Knowledge</p>
             <Switch
               checked={isKnowledgeEnabled}
               onCheckedChange={setIsKnowledgeEnabled}
