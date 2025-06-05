@@ -13,7 +13,7 @@ import {
   Plus,
   Send,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { motion } from "framer-motion";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
