@@ -78,7 +78,7 @@ export function AttachContent({
               {selectedCourse?.title}
             </p>
           ) : (
-            "Attach Content"
+            <p className="hidden xl:max-w-50">Attach</p>
           )}
         </Button>
       </DialogTrigger>

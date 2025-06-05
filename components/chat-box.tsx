@@ -252,7 +252,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
                     )}
                   </ReactMarkdown>
                 )}
-                {message?.documents && (
+                {message?.documents && message.documents.length > 0 && (
                   <div className="flex flex-col">
                     <p className="text-sm text-muted-foreground mt-8">
                       Documents used for this answer
