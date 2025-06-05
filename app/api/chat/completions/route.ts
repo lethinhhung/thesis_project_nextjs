@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { messages, isUseKnowledge, model } = await req.json();
+    const { messages, isUseKnowledge, model, courseId } = await req.json();
 
     if (!messages) {
       return NextResponse.json(
@@ -44,7 +44,8 @@ export async function POST(req: NextRequest) {
       token?.accessToken || "",
       messages,
       isUseKnowledge || false,
-      model || "llama-3.3-70b-versatile"
+      model || "llama-3.3-70b-versatile",
+      courseId || null
     );
 
     if (response.status === 201 || response.status === 200) {

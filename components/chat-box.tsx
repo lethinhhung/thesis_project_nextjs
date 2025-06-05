@@ -6,7 +6,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Message } from "@/interfaces/message";
 // import { chatCompletions } from "@/utils/api";
 import {
-  Book,
   BookOpen,
   BrainCircuit,
   ChevronDown,
@@ -37,6 +36,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { AttachContent } from "./attach-content";
+import { Course } from "@/interfaces/course";
 
 const models = [
   {
@@ -103,6 +104,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
   const [isKnowledgeEnabled, setIsKnowledgeEnabled] = useState(false);
   const [isContextEnabled, setIsContextEnabled] = useState(false);
   const [model, setModel] = useState<string>("llama-3.3-70b-versatile");
+  const [attachedCourse, setAttachedCourse] = useState<Course | null>(null);
 
   const scrollToBottom = () => {
     const chatContainer = document.getElementById("scroll");
@@ -129,6 +131,8 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
           messages: updatedMessages,
           isUseKnowledge: isKnowledgeEnabled,
           model: model,
+          courseId:
+            isKnowledgeEnabled && attachedCourse?._id ? attachedCourse._id : "",
         }),
       });
 
@@ -305,7 +309,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
           placeholder="Ask anything..."
           className="resize-none max-h-[17rem] border-dashed scrollbar"
         ></Textarea>
-        <div className="w-full pt-1 md:pt-2 flex gap-1 md:gap-2 items-center justify-end">
+        <div className="w-full pt-1 md:pt-2 flex flex-wrap gap-1 md:gap-2 items-center justify-end">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant={"secondary"}>
@@ -346,21 +350,11 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
             </DropdownMenuContent>
           </DropdownMenu>
 
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant={"secondary"}>
-                <Book className="hidden sm:flex" />
-                <p className="truncate max-w-12 xl:max-w-50">
-                  Getting started with Next.js
-                </p>
-              </Button>
-            </DropdownMenuTrigger>
-
-            <DropdownMenuContent>
-              <DropdownMenuLabel>Select course</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-            </DropdownMenuContent>
-          </DropdownMenu>
+          <AttachContent
+            disabled={!isKnowledgeEnabled}
+            selectedCourse={attachedCourse}
+            setSelectedCourse={setAttachedCourse}
+          />
 
           {context && messages.length === 0 && (
             <div className="w-auto h-9 flex gap-2 p-2 bg-secondary rounded-md items-center justify-center">
@@ -380,48 +374,50 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
               onCheckedChange={setIsKnowledgeEnabled}
             />
           </div>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                onClick={() => setMessages([])}
-                size={"icon"}
-                variant={"secondary"}
-              >
-                <Plus />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>New chat</TooltipContent>
-          </Tooltip>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                size={"icon"}
-                onClick={scrollToBottom}
-                variant={"secondary"}
-              >
-                <ChevronDown />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>Scroll to bottom</TooltipContent>
-          </Tooltip>
-          <Button
-            disabled={!input.trim()}
-            onClick={() => {
-              if (!input.trim()) return;
-              setMessages([
-                ...messages,
-                {
-                  role: "user",
-                  content: input.trim(),
-                },
-              ]);
-              setInput("");
-              handleSendMessage();
-            }}
-            size={"icon"}
-          >
-            <Send />
-          </Button>
+          <div className="flex items-center gap-1">
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  onClick={() => setMessages([])}
+                  size={"icon"}
+                  variant={"secondary"}
+                >
+                  <Plus />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>New chat</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  size={"icon"}
+                  onClick={scrollToBottom}
+                  variant={"secondary"}
+                >
+                  <ChevronDown />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>Scroll to bottom</TooltipContent>
+            </Tooltip>
+            <Button
+              disabled={!input.trim()}
+              onClick={() => {
+                if (!input.trim()) return;
+                setMessages([
+                  ...messages,
+                  {
+                    role: "user",
+                    content: input.trim(),
+                  },
+                ]);
+                setInput("");
+                handleSendMessage();
+              }}
+              size={"icon"}
+            >
+              <Send />
+            </Button>
+          </div>
         </div>
       </div>
     </div>

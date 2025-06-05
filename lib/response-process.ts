@@ -21,6 +21,12 @@ export async function processResponse(
   }
 
   if (!toastify.error) {
+    if (data.error?.code === "UNAUTHORIZED" || response.status === 401) {
+      signOut({
+        redirect: true,
+        callbackUrl: `/login?error=SessionExpired&callbackUrl=${window.location.pathname}`,
+      });
+    }
     return data;
   }
 
