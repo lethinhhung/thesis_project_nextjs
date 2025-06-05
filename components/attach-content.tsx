@@ -78,7 +78,7 @@ export function AttachContent({
               {selectedCourse?.title}
             </p>
           ) : (
-            <p className="hidden xl:max-w-50">Attach</p>
+            <p className="hidden xl:flex">Attach</p>
           )}
         </Button>
       </DialogTrigger>
@@ -101,7 +101,7 @@ export function AttachContent({
                     setSelectedCourse(course);
                     setIsAttached(true);
                   }}
-                  className={`flex justify-between p-2 rounded hover:bg-secondary text-sm ${
+                  className={`flex justify-between p-2 rounded hover:bg-secondary text-sm cursor-pointer ${
                     selectedCourse?._id === course._id ? "bg-secondary" : ""
                   }`}
                 >

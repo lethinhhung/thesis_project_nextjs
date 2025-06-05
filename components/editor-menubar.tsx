@@ -229,8 +229,8 @@ function EditorMenubar({
                     </MenubarItem>
                     <MenubarSeparator />
                     <MenubarItem onClick={copyText}>Copy text</MenubarItem>
-                    <MenubarSeparator />
-                    <MenubarItem>Share</MenubarItem>
+                    {/* <MenubarSeparator /> */}
+                    {/* <MenubarItem>Share</MenubarItem> */}
                   </MenubarContent>
                 </MenubarMenu>
                 <MenubarMenu>
@@ -272,13 +272,15 @@ function EditorMenubar({
                 <MenubarMenu>
                   <MenubarTrigger>AI tools</MenubarTrigger>
                   <MenubarContent>
-                    <MenubarSub>
-                      <MenubarSubTrigger>Translate to</MenubarSubTrigger>
+                    {/* <MenubarSub>
+                      <MenubarSubTrigger disabled>
+                        Translate to
+                      </MenubarSubTrigger>
                       <MenubarSubContent>
                         <MenubarItem>English</MenubarItem>
                         <MenubarItem>Vietnamese</MenubarItem>
                       </MenubarSubContent>
-                    </MenubarSub>
+                    </MenubarSub> */}
                     <MenubarItem
                       className="hidden 2xl:flex hover:bg-transparent data-[state=open]:bg-transparent"
                       onClick={() => {
@@ -295,8 +297,8 @@ function EditorMenubar({
                         <ArrowUpRight />
                       </MenubarShortcut>
                     </MenubarItem>
-                    <MenubarItem>Summarize</MenubarItem>
-                    <MenubarItem>Generate from knownledge</MenubarItem>
+                    {/* <MenubarItem disabled>Summarize</MenubarItem>
+                    <MenubarItem disabled>Generate from knownledge</MenubarItem> */}
                   </MenubarContent>
                 </MenubarMenu>
 

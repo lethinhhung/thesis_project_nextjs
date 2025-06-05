@@ -15,7 +15,7 @@ import {
   Send,
 } from "lucide-react";
 import { useState } from "react";
-import { CardDescription, CardHeader, CardTitle } from "./ui/card";
+import { CardHeader, CardTitle } from "./ui/card";
 import { motion } from "framer-motion";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import ThinkingText from "./thinking-text";
@@ -107,17 +107,20 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
   const [attachedCourse, setAttachedCourse] = useState<Course | null>(null);
 
   const scrollToBottom = () => {
-    const chatContainer = document.getElementById("scroll");
-    if (chatContainer) {
-      chatContainer.scrollTo({
-        top: chatContainer.scrollHeight,
-        behavior: "smooth",
-      });
-    }
+    setTimeout(() => {
+      const chatContainer = document.getElementById("scroll");
+      if (chatContainer) {
+        chatContainer.scrollTo({
+          top: chatContainer.scrollHeight,
+          behavior: "smooth",
+        });
+      }
+    }, 100);
   };
 
   const getChatCompletions = async (updatedMessages: Message[]) => {
     setLoading(true);
+
     try {
       // const res = await fetch(`/api/chat/question`, {
       //   method: "POST",
@@ -125,6 +128,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
       //     question: updatedMessages[updatedMessages.length - 1].content,
       //   }),
       // });
+      scrollToBottom();
       const res = await fetch(`/api/chat/completions`, {
         method: "POST",
         body: JSON.stringify({
@@ -161,14 +165,11 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
       console.error("Error fetching chat completions:", error);
     } finally {
       setLoading(false);
-      scrollToBottom();
     }
   };
 
   const handleSendMessage = async () => {
     if (!input.trim()) return;
-
-    scrollToBottom();
 
     const newMessage: Message = {
       role: "user",
@@ -196,8 +197,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
     <div className="flex flex-col w-full h-full space-y-4 items-center 2xl:min-w-100">
       {title && (
         <CardHeader className="w-full">
-          <CardTitle>Ask AI</CardTitle>
-          <CardDescription>about this {title}</CardDescription>
+          <CardTitle>Chat</CardTitle>
         </CardHeader>
       )}
       {messages?.length > 0 && (
@@ -309,7 +309,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
           placeholder="Ask anything..."
           className="resize-none max-h-[17rem] border-dashed scrollbar"
         ></Textarea>
-        <div className="w-full pt-1 md:pt-2 flex flex-wrap gap-1 md:gap-2 items-center justify-end">
+        <div className="w-full pt-1 md:pt-2 flex flex-wrap gap-1 items-center justify-end">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant={"secondary"}>
@@ -356,17 +356,21 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
             setSelectedCourse={setAttachedCourse}
           />
 
-          {context && messages.length === 0 && (
-            <div className="w-auto h-9 flex gap-2 p-2 bg-secondary rounded-md items-center justify-center">
+          {context && (
+            <div className="w-auto h-9 flex gap-1 p-2 bg-secondary rounded-md items-center justify-center relative">
               <BookOpen className="sm:hidden" size={18} />
               <p className="text-sm font-semibold hidden xl:flex">Content</p>
               <Switch
                 checked={isContextEnabled}
                 onCheckedChange={setIsContextEnabled}
               />
+              <div
+                hidden={messages?.length === 0}
+                className="w-full h-full absolute z-10 bg-background top-0 left-0 rounded-md opacity-50"
+              ></div>
             </div>
           )}
-          <div className="w-auto h-9 flex gap-2 p-2 bg-secondary rounded-md items-center justify-center">
+          <div className="w-auto h-9 flex gap-1 p-2 bg-secondary rounded-md items-center justify-center">
             <LibraryBig className="" size={18} />
             <p className="text-sm font-semibold hidden xl:flex">Knowledge</p>
             <Switch

@@ -7,19 +7,11 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 
-import {
-  ArrowUpRight,
-  ChevronDown,
-  Copy,
-  Loader,
-  MoreHorizontal,
-  Sparkles,
-} from "lucide-react";
+import { ChevronDown, Loader, MoreHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import ChatBox from "@/components/chat-box";
@@ -81,19 +73,19 @@ function Lesson() {
 
   const currentDateFnsLocale = dateFnsLocales[locale as "vi" | "en"] || vi;
 
-  const copyText = () => {
-    const text = document?.getElementById("summary")?.innerText;
-    navigator.clipboard
-      .writeText(text?.toString() || "")
-      .then(() => {
-        const audio = new Audio("/notification.mp3");
-        audio.play();
-        toast.success("Copied to clipboard!");
-      })
-      .catch((err) => {
-        console.error("Err:", err);
-      });
-  };
+  // const copyText = () => {
+  //   const text = document?.getElementById("summary")?.innerText;
+  //   navigator.clipboard
+  //     .writeText(text?.toString() || "")
+  //     .then(() => {
+  //       const audio = new Audio("/notification.mp3");
+  //       audio.play();
+  //       toast.success("Copied to clipboard!");
+  //     })
+  //     .catch((err) => {
+  //       console.error("Err:", err);
+  //     });
+  // };
 
   const fetchLesson = async () => {
     setIsLoading(true);
@@ -255,13 +247,6 @@ function Lesson() {
                   fetchLesson={fetchLesson}
                 />
               </div>
-
-              {/* <CardDescription>
-                User&apos;s lesson note User&apos;s lesson note User&apos;s
-                lesson note User&apos;s lesson note User&apos;s lesson note
-                User&apos;s lesson note User&apos;s lesson note User&apos;s
-                lesson note User&apos;s lesson note User&apos;s lesson note
-              </CardDescription> */}
             </CardHeader>
           </Card>
           <Card className="dark:border-dashed break-inside-avoid-column">
@@ -333,39 +318,6 @@ function Lesson() {
               </Collapsible>
             )}
           </Card>
-          <Card
-            className={
-              "dark:border-dashed justify-between break-inside-avoid-column"
-            }
-          >
-            <div className="flex justify-between">
-              <CardHeader className="flex-1">
-                <div className="flex w-full justify-between items-center">
-                  <div className="flex flex-col gap-1">
-                    <CardTitle>Summary</CardTitle>
-                    <CardDescription id="summary" className="break-all">
-                      {markDown.slice(0, 300) || "No summary available"}
-                    </CardDescription>
-                  </div>
-                  <Button size={"sm"} variant={"ghost"} onClick={copyText}>
-                    <Copy />
-                  </Button>
-                </div>
-              </CardHeader>
-            </div>
-            <CardFooter className="flex flex-wrap justify-end gap-2">
-              <Button
-                size={"sm"}
-                variant={"ghost"}
-                onClick={() => window.open("/chat", "_blank")}
-              >
-                <ArrowUpRight /> Chat with AI
-              </Button>
-              <Button size={"sm"} variant={"secondary"}>
-                <Sparkles /> Re-summarize
-              </Button>
-            </CardFooter>
-          </Card>
         </div>
 
         {/* <EditorMenubar
@@ -386,7 +338,7 @@ function Lesson() {
         {isChatOpen && (
           <motion.div
             initial={{ width: 0, opacity: 0 }}
-            animate={{ width: 1024, opacity: 1 }}
+            animate={{ width: 768, opacity: 1 }}
             exit={{ width: 0, opacity: 0 }}
             transition={{ duration: 0.3 }}
             className="hidden 2xl:flex sticky border py-4 dark:border-dashed rounded-xl shadow-md h-[calc(100svh-92px)] top-18"
