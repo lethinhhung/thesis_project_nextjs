@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
-import { NavConversations } from "@/components/nav-conversations";
+// import { NavConversations } from "@/components/nav-conversations";
 import {
   Sidebar,
   SidebarContent,
@@ -22,7 +22,7 @@ import { NavUser } from "./nav-user";
 import { NavControls } from "./nav-controls";
 import { NavCourses } from "./nav-courses";
 // import { NavPinned } from "./nav-pinned";
-import { usePathname } from "next/navigation";
+// import { usePathname } from "next/navigation";
 import { LessonCard as LessonInterface } from "@/interfaces/lesson";
 import { Course as CourseInterface } from "@/interfaces/course";
 import { processResponse } from "@/lib/response-process";
@@ -38,9 +38,9 @@ export function SidebarLeft({
 }: React.ComponentProps<typeof Sidebar>) {
   const { isMobile, open } = useSidebar();
   const t = useTranslations("common");
-  const pathname = usePathname();
-  const isChatPage =
-    pathname.startsWith("/en/chat") || pathname.startsWith("/vi/chat");
+  // const pathname = usePathname();
+  // const isChatPage =
+  //   pathname.startsWith("/en/chat") || pathname.startsWith("/vi/chat");
   const [result, setResult] = useState<{
     courses: CourseInterface[];
     lessons: LessonInterface[];
@@ -221,9 +221,9 @@ export function SidebarLeft({
           <NavSkeleton />
         ) : (
           <>
-            {isChatPage && (
+            {/* {isChatPage && (
               <NavConversations isChatPage conversations={data.conversations} />
-            )}
+            )} */}
             {/* <NavPinned conversations={data.conversations} /> */}
             {result?.lessons && result?.lessons.length > 0 && (
               <NavLessons lessons={result?.lessons} />
@@ -231,9 +231,9 @@ export function SidebarLeft({
             {result?.courses && result?.courses.length > 0 && (
               <NavCourses courses={result?.courses} />
             )}
-            {!isChatPage && (
+            {/* {!isChatPage && (
               <NavConversations conversations={data.conversations} />
-            )}
+            )} */}
           </>
         )}
       </SidebarContent>

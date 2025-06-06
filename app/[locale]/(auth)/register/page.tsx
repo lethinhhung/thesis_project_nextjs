@@ -221,14 +221,14 @@ function Register() {
                     {t("sign_in")}
                   </a>
                 </div>
-                <div className="flex flex-row justify-between">
-                  <Button
+                <div className="flex flex-row justify-end">
+                  {/* <Button
                     type="button"
                     variant={"secondary"}
                     onClick={(e) => handleBack(e)}
                   >
                     {t("back")}
-                  </Button>
+                  </Button> */}
                   <Button type="submit" className="min-w-20">
                     {isLoading ? (
                       <Loader className="animate-spin" />
