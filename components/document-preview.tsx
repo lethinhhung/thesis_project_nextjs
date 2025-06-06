@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import { BookOpen, Sparkles } from "lucide-react";
+import { BookOpen } from "lucide-react";
 import { Document } from "@/interfaces/document";
 import Image from "next/image";
 import { format } from "date-fns";
@@ -110,9 +110,9 @@ function DocumentPreview({
               {document ? (
                 <div className="h-full w-full rounded-xl flex flex-col">
                   <div className="flex flex-col py-2 gap-2 w-full rounded-xl overflow-y-auto scrollbar">
-                    <Card className="w-full bg-background rounded-xl border border-dashed shadow-none">
+                    {/* <Card className="w-full bg-background rounded-xl border border-dashed shadow-none">
                       <CardContent>
-                        {/* {document?.description} */}
+                  
                         AI sumarry
                       </CardContent>
                       <CardFooter>
@@ -123,7 +123,7 @@ function DocumentPreview({
                           </Button>
                         </div>
                       </CardFooter>
-                    </Card>
+                    </Card> */}
                     <Card className="w-full h-150 bg-background rounded-xl border border-dashed shadow-none">
                       <CardContent className="h-full">
                         <Image
@@ -212,9 +212,9 @@ function DocumentPreview({
           </Card>
 
           <div className="flex flex-col py-2 gap-2 w-full rounded-xl overflow-y-auto scrollbar">
-            <Card className="w-full bg-background rounded-xl border border-dashed shadow-none">
+            {/* <Card className="w-full bg-background rounded-xl border border-dashed shadow-none">
               <CardContent>
-                {/* {document?.description} */}
+          
                 AI sumarry
               </CardContent>
               <CardFooter>
@@ -225,7 +225,7 @@ function DocumentPreview({
                   </Button>
                 </div>
               </CardFooter>
-            </Card>
+            </Card> */}
             <Card className="w-full h-150 bg-background rounded-xl border border-dashed shadow-none">
               <CardContent className="h-full">
                 <Image
