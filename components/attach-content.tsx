@@ -17,6 +17,7 @@ import { format } from "date-fns";
 import { useLocale } from "next-intl";
 import { enUS as en } from "date-fns/locale/en-US";
 import { vi } from "date-fns/locale/vi";
+import { Input } from "./ui/input";
 
 export function AttachContent({
   disabled = true,
@@ -60,6 +61,24 @@ export function AttachContent({
     }
   };
 
+  const handleSearch = (query: string) => {
+    if (!query.trim()) {
+      fetchCourses();
+      return;
+    }
+
+    const searchResults = courses.filter(
+      (course) =>
+        course.title.toLowerCase().includes(query.toLowerCase()) ||
+        course.customization.emoji
+          .toLowerCase()
+          .includes(query.toLowerCase()) ||
+        course.description.toLowerCase().includes(query.toLowerCase())
+    );
+
+    setCourses(searchResults);
+  };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -85,7 +104,12 @@ export function AttachContent({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Select course</DialogTitle>
-          <DialogDescription></DialogDescription>
+          <DialogDescription>
+            <Input
+              onChange={(e) => handleSearch(e.target.value)}
+              placeholder="Search..."
+            />
+          </DialogDescription>
         </DialogHeader>
         {isLoading ? (
           <div className="min-h-18 w-full flex items-center justify-center">

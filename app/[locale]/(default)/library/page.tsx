@@ -2,13 +2,13 @@
 
 import { DocumentCard } from "@/components/document-card";
 import DocumentPreview from "@/components/document-preview";
-import SearchBarWithTags from "@/components/search-bar-with-tags";
 import { useEffect, useState } from "react";
 import { Document } from "@/interfaces/document";
 import { processResponse } from "@/lib/response-process";
 import { DocumentCardSkeleton } from "@/components/skeleton/document-skeleton";
 import { Button } from "@/components/ui/button";
 import { Loader, RefreshCcw } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 function Library() {
   const [isLoading, setIsLoading] = useState(true);
@@ -44,6 +44,21 @@ function Library() {
     setIsLoading(false);
   };
 
+  const handleSearch = (query: string) => {
+    if (!query.trim()) {
+      fetchDocuments();
+      return;
+    }
+
+    const searchResults = documents.filter(
+      (doc) =>
+        doc.title.toLowerCase().includes(query.toLowerCase()) ||
+        doc.fileUrl.toLowerCase().includes(query.toLowerCase())
+    );
+
+    setDocuments(searchResults);
+  };
+
   useEffect(() => {
     fetchDocuments().then(() => setIsLoading(false));
   }, []);
@@ -52,7 +67,12 @@ function Library() {
     <div className="w-full h-[calc(100dvh-92px)] rounded-xl">
       <div className="w-full h-full rounded-xl columns-1 lg:columns-2">
         <div className="h-full w-full col-span-1 rounded-xl flex flex-col">
-          <SearchBarWithTags placeholder="Search for documents" />
+          <div className="px-2">
+            <Input
+              onChange={(e) => handleSearch(e.target.value)}
+              placeholder="Search..."
+            />
+          </div>
           <div className="py-2 w-full px-3 flex justify-between items-center">
             <p className="text-sm text-muted-foreground">
               {documents.length} document(s) found

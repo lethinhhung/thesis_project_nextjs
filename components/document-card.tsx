@@ -45,7 +45,7 @@ export function DocumentCard({
     >
       <CardHeader>
         <CardTitle>
-          <div className="flex items-center justify-between gap-1 line-clamp-1">
+          <div className="flex items-center justify-between gap-1 leading-[1.3] line-clamp-2">
             {document.title}
             <Badge>{getDocumentMeta(document.fileUrl).type}</Badge>
             {/* {document.status && <CheckCircle2 size={"1rem"} />} */}
