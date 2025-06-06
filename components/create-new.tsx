@@ -176,14 +176,15 @@ export function CreateNew() {
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xlsx
             // "application/vnd.ms-powerpoint", // .ppt
             "application/vnd.openxmlformats-officedocument.presentationml.presentation", // .pptx
-            // "text/plain", // .txt
-            // "text/markdown", // .md
+            "text/markdown", // .md
+            "text/x-markdown", // alternative .md
+            "text/plain", // alternative .md
             // "application/rtf", // .rtf
-          ].includes(document.type),
+          ].includes(document.type) || document.name.endsWith(".md"),
         {
           message:
             // "Only PDF, DOC, DOCX, XLS, XLSX, PPT, PPTX, TXT, MD, and RTF files are allowed",
-            "Only PDF, DOCX, XLSX, and PPTX files are allowed",
+            "Only PDF, DOCX, XLSX, PPTX, and MD files are allowed",
         }
       ),
   });
@@ -615,6 +616,7 @@ export function CreateNew() {
                             type="file"
                             onChange={(e) => {
                               const file = e.target.files?.[0];
+                              console.log(file?.type);
                               if (!file) return;
                               setDocument(file);
 

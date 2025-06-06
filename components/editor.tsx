@@ -252,6 +252,7 @@ const Editor = ({
   return (
     <div className="col-span-full space-y-4">
       <EditorMenubar
+        lesson={lesson}
         editor={editor}
         isPlainBackground={isPlainBackground}
         setIsPlainBackground={setIsPlainBackground}

@@ -22,6 +22,7 @@ import {
   ArrowUpRight,
   CheckCircle2,
   ChevronRight,
+  LibraryBig,
   Loader,
   ToggleLeft,
   ToggleRight,
@@ -33,6 +34,8 @@ import { toast } from "sonner";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas-pro";
 import { schema } from "./blocknote";
+import { LessonWithContent } from "@/interfaces/lesson";
+import { processResponse } from "@/lib/response-process";
 
 function EditorMenubar({
   editor,
@@ -44,6 +47,7 @@ function EditorMenubar({
   isLoading,
   save,
   markDown,
+  lesson,
 }: {
   editor: typeof schema.BlockNoteEditor;
   isPlainBackground: boolean;
@@ -54,9 +58,11 @@ function EditorMenubar({
   isLoading: boolean;
   save: () => void;
   markDown: string;
+  lesson?: LessonWithContent;
 }) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isClearBackground, setIsClearBackground] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const downloadBlob = (blob: Blob, filename: string) => {
     const url = window.URL.createObjectURL(blob);
@@ -179,6 +185,40 @@ function EditorMenubar({
       });
   };
 
+  const saveToLibrary = async () => {
+    try {
+      if (!lesson) {
+        toast.error("No lesson selected to save to library.");
+        return;
+      }
+      setLoading(true);
+      document.body.style.cursor = "wait";
+
+      const markdown = await editor.blocksToMarkdownLossy(editor.document);
+      const blob = new Blob([markdown], { type: "text/markdown" });
+
+      console.log("lesson", lesson._id);
+      console.log("courseId", lesson.courseId._id);
+      const formData = new FormData();
+      formData.append("title", lesson.title);
+      formData.append("document", blob, `${lesson.title}.md`);
+      formData.append("lessonId", lesson._id);
+      formData.append("courseId", lesson.courseId._id);
+
+      const res = await fetch("/api/document/create", {
+        method: "POST",
+        body: formData,
+      });
+
+      await processResponse(res);
+    } catch (error) {
+      console.error("Error saving to library:", error);
+    } finally {
+      setLoading(false);
+      document.body.style.cursor = "auto";
+    }
+  };
+
   return (
     <AnimatePresence initial={false}>
       <div className="w-full pb-4 pt-2 2xl:pt-4 flex justify-end col-span-full sticky z-10 top-14 2xl:top-14">
@@ -225,6 +265,22 @@ function EditorMenubar({
                       Save
                       <MenubarShortcut>
                         {isLoading && <Loader className="animate-spin" />}
+                      </MenubarShortcut>
+                    </MenubarItem>
+                    <MenubarSeparator />
+                    <MenubarItem
+                      onClick={(e) => {
+                        e.preventDefault();
+                        saveToLibrary();
+                      }}
+                    >
+                      Save to Library
+                      <MenubarShortcut>
+                        {loading ? (
+                          <Loader className="animate-spin" />
+                        ) : (
+                          <LibraryBig />
+                        )}
                       </MenubarShortcut>
                     </MenubarItem>
                     <MenubarSeparator />

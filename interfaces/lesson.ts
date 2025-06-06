@@ -23,7 +23,10 @@ export interface LessonName {
 
 export interface LessonWithContent {
   _id: string;
-  courseId: string;
+  courseId: {
+    _id: string;
+    title: string;
+  };
   title: string;
   content: string;
   refDocuments: [Document];
