@@ -92,7 +92,7 @@ export function AttachContent({
             <Loader className="animate-spin" size={18} />
           </div>
         ) : (
-          <div>
+          <div className="max-h-96 overflow-y-auto px-2">
             <ul className="space-y-1">
               {courses.map((course) => (
                 <li

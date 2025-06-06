@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Message } from "@/interfaces/message";
 // import { chatCompletions } from "@/utils/api";
 import {
+  AlertCircle,
   BookOpen,
   BrainCircuit,
   ChevronDown,
@@ -16,7 +17,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { CardHeader, CardTitle } from "./ui/card";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import ThinkingText from "./thinking-text";
 import { toast } from "sonner";
@@ -175,7 +176,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
       role: "user",
       content:
         context && context != "" && isContextEnabled && messages.length === 0
-          ? `Dựa vào nội dung:\n"${context}".\n Hãy trả lời: ${input.trim()}`
+          ? `Dựa vào nội dung:\n${context}.\n Hãy trả lời: ${input.trim()}`
           : input.trim(),
     };
     const updatedMessages = [...messages, newMessage];
@@ -290,9 +291,53 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
         </div>
       )}
       {messages?.length == 0 && (
-        <h4 className="flex h-full items-center scroll-m-20 text-xl font-semibold tracking-tight ">
-          <MessageCircleMoreIcon /> Ask for anything...
-        </h4>
+        <div className="flex flex-col flex-1 items-center justify-center">
+          <AnimatePresence>
+            <h4 className="flex gap-1 scroll-m-20 text-xl font-semibold tracking-tight">
+              <MessageCircleMoreIcon /> Ask for anything
+            </h4>
+            {isKnowledgeEnabled && !attachedCourse && (
+              <motion.span
+                key={"knowledge-base"}
+                className="text-sm text-muted-foreground ml-2"
+                initial={{ opacity: 0, y: 10 }}
+                exit={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+              >
+                Use knowledge base
+              </motion.span>
+            )}
+            {attachedCourse && isKnowledgeEnabled && (
+              <motion.span
+                key={"attached-course"}
+                className="flex gap-1 text-sm text-muted-foreground ml-2"
+                initial={{ opacity: 0, y: 10 }}
+                exit={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+              >
+                About <p className="font-bold">{attachedCourse.title}</p>
+              </motion.span>
+            )}
+            {isContextEnabled && (
+              <motion.span
+                key={"context"}
+                className="flex gap-1 text-sm text-muted-foreground ml-2"
+                initial={{ opacity: 0, y: 10 }}
+                exit={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+              >
+                With <p className="font-bold">attached content</p>
+              </motion.span>
+            )}
+          </AnimatePresence>
+          <small className="flex gap-1 items-center text-sm text-destructive mt-2">
+            <AlertCircle size={14} />
+            AI can be wrong, always verify the information.
+          </small>
+        </div>
       )}
       <DocumentPreview
         open={openDocumentPreview}
@@ -306,7 +351,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
           onChange={(e) => setInput(e.target.value)}
           value={input}
           spellCheck={false}
-          placeholder="Ask anything..."
+          placeholder="Type your question here..."
           className="resize-none max-h-[17rem] border-dashed scrollbar"
         ></Textarea>
         <div className="w-full pt-1 md:pt-2 flex flex-wrap gap-1 items-center justify-end">
