@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 import { updateCourseDetailsAPI } from "@/lib/services/course.service";
+import { revalidatePath } from "next/cache";
 
 export async function PATCH(
   req: NextRequest,
@@ -62,6 +63,8 @@ export async function PATCH(
       courseId,
       course
     );
+
+    revalidatePath(`/courses/${courseId}`);
 
     if (response.status === 201 || response.status === 200) {
       if (response.data.success) {

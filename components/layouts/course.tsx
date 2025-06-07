@@ -115,6 +115,7 @@ function CourseLayout({
     });
     // fetchCourse();
     setIsActionsLoading(false);
+    router.refresh();
   };
 
   // useEffect(() => {
@@ -227,7 +228,7 @@ function CourseLayout({
                   openEdit={openEdit}
                   setOpenEdit={setOpenEdit}
                   course={course}
-                  fetchCourse={() => {}}
+                  fetchCourse={() => router.refresh()}
                 />
               )}
 

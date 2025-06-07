@@ -394,13 +394,6 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
-
-          <AttachContent
-            disabled={!isKnowledgeEnabled}
-            selectedCourse={attachedCourse}
-            setSelectedCourse={setAttachedCourse}
-          />
-
           {context && (
             <div className="w-auto h-9 flex gap-1 p-2 bg-secondary rounded-md items-center justify-center relative">
               <BookOpen className="sm:hidden" size={18} />
@@ -415,6 +408,11 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
               ></div>
             </div>
           )}
+          <AttachContent
+            disabled={!isKnowledgeEnabled}
+            selectedCourse={attachedCourse}
+            setSelectedCourse={setAttachedCourse}
+          />
           <div className="w-auto h-9 flex gap-1 p-2 bg-secondary rounded-md items-center justify-center">
             <LibraryBig className="" size={18} />
             <p className="text-sm font-semibold hidden xl:flex">Knowledge</p>
