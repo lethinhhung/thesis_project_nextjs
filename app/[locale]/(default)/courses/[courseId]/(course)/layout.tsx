@@ -1,8 +1,9 @@
-import CourseLayout from "@/components/layouts/course";
 import { getCourseAPI } from "@/lib/services/course.service";
 import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/options";
+import { notFound } from "next/navigation";
+import CourseLayout from "@/components/layouts/course";
 
 export async function generateMetadata({
   params,
@@ -33,8 +34,25 @@ export async function generateMetadata({
   };
 }
 
-function Course({ children }: { children: React.ReactNode }) {
-  return <CourseLayout>{children}</CourseLayout>;
+async function Course({
+  children,
+  params,
+}: {
+  children: React.ReactNode;
+  params: Promise<{ courseId: string }>;
+}) {
+  const { courseId } = await params;
+  const session = await getServerSession(authOptions);
+
+  try {
+    const res = await getCourseAPI(session?.accessToken || "", courseId);
+    const course = res.data.data;
+
+    return <CourseLayout course={course}>{children}</CourseLayout>;
+  } catch (error) {
+    console.error("Error fetching course:", error);
+    notFound();
+  }
 }
 
 export default Course;

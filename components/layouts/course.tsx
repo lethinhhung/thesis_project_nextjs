@@ -46,19 +46,24 @@ import { format } from "date-fns";
 import { useLocale } from "next-intl";
 import { enUS as en } from "date-fns/locale/en-US";
 import { vi } from "date-fns/locale/vi";
-import CourseSkeleton from "@/components/skeleton/course-layout-skeleton";
 import { CompletedMark } from "@/components/completed-mark";
 import { EditCourse } from "@/components/edit-course";
 
-function CourseLayout({ children }: { children: React.ReactNode }) {
+function CourseLayout({
+  children,
+  course,
+}: {
+  children: React.ReactNode;
+  course: CourseInterface;
+}) {
   const { courseId } = useParams();
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
   const [isActionsLoading, setIsActionsLoading] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [openDetails, setOpenDetails] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
-  const [course, setCourse] = useState<CourseInterface>();
+  // const [course, setCourse] = useState<CourseInterface>();
   const router = useRouter();
   // const tabTop = useRef<HTMLDivElement | null>(null);
   const locale = useLocale();
@@ -81,35 +86,6 @@ function CourseLayout({ children }: { children: React.ReactNode }) {
     : "dashboard";
 
   const [tab, setTab] = useState(currentTab);
-
-  // const scrollToTabTop = () => {
-  //   const navbarHeight = 56;
-  //   if (tabTop.current) {
-  //     const topOffset =
-  //       tabTop.current.getBoundingClientRect().top +
-  //       window.scrollY -
-  //       navbarHeight;
-
-  //     //delay
-  //     setTimeout(() => {
-  //       window.scrollTo({ top: topOffset, behavior: "smooth" });
-  //     }, 1000);
-  //   }
-  // };
-
-  const fetchCourse = async () => {
-    const res = await fetch(`/api/course/${courseId}`, {
-      method: "GET",
-    });
-    const response = await processResponse(res, {
-      success: false,
-      error: false,
-    });
-
-    if (response.success) {
-      setCourse(response.data);
-    }
-  };
 
   const deleteCourse = async () => {
     setIsActionsLoading(true);
@@ -137,15 +113,15 @@ function CourseLayout({ children }: { children: React.ReactNode }) {
       success: true,
       error: true,
     });
-    fetchCourse();
+    // fetchCourse();
     setIsActionsLoading(false);
   };
 
-  useEffect(() => {
-    fetchCourse().then(() => setIsLoading(false));
+  // useEffect(() => {
+  //   fetchCourse().then(() => setIsLoading(false));
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
   useEffect(() => {
     const currentTab = pathname.includes("/lessons")
@@ -160,8 +136,6 @@ function CourseLayout({ children }: { children: React.ReactNode }) {
 
     setTab(currentTab);
   }, [pathname]);
-
-  if (isLoading) return <CourseSkeleton />;
 
   return (
     <div className="flex flex-col items-center mx-auto h-full w-full max-w-7xl rounded-xl">
@@ -253,7 +227,7 @@ function CourseLayout({ children }: { children: React.ReactNode }) {
                   openEdit={openEdit}
                   setOpenEdit={setOpenEdit}
                   course={course}
-                  fetchCourse={fetchCourse}
+                  fetchCourse={() => {}}
                 />
               )}
 
