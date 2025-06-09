@@ -1,6 +1,6 @@
 "use client";
 
-import { MoreHorizontal } from "lucide-react";
+import { Book, MoreHorizontal } from "lucide-react";
 
 import {
   SidebarGroup,
@@ -19,7 +19,10 @@ export function NavCourses({ courses }: { courses?: CourseInterface[] }) {
   return (
     // <SidebarGroup className="group-data-[collapsible=icon]:hidden">
     <SidebarGroup>
-      <SidebarGroupLabel>{t("recent_courses")}</SidebarGroupLabel>
+      <SidebarGroupLabel className="gap-1">
+        <Book size={16} />
+        {t("recent_courses")}
+      </SidebarGroupLabel>
       <SidebarMenu>
         {courses
           ?.sort(

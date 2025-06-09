@@ -5,14 +5,12 @@ import {
   // Cloud,
   // Inbox,
   ListTodo,
-  Sparkles,
   StickyNote,
 } from "lucide-react";
 import { DatePicker } from "@/components/date-picker";
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
@@ -25,17 +23,13 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "./ui/collapsible";
-import ChatSmall from "./chat-small";
-// import ButtonWithBadge from "./button-with-badge";
-// import { useRouter } from "next/navigation";
+
 import { Textarea } from "./ui/textarea";
 import TodoList from "./todo-list";
 
 export function SidebarRight({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
-  // const router = useRouter();
-
   return (
     <Sidebar collapsible="none" {...props}>
       <SidebarHeader className="border-sidebar-border">
@@ -104,7 +98,7 @@ export function SidebarRight({
           </CollapsibleContent>
         </Collapsible>
       </SidebarContent>
-      <SidebarFooter className="px-0 border-t border-dashed z-2 bg-secondary">
+      {/* <SidebarFooter className="px-0 border-t border-dashed z-2 bg-secondary">
         <Collapsible className="group/collapsible">
           <SidebarGroupLabel
             asChild
@@ -124,7 +118,7 @@ export function SidebarRight({
             </SidebarGroupContent>
           </CollapsibleContent>
         </Collapsible>
-      </SidebarFooter>
+      </SidebarFooter> */}
     </Sidebar>
   );
 }

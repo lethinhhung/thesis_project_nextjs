@@ -1,9 +1,9 @@
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
-import { createChatCompletionAPI } from "@/lib/services/ai.service";
+import { getChatCompletionAPI } from "@/lib/services/ai.service";
 
-export async function POST(req: NextRequest) {
+export async function GET(req: NextRequest) {
   try {
     // Check if user is authenticated
     const session = await getServerSession();
@@ -24,32 +24,12 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const { messages, isUseKnowledge, model, courseId, _id } = await req.json();
+    const searchParams = req.nextUrl.searchParams;
 
-    if (!messages) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: "Invalid content format",
-          error: {
-            code: "INVALID_CONTENT",
-            details: "Content is required and must be in correct format",
-          },
-        },
-        { status: 400 }
-      );
-    }
-
-    const response = await createChatCompletionAPI(
+    const response = await getChatCompletionAPI(
       token?.accessToken || "",
-      messages,
-      isUseKnowledge || false,
-      model || "llama-3.3-70b-versatile",
-      courseId || undefined,
-      _id || undefined
+      searchParams.get("_id")?.toString() || ""
     );
-
-    console.log("Response from chat API:", response);
 
     if (response.status === 201 || response.status === 200) {
       if (response.data.success) {

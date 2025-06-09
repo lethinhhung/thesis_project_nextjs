@@ -34,7 +34,8 @@ const createChatCompletionAPI = (
   messages: ChatMessage[],
   isUseKnowledge: boolean = false,
   model?: string,
-  courseId?: string
+  courseId?: string,
+  _id?: string
 ) => {
   const URL_API = "/api/chat/completions";
   return createAxiosInstance(token).post(URL_API, {
@@ -42,7 +43,23 @@ const createChatCompletionAPI = (
     isUseKnowledge,
     model,
     courseId,
+    _id,
   });
 };
 
-export { questionAPI, createChatCompletionAPI };
+const getChatCompletionAPI = (token: string, _id: string) => {
+  const URL_API = `/api/chat/get-completions?_id=${_id}`;
+  return createAxiosInstance(token).get(URL_API);
+};
+
+const getAllChatsAPI = (token: string) => {
+  const URL_API = "/api/chat/get-all";
+  return createAxiosInstance(token).get(URL_API);
+};
+
+export {
+  questionAPI,
+  createChatCompletionAPI,
+  getChatCompletionAPI,
+  getAllChatsAPI,
+};

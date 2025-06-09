@@ -15,7 +15,7 @@ import {
   Plus,
   Send,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CardHeader, CardTitle } from "./ui/card";
 import { AnimatePresence, motion } from "framer-motion";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
@@ -39,6 +39,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { AttachContent } from "./attach-content";
 import { Course } from "@/interfaces/course";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const models = [
   {
@@ -106,6 +107,10 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
   const [isContextEnabled, setIsContextEnabled] = useState(false);
   const [model, setModel] = useState<string>("llama-3.3-70b-versatile");
   const [attachedCourse, setAttachedCourse] = useState<Course | null>(null);
+  const [currentChatId, setCurrentChatId] = useState<string | null>(null);
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const scrollToBottom = () => {
     setTimeout(() => {
@@ -138,6 +143,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
           model: model,
           courseId:
             isKnowledgeEnabled && attachedCourse?._id ? attachedCourse._id : "",
+          _id: currentChatId == null ? undefined : currentChatId,
         }),
       });
 
@@ -146,6 +152,14 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
         error: false,
       });
       if (response.success) {
+        if (response.data._id) {
+          setCurrentChatId(response.data._id);
+
+          const params = new URLSearchParams(searchParams.toString());
+          params.set("id", response.data._id);
+
+          router.push(`?${params.toString()}`);
+        }
         setMessages((prevMessages) => [
           ...prevMessages,
           {
@@ -156,6 +170,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
         ]);
       } else {
         setMessages([]);
+        searchParams.delete();
         const audio = new Audio("/notification.mp3");
         audio.play();
         toast.error("Something went wrong. Please try again later.", {
@@ -193,6 +208,38 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
     setSelectedDocument(document);
     setOpenDocumentPreview(true);
   };
+
+  useEffect(() => {
+    async function fetchChatData() {
+      const chatId = searchParams.get("id");
+      if (chatId) {
+        setCurrentChatId(chatId);
+        try {
+          const res = await fetch(`/api/chat/get-completion?_id=${chatId}`, {
+            method: "GET",
+          });
+          const response = await processResponse(res, {
+            success: false,
+            error: false,
+          });
+
+          if (response.success) {
+            setMessages(response.data.messages || []);
+            setIsKnowledgeEnabled(response.data.isUseKnowledge || false);
+            setModel(response.data.model || "llama-3.3-70b-versatile");
+            setAttachedCourse(response.data.course || null);
+            setIsContextEnabled(response.data.isContextEnabled || false);
+          } else {
+            console.error("Error fetching chat data:", response.error);
+          }
+        } catch (error) {
+          console.error("Error parsing chat ID:", error);
+        }
+      }
+    }
+
+    fetchChatData();
+  }, [searchParams]);
 
   return (
     <div className="flex flex-col w-full h-full space-y-4 items-center 2xl:min-w-100">
@@ -425,7 +472,14 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
-                  onClick={() => setMessages([])}
+                  onClick={() => {
+                    setMessages([]);
+                    setCurrentChatId(null);
+                    // remove searchParams.id;
+                    const params = new URLSearchParams(searchParams.toString());
+                    params.delete("id");
+                    router.push(`?${params.toString()}`);
+                  }}
                   size={"icon"}
                   variant={"secondary"}
                 >

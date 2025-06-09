@@ -13,3 +13,8 @@ export interface ChatMessage {
   tool_call_id?: string; // Optional: if the message is a tool call response
   // Add other relevant fields if your LLM API uses them
 }
+
+export interface ChatInList {
+  _id: string;
+  title: string;
+}

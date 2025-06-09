@@ -10,13 +10,17 @@ import {
 import { useRouter } from "next/navigation";
 import { LessonCard as LessonInterface } from "@/interfaces/lesson";
 import { useTranslations } from "next-intl";
+import { NotepadText } from "lucide-react";
 
 export function NavLessons({ lessons }: { lessons?: LessonInterface[] }) {
   const router = useRouter();
   const t = useTranslations("common");
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>{t("recent_lessons")}</SidebarGroupLabel>
+      <SidebarGroupLabel className="gap-1">
+        <NotepadText size={16} />
+        {t("recent_lessons")}
+      </SidebarGroupLabel>
       <SidebarMenu>
         {lessons
           ?.sort(

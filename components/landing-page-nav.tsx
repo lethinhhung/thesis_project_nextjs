@@ -22,7 +22,7 @@ export default function Nav() {
       </h4>
 
       <div className="flex items-center gap-2">
-        <TooltipProvider>
+        {/* <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
               <a
@@ -56,8 +56,25 @@ export default function Nav() {
               <p>Backend Repo</p>
             </TooltipContent>
           </Tooltip>
-        </TooltipProvider>
+        </TooltipProvider> */}
 
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <a
+                target="_blank"
+                href={"https://lethinhhung.vercel.app/projects"}
+              >
+                <Button variant={"ghost"} size={"sm"}>
+                  <Github />
+                </Button>
+              </a>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>More details</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
         <DarkModeSwitcher variant={"ghost"} size={"sm"} />
         <LanguageSwitcher variant={"ghost"} size={"sm"} />
         <Separator orientation="vertical" className="!h-8 mr-2" />
