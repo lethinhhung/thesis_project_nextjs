@@ -225,10 +225,6 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
 
           if (response.success) {
             setMessages(response.data.messages || []);
-            setIsKnowledgeEnabled(response.data.isUseKnowledge || false);
-            setModel(response.data.model || "llama-3.3-70b-versatile");
-            setAttachedCourse(response.data.course || null);
-            setIsContextEnabled(response.data.isContextEnabled || false);
           } else {
             console.error("Error fetching chat data:", response.error);
           }
