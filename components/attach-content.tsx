@@ -92,12 +92,10 @@ export function AttachContent({
           ) : (
             <Paperclip />
           )}
-          {isAttached ? (
+          {isAttached && (
             <p className="truncate max-w-12 xl:max-w-50">
               {selectedCourse?.title}
             </p>
-          ) : (
-            <p className="hidden xl:flex">Attach</p>
           )}
         </Button>
       </DialogTrigger>

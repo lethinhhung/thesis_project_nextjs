@@ -16,7 +16,7 @@ import {
   Plus,
   Send,
 } from "lucide-react";
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { CardHeader, CardTitle } from "./ui/card";
 import { AnimatePresence, motion } from "framer-motion";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
@@ -73,32 +73,32 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
     {
       type: "qa",
       name: "llama-3.3-70b-versatile",
-      description: "Tổng hợp nội dung, tạo câu hỏi, tóm tắt",
+      description: t("1"),
     },
     {
       type: "qa",
       name: "meta-llama/llama-4-maverick-17b-128e-instruct",
-      description: "Phản hồi nhanh, hiểu lệnh tốt",
+      description: t("2"),
     },
     {
       type: "qa",
       name: "llama3-70b-8192",
-      description: "LLM mạnh mẽ, phản hồi chính xác",
+      description: t("3"),
     },
     {
       type: "instant",
       name: "llama-3.1-8b-instant",
-      description: "Assistant nhẹ, phản hồi nhanh",
+      description: t("4"),
     },
     {
       type: "instant",
       name: "llama3-8b-8192",
-      description: "Xử lý ngữ cảnh dài với tốc độ cao",
+      description: t("5"),
     },
     {
       type: "instant",
       name: "gemma2-9b-it",
-      description: "Instruct-tuned, gọn nhẹ",
+      description: t("6"),
     },
     // {
     //   type: "reasoning",
@@ -108,12 +108,12 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
     {
       type: "reasoning",
       name: "deepseek-r1-distill-llama-70b",
-      description: "Hướng tới ứng dụng kỹ thuật suy luận + học tập",
+      description: t("7"),
     },
     {
       type: "reasoning",
       name: "qwen-qwq-32b",
-      description: "Một trong các model Trung Quốc mạnh về lập luận đa bước",
+      description: t("8"),
     },
   ];
 
@@ -273,7 +273,10 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
                 transition={{ duration: 0.3, ease: "easeOut" }}
                 className="flex justify-end mb-5 pl-16"
               >
-                <div className="bg-secondary p-4 rounded-md border border-dashed break-all">
+                <div
+                  id="llm"
+                  className="bg-secondary p-4 rounded-md border border-dashed break-all"
+                >
                   <ReactMarkdown
                     remarkPlugins={[remarkGfm]} // Cho phép sử dụng markdown GFM
                     rehypePlugins={[rehypeRaw]}
@@ -392,7 +395,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
               >
-                With <p className="font-bold">attached content</p>
+                {t("with")} <p className="font-bold">{t("attached")}</p>
               </motion.span>
             )}
           </AnimatePresence>
@@ -460,7 +463,9 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
           {context && (
             <div className="w-auto h-9 flex gap-1 p-2 bg-secondary rounded-md items-center justify-center relative">
               <BookOpen className="sm:hidden" size={18} />
-              <p className="text-sm font-semibold hidden xl:flex">Content</p>
+              <p className="text-sm font-semibold hidden xl:flex">
+                {t("content")}
+              </p>
               <Switch
                 checked={isContextEnabled}
                 onCheckedChange={setIsContextEnabled}

@@ -129,6 +129,17 @@
     "select_model": "Chọn mô hình AI",
     "new": "Cuộc trò chuyện mới",
     "scroll": "Cuộn xuống dưới cùng",
-    "knowledge": "Kiến thức"
+    "knowledge": "Kiến thức",
+    "content": "Nội dung",
+    "with": "Với",
+    "attached": "nội dung đính kèm",
+    "1": "Tổng hợp nội dung, tạo câu hỏi, tóm tắt",
+    "2": "Phản hồi nhanh, hiểu lệnh tốt",
+    "3": "LLM mạnh mẽ, phản hồi chính xác",
+    "4": "Assistant nhẹ, phản hồi nhanh",
+    "5": "Xử lý ngữ cảnh dài với tốc độ cao",
+    "6": "Instruct-tuned, gọn nhẹ",
+    "7": "Hướng tới ứng dụng kỹ thuật suy luận + học tập",
+    "8": "Một trong các model Trung Quốc mạnh về lập luận đa bước"
   }
 }

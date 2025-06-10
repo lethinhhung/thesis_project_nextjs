@@ -129,6 +129,17 @@
     "select_model": "Select AI model",
     "new": "New chat",
     "scroll": "Scroll to bottom",
-    "knowledge": "Knowledge"
+    "knowledge": "Knowledge",
+    "content": "Content",
+    "with": "With",
+    "attached": "attached content",
+    "1": "Content synthesis, question generation, summarization",
+    "2": "Fast response, strong command understanding",
+    "3": "Powerful LLM, accurate replies",
+    "4": "Lightweight assistant, speedy responses",
+    "5": "Handles long context with high speed",
+    "6": "Instruct-tuned and compact",
+    "7": "Geared towards reasoning + learning applications",
+    "8": "One of the top Chinese models for multi-step reasoning"
   }
 }
