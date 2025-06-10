@@ -161,7 +161,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
           const params = new URLSearchParams(searchParams.toString());
           params.set("id", response.data._id);
 
-          router.push(`?${params.toString()}`);
+          // router.push(`?${params.toString()}`);
         }
         setMessages((prevMessages) => [
           ...prevMessages,
@@ -194,7 +194,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
       role: "user",
       content:
         context && context != "" && isContextEnabled && messages.length === 0
-          ? `Dựa vào nội dung:\n${context}.\n Hãy trả lời: ${input.trim()}`
+          ? `Dựa vào nội dung:\n${context} \n Hãy trả lời: ${input.trim()}`
           : input.trim(),
       documents: [],
     };
@@ -240,7 +240,6 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
     fetchChatData();
   }, [chatId]);
 
-  console.log(messages);
   return (
     <div className="flex flex-col w-full h-full space-y-4 items-center 2xl:min-w-100">
       {title && (
@@ -253,7 +252,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <NavConversations />
+              <NavConversations isRedirect={false} />
             </DropdownMenuContent>
           </DropdownMenu>
         </CardHeader>
@@ -272,8 +271,13 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
                 transition={{ duration: 0.3, ease: "easeOut" }}
                 className="flex justify-end mb-5 pl-16"
               >
-                <div className="bg-secondary p-4 rounded-md border border-dashed whitespace-pre-line">
-                  {message?.content}
+                <div className="bg-secondary p-4 rounded-md border border-dashed break-all">
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]} // Cho phép sử dụng markdown GFM
+                    rehypePlugins={[rehypeRaw]}
+                  >
+                    {message?.content}
+                  </ReactMarkdown>
                 </div>
               </motion.div>
             ) : (
@@ -485,10 +489,12 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
                   onClick={() => {
                     setMessages([]);
                     setCurrentChatId(null);
-                    // remove searchParams.id;
+                    const currentPathname = window.location.pathname;
                     const params = new URLSearchParams(searchParams.toString());
                     params.delete("id");
-                    router.push(`?${params.toString()}`);
+                    router.replace(`${currentPathname}?${params.toString()}`, {
+                      scroll: false,
+                    });
                   }}
                   size={"icon"}
                   variant={"secondary"}

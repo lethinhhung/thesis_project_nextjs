@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Loader, MessageCircleMore } from "lucide-react";
 import {
   SidebarGroup,
@@ -15,9 +15,12 @@ import { processResponse } from "@/lib/response-process";
 import { useEffect, useState } from "react";
 import { ChatInList } from "@/interfaces/message";
 
-export function NavConversations() {
+export function NavConversations({
+  isRedirect = true,
+}: {
+  isRedirect?: boolean;
+}) {
   const router = useRouter();
-  const pathname = usePathname();
   const t = useTranslations("common");
   const [result, setResult] = useState<ChatInList[]>([]);
   const [loading, setLoading] = useState(false);
@@ -63,11 +66,20 @@ export function NavConversations() {
               <SidebarMenuButton
                 onClick={() => {
                   const params = new URLSearchParams(window.location.search);
-                  params.set("id", chat._id);
-                  router.push(`${pathname}?${params.toString()}`);
+                  if (isRedirect) {
+                    params.set("id", chat._id);
+                    router.push(`/chat?${params.toString()}`);
+                  } else {
+                    const currentPathname = window.location.pathname;
+                    params.delete("id");
+                    params.set("id", chat._id);
+                    router.replace(`${currentPathname}?${params.toString()}`, {
+                      scroll: false,
+                    });
+                  }
                 }}
               >
-                <span>{chat.title}</span>
+                <span className="truncate max-w-50">{chat.title}</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
