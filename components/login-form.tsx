@@ -117,7 +117,6 @@ export function LoginForm({
       });
     }
     setLoading(false);
-    console.log(res);
   }
 
   const handleSignUp = (e: ReactMouseEvent<HTMLAnchorElement>) => {

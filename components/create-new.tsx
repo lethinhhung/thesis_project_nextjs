@@ -204,7 +204,6 @@ export function CreateNew() {
       return;
     }
     setCurrentType(type);
-    console.log(`Creating new ${type}`);
     setIsOpen(true);
   };
 
@@ -616,7 +615,6 @@ export function CreateNew() {
                             type="file"
                             onChange={(e) => {
                               const file = e.target.files?.[0];
-                              console.log(file?.type);
                               if (!file) return;
                               setDocument(file);
 

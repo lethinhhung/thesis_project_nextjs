@@ -49,8 +49,6 @@ export async function POST(req: NextRequest) {
       _id || undefined
     );
 
-    console.log("Response from chat API:", response);
-
     if (response.status === 201 || response.status === 200) {
       if (response.data.success) {
         return NextResponse.json(

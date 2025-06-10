@@ -197,8 +197,6 @@ function EditorMenubar({
       const markdown = await editor.blocksToMarkdownLossy(editor.document);
       const blob = new Blob([markdown], { type: "text/markdown" });
 
-      console.log("lesson", lesson._id);
-      console.log("courseId", lesson.courseId._id);
       const formData = new FormData();
       formData.append("title", lesson.title);
       formData.append("document", blob, `${lesson.title}.md`);

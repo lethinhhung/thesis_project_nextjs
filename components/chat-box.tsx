@@ -159,11 +159,13 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
       if (response.success) {
         if (response.data._id) {
           setCurrentChatId(response.data._id);
-
+          const currentPathname = window.location.pathname;
           const params = new URLSearchParams(searchParams.toString());
           params.set("id", response.data._id);
 
-          // router.push(`?${params.toString()}`);
+          router.replace(`${currentPathname}?${params.toString()}`, {
+            scroll: false,
+          });
         }
         setMessages((prevMessages) => [
           ...prevMessages,

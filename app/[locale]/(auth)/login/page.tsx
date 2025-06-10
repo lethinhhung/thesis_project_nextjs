@@ -113,7 +113,6 @@ function Login() {
       });
     }
     setLoading(false);
-    console.log(res);
   }
 
   const handleSignUp = (e: ReactMouseEvent<HTMLAnchorElement>) => {
