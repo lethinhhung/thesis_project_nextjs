@@ -117,5 +117,18 @@
     "view_chat": "Để bắt đầu một cuộc trò chuyện mới",
     "library": "Đi đến thư viện",
     "view_library": "Để xem tất cả tài liệu"
+  },
+  "chat": {
+    "chat": "Trò chuyện",
+    "ref_documents": "Tài liệu được sử dụng cho câu trả lời này",
+    "ask_anything": "Hỏi bất cứ điều gì",
+    "use_knowledge": "Sử dụng kiến thức từ thư viện",
+    "about": "Về",
+    "ai_can_be_wrong": "AI có thể sai, luôn xác minh thông tin.",
+    "placeholder": "Nhập tin nhắn của bạn tại đây...",
+    "select_model": "Chọn mô hình AI",
+    "new": "Cuộc trò chuyện mới",
+    "scroll": "Cuộn xuống dưới cùng",
+    "knowledge": "Kiến thức"
   }
 }

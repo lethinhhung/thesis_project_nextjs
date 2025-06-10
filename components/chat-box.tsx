@@ -16,7 +16,7 @@ import {
   Plus,
   Send,
 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { CardHeader, CardTitle } from "./ui/card";
 import { AnimatePresence, motion } from "framer-motion";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
@@ -42,54 +42,7 @@ import { AttachContent } from "./attach-content";
 import { Course } from "@/interfaces/course";
 import { useRouter, useSearchParams } from "next/navigation";
 import { NavConversations } from "./nav-conversations";
-
-const models = [
-  {
-    type: "qa",
-    name: "llama-3.3-70b-versatile",
-    description: "Tổng hợp nội dung, tạo câu hỏi, tóm tắt",
-  },
-  {
-    type: "qa",
-    name: "meta-llama/llama-4-maverick-17b-128e-instruct",
-    description: "Phản hồi nhanh, hiểu lệnh tốt",
-  },
-  {
-    type: "qa",
-    name: "llama3-70b-8192",
-    description: "LLM mạnh mẽ, phản hồi chính xác",
-  },
-  {
-    type: "instant",
-    name: "llama-3.1-8b-instant",
-    description: "Assistant nhẹ, phản hồi nhanh",
-  },
-  {
-    type: "instant",
-    name: "llama3-8b-8192",
-    description: "Xử lý ngữ cảnh dài với tốc độ cao",
-  },
-  {
-    type: "instant",
-    name: "gemma2-9b-it",
-    description: "Instruct-tuned, gọn nhẹ",
-  },
-  // {
-  //   type: "reasoning",
-  //   name: "mistral-saba-24b",
-  //   description: "Chatbot / Q&A học tập",
-  // },
-  {
-    type: "reasoning",
-    name: "deepseek-r1-distill-llama-70b",
-    description: "Hướng tới ứng dụng kỹ thuật suy luận + học tập",
-  },
-  {
-    type: "reasoning",
-    name: "qwen-qwq-32b",
-    description: "Một trong các model Trung Quốc mạnh về lập luận đa bước",
-  },
-];
+import { useTranslations } from "next-intl";
 
 function extractThinkBlocks(markdown: string): string | null {
   const regex = /<think[^>]*>([\s\S]*?)<\/think>/i;
@@ -114,6 +67,55 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const chatId = searchParams.get("id");
+  const t = useTranslations("chat");
+
+  const models = [
+    {
+      type: "qa",
+      name: "llama-3.3-70b-versatile",
+      description: "Tổng hợp nội dung, tạo câu hỏi, tóm tắt",
+    },
+    {
+      type: "qa",
+      name: "meta-llama/llama-4-maverick-17b-128e-instruct",
+      description: "Phản hồi nhanh, hiểu lệnh tốt",
+    },
+    {
+      type: "qa",
+      name: "llama3-70b-8192",
+      description: "LLM mạnh mẽ, phản hồi chính xác",
+    },
+    {
+      type: "instant",
+      name: "llama-3.1-8b-instant",
+      description: "Assistant nhẹ, phản hồi nhanh",
+    },
+    {
+      type: "instant",
+      name: "llama3-8b-8192",
+      description: "Xử lý ngữ cảnh dài với tốc độ cao",
+    },
+    {
+      type: "instant",
+      name: "gemma2-9b-it",
+      description: "Instruct-tuned, gọn nhẹ",
+    },
+    // {
+    //   type: "reasoning",
+    //   name: "mistral-saba-24b",
+    //   description: "Chatbot / Q&A học tập",
+    // },
+    {
+      type: "reasoning",
+      name: "deepseek-r1-distill-llama-70b",
+      description: "Hướng tới ứng dụng kỹ thuật suy luận + học tập",
+    },
+    {
+      type: "reasoning",
+      name: "qwen-qwq-32b",
+      description: "Một trong các model Trung Quốc mạnh về lập luận đa bước",
+    },
+  ];
 
   const scrollToBottom = () => {
     setTimeout(() => {
@@ -244,7 +246,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
     <div className="flex flex-col w-full h-full space-y-4 items-center 2xl:min-w-100">
       {title && (
         <CardHeader className="w-full flex items-center justify-between">
-          <CardTitle>Chat</CardTitle>
+          <CardTitle>{t("chat")}</CardTitle>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size={"sm"} variant={"ghost"}>
@@ -317,7 +319,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
                 {message?.documents && message.documents.length > 0 && (
                   <div className="flex flex-col">
                     <p className="text-sm text-muted-foreground mt-8">
-                      Documents used for this answer
+                      {t("ref_documents")}
                     </p>
                     <div className="columns-xs space-y-2 gap-2 p-2">
                       {message?.documents?.map((document, index) => (
@@ -355,7 +357,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
         <div className="flex flex-col flex-1 items-center justify-center">
           <AnimatePresence>
             <h4 className="flex gap-1 scroll-m-20 text-xl font-semibold tracking-tight">
-              <MessageCircleMoreIcon /> Ask for anything
+              <MessageCircleMoreIcon /> {t("ask_anything")}
             </h4>
             {isKnowledgeEnabled && !attachedCourse && (
               <motion.span
@@ -366,7 +368,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
               >
-                Use knowledge base
+                {t("use_knowledge")}
               </motion.span>
             )}
             {attachedCourse && isKnowledgeEnabled && (
@@ -378,7 +380,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, ease: "easeOut" }}
               >
-                About <p className="font-bold">{attachedCourse.title}</p>
+                {t("about")} <p className="font-bold">{attachedCourse.title}</p>
               </motion.span>
             )}
             {isContextEnabled && (
@@ -396,7 +398,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
           </AnimatePresence>
           <small className="flex gap-1 items-center text-sm text-destructive mt-2">
             <AlertCircle size={14} />
-            AI can be wrong, always verify the information.
+            {t("ai_can_be_wrong")}
           </small>
         </div>
       )}
@@ -412,7 +414,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
           onChange={(e) => setInput(e.target.value)}
           value={input}
           spellCheck={false}
-          placeholder="Type your question here..."
+          placeholder={t("placeholder")}
           className="resize-none max-h-[17rem] border-dashed scrollbar"
         ></Textarea>
         <div className="w-full pt-1 md:pt-2 flex flex-wrap gap-1 items-center justify-end">
@@ -425,7 +427,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
-              <DropdownMenuLabel>Select model</DropdownMenuLabel>
+              <DropdownMenuLabel>{t("select_model")}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {models.map((model) => (
                 <Tooltip key={model.name} delayDuration={0}>
@@ -476,7 +478,9 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
           />
           <div className="w-auto h-9 flex gap-1 p-2 bg-secondary rounded-md items-center justify-center">
             <LibraryBig className="" size={18} />
-            <p className="text-sm font-semibold hidden xl:flex">Knowledge</p>
+            <p className="text-sm font-semibold hidden xl:flex">
+              {t("knowledge")}
+            </p>
             <Switch
               checked={isKnowledgeEnabled}
               onCheckedChange={setIsKnowledgeEnabled}
@@ -502,7 +506,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
                   <Plus />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>New chat</TooltipContent>
+              <TooltipContent>{t("new")}</TooltipContent>
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -514,7 +518,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
                   <ChevronDown />
                 </Button>
               </TooltipTrigger>
-              <TooltipContent>Scroll to bottom</TooltipContent>
+              <TooltipContent>{t("scroll")}</TooltipContent>
             </Tooltip>
             <Button
               disabled={!input.trim()}

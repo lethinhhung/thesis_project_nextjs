@@ -117,5 +117,18 @@
     "view_chat": "To start a new chat",
     "library": "Go to library",
     "view_library": "To view all ducments"
+  },
+  "chat": {
+    "chat": "Chat",
+    "ref_documents": "Documents used for this answer",
+    "ask_anything": "Ask for anything",
+    "use_knowledge": "Use knowledge from the library",
+    "about": "About",
+    "ai_can_be_wrong": "AI can be wrong, always verify the information.",
+    "placeholder": "Type your message here...",
+    "select_model": "Select AI model",
+    "new": "New chat",
+    "scroll": "Scroll to bottom",
+    "knowledge": "Knowledge"
   }
 }
