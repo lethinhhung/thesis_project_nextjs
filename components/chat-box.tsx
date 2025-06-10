@@ -10,6 +10,7 @@ import {
   BookOpen,
   BrainCircuit,
   ChevronDown,
+  History,
   LibraryBig,
   MessageCircleMoreIcon,
   Plus,
@@ -40,6 +41,7 @@ import {
 import { AttachContent } from "./attach-content";
 import { Course } from "@/interfaces/course";
 import { useRouter, useSearchParams } from "next/navigation";
+import { NavConversations } from "./nav-conversations";
 
 const models = [
   {
@@ -111,6 +113,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
 
   const router = useRouter();
   const searchParams = useSearchParams();
+  const chatId = searchParams.get("id");
 
   const scrollToBottom = () => {
     setTimeout(() => {
@@ -193,6 +196,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
         context && context != "" && isContextEnabled && messages.length === 0
           ? `Dựa vào nội dung:\n${context}.\n Hãy trả lời: ${input.trim()}`
           : input.trim(),
+      documents: [],
     };
     const updatedMessages = [...messages, newMessage];
 
@@ -211,7 +215,6 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
 
   useEffect(() => {
     async function fetchChatData() {
-      const chatId = searchParams.get("id");
       if (chatId) {
         setCurrentChatId(chatId);
         try {
@@ -235,13 +238,24 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
     }
 
     fetchChatData();
-  }, [searchParams]);
+  }, [chatId]);
 
+  console.log(messages);
   return (
     <div className="flex flex-col w-full h-full space-y-4 items-center 2xl:min-w-100">
       {title && (
-        <CardHeader className="w-full">
+        <CardHeader className="w-full flex items-center justify-between">
           <CardTitle>Chat</CardTitle>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button size={"sm"} variant={"ghost"}>
+                <History />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <NavConversations />
+            </DropdownMenuContent>
+          </DropdownMenu>
         </CardHeader>
       )}
       {messages?.length > 0 && (
@@ -505,6 +519,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
                   {
                     role: "user",
                     content: input.trim(),
+                    documents: [],
                   },
                 ]);
                 setInput("");
