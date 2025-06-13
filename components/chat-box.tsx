@@ -198,7 +198,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
       role: "user",
       content:
         context && context != "" && isContextEnabled && messages.length === 0
-          ? `Dựa vào nội dung:\n${context} \n Hãy trả lời: ${input.trim()}`
+          ? `### Yêu cầu: ${input.trim()}. Dựa vào nội dung sau:\n${context}`
           : input.trim(),
       documents: [],
     };
