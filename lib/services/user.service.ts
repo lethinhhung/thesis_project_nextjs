@@ -20,4 +20,15 @@ const deleteUserAPI = (token: string, userId: string) => {
   return createAxiosInstance(token).delete(URL_API);
 };
 
-export { getProfileAPI, updateProfileAPI, getAllUsersAPI, deleteUserAPI };
+const getSystemStatsAPI = (token: string) => {
+  const URL_API = "/api/user/stats/system";
+  return createAxiosInstance(token).get(URL_API);
+};
+
+export {
+  getProfileAPI,
+  updateProfileAPI,
+  getAllUsersAPI,
+  deleteUserAPI,
+  getSystemStatsAPI,
+};
