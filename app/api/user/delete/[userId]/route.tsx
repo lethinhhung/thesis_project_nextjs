@@ -1,9 +1,12 @@
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import { getProfileAPI } from "@/lib/services/user.service";
 import { getToken } from "next-auth/jwt";
+import { deleteUserAPI } from "@/lib/services/user.service";
 
-export async function GET(req: NextRequest) {
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: Promise<{ userId: string }> }
+) {
   try {
     // Check if user is authenticated
     const session = await getServerSession();
@@ -24,8 +27,22 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    // Call backend API to get profile
-    const response = await getProfileAPI(token?.accessToken || "");
+    const userId = (await params).userId;
+    if (!userId) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: "User ID is required",
+          error: {
+            code: "INVALID_USER_ID",
+            details: "User ID is required",
+          },
+        },
+        { status: 400 }
+      );
+    }
+
+    const response = await deleteUserAPI(token?.accessToken || "", userId);
 
     if (response.status === 201 || response.status === 200) {
       if (response.data.success) {

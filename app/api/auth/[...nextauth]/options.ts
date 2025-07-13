@@ -34,6 +34,7 @@ export const authOptions: AuthOptions = {
               email: response.data.data.email,
               image: response.data.data.avatar,
               accessToken: response.data.data.accessToken,
+              role: response.data.data.role,
             };
           }
           return null;
@@ -54,34 +55,18 @@ export const authOptions: AuthOptions = {
   },
   callbacks: {
     async jwt({ token, user }) {
-      // if (user) {
-      //   token = {
-      //     ...token,
-      //     accessToken: user.accessToken,
-      //     image: user.image,
-      //   };
-      // }
-
-      // return token;
       if (user) {
         token.accessToken = user.accessToken;
+        token.role = user.role;
       }
       return token;
     },
     async session({ session, token }) {
-      // const updatedUser = await getProfileAPI(token.accessToken as string); // Giả sử accessToken có sẵn trong token
-      // if (updatedUser?.status === 200 && updatedUser.data) {
-      //   session.user = {
-      //     ...session.user,
-      //     image: updatedUser.data.data.profile.avatar,
-      //   };
-      // }
-      // return session;
-
       const updatedUser = await getProfileAPI(token.accessToken as string);
       if (updatedUser?.status === 200 && updatedUser.data) {
         if (session.user) {
           session.user.image = updatedUser.data.data.profile.avatar;
+          session.user.role = updatedUser.data.data.role;
         }
       }
       session.accessToken = token.accessToken;

@@ -10,4 +10,14 @@ const updateProfileAPI = (token: string, form: FormData) => {
   return createAxiosInstance(token).put(URL_API, form);
 };
 
-export { getProfileAPI, updateProfileAPI };
+const getAllUsersAPI = (token: string) => {
+  const URL_API = "/api/user/all";
+  return createAxiosInstance(token).get(URL_API);
+};
+
+const deleteUserAPI = (token: string, userId: string) => {
+  const URL_API = `/api/user/${userId}`;
+  return createAxiosInstance(token).delete(URL_API);
+};
+
+export { getProfileAPI, updateProfileAPI, getAllUsersAPI, deleteUserAPI };

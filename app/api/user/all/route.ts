@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
-import { getProfileAPI } from "@/lib/services/user.service";
+import { getAllUsersAPI } from "@/lib/services/user.service";
 import { getToken } from "next-auth/jwt";
 
 export async function GET(req: NextRequest) {
@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
     }
 
     // Call backend API to get profile
-    const response = await getProfileAPI(token?.accessToken || "");
+    const response = await getAllUsersAPI(token?.accessToken || "");
 
     if (response.status === 201 || response.status === 200) {
       if (response.data.success) {
