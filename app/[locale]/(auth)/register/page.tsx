@@ -127,7 +127,7 @@ function Register() {
             <Image
               width={1000}
               height={1000}
-              src="/placeholder.svg"
+              src="/cover.jpg"
               alt="Image"
               className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.7]"
             />

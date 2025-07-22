@@ -13,10 +13,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-export default function Nav() {
+export default function Nav({ className }: { className?: string }) {
   const router = useRouter();
   return (
-    <div className="w-full h-16 flex items-center justify-between px-4">
+    <div
+      className={`w-full h-16 flex items-center justify-between px-4 ${className}`}
+    >
       <h4 className="scroll-m-20 text-xl font-semibold tracking-tight">
         Notebok
       </h4>

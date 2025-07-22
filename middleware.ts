@@ -8,7 +8,7 @@ import { getToken } from "next-auth/jwt";
 const intlMiddleware = createIntlMiddleware(routing);
 
 // Function to check if user is admin and redirect
-async function checkAdminAndRedirect(req: NextRequest, token: any) {
+async function checkAdminAndRedirect(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   // Skip admin check for admin pages, login, register, and public pages
@@ -27,29 +27,14 @@ async function checkAdminAndRedirect(req: NextRequest, token: any) {
     return null;
   }
 
-  try {
-    // Fetch user profile to get role
-    const response = await fetch(
-      `${process.env.NEXTAUTH_URL || "http://localhost:3000"}/api/user/profile`,
-      {
-        headers: {
-          Authorization: `Bearer ${token?.accessToken}`,
-          Cookie: req.headers.get("cookie") || "",
-        },
-      }
-    );
+  // Get token from request - this works in middleware context
+  const token = await getToken({ req });
 
-    if (response.ok) {
-      const userData = await response.json();
-      if (userData.success && userData.data.role === "admin") {
-        // Redirect admin to admin dashboard
-        const locale = pathname.startsWith("/vi") ? "vi" : "en";
-        const adminUrl = new URL(`/${locale}/admin`, req.url);
-        return NextResponse.redirect(adminUrl);
-      }
-    }
-  } catch (error) {
-    console.error("Error checking admin status:", error);
+  if (token?.role === "admin") {
+    // Redirect admin to admin dashboard
+    const locale = pathname.startsWith("/vi") ? "vi" : "en";
+    const adminUrl = new URL(`/${locale}/admin`, req.url);
+    return NextResponse.redirect(adminUrl);
   }
 
   return null;
@@ -92,12 +77,10 @@ const middlewares = async (req: NextRequest, event: NextFetchEvent) => {
   }
 
   // For authenticated routes, check if user is admin
-  const token = await getToken({ req });
-  if (token) {
-    const adminRedirect = await checkAdminAndRedirect(req, token);
-    if (adminRedirect) {
-      return adminRedirect;
-    }
+
+  const adminRedirect = await checkAdminAndRedirect(req);
+  if (adminRedirect) {
+    return adminRedirect;
   }
 
   return authMiddlewares(req as NextRequestWithAuth, event);
