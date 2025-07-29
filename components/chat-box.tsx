@@ -112,7 +112,7 @@ function ChatBox({ title, context }: { title?: string; context?: string }) {
     },
     {
       type: "reasoning",
-      name: "qwen-qwq-32b",
+      name: "qwen/qwen3-32b",
       description: t("8"),
     },
   ];
